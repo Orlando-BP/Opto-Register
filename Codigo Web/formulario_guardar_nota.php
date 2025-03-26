@@ -1,82 +1,205 @@
-<?php
-require 'conexion.php'; // Asegúrate de tener un archivo para conectar a la BD
-
-// Obtener lista de clientes existentes
-$clientes = $conn->query("SELECT id_cliente, nombre FROM Clientes");
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Nota de Venta</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Registro de Nota de Venta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="container mt-4">
-    <h2>Registrar Nota de Venta</h2>
-    <form action="guardar_nota.php" method="POST">
-        
-        <!-- Selección o registro de cliente -->
-        <div class="mb-3">
-            <label class="form-label">Seleccionar Cliente:</label>
-            <select name="id_cliente" class="form-select" id="selectCliente">
-                <option value="">-- Cliente Nuevo --</option>
-                <?php while ($cliente = $clientes->fetch_assoc()) { ?>
-                    <option value="<?php echo $cliente['id_cliente']; ?>">
-                        <?php echo $cliente['nombre']; ?>
-                    </option>
-                <?php } ?>
-            </select>
-        </div>
-        
-        <div id="nuevoCliente" style="display: none;">
-            <h5>Datos del Nuevo Cliente</h5>
-            <input type="text" name="nombre" class="form-control mb-2" placeholder="Nombre">
-            <input type="text" name="telefono" class="form-control mb-2" placeholder="Teléfono">
-            <textarea name="domicilio" class="form-control mb-2" placeholder="Domicilio"></textarea>
-        </div>
-
-        <!-- Datos de la Nota de Venta -->
-        <h5>Datos de la Nota</h5>
-        <input type="date" name="fecha_expedicion" class="form-control mb-2" required>
-        <input type="date" name="fecha_entrega" class="form-control mb-2">
-        <input type="number" step="0.01" name="precio_total" class="form-control mb-2" placeholder="Precio Total" required>
-        <input type="number" step="0.01" name="anticipo" class="form-control mb-2" placeholder="Anticipo" required>
-        <input type="number" step="0.01" name="resta" class="form-control mb-2" placeholder="Resta" required>
-
-        <!-- Datos de la Graduación -->
-        <h5>Graduación</h5>
-        <?php $ojos = ['OD' => 'Ojo Derecho', 'OI' => 'Ojo Izquierdo']; ?>
-        <?php $distancias = ['Lejos', 'Cerca']; ?>
-        
-        <?php foreach ($ojos as $ojo => $nombre_ojo) { ?>
-            <h6><?php echo $nombre_ojo; ?></h6>
-            <?php foreach ($distancias as $distancia) { ?>
-                <div class="mb-2">
-                    <label><?php echo "$distancia ($ojo)"; ?></label>
-                    <input type="number" step="0.25" name="esf_<?php echo $ojo . '_' . $distancia; ?>" placeholder="ESF">
-                    <input type="number" step="0.25" name="cil_<?php echo $ojo . '_' . $distancia; ?>" placeholder="CIL">
-                    <input type="number" name="eje_<?php echo $ojo . '_' . $distancia; ?>" placeholder="EJE">
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">Registro de Nota de Venta</h2>
+        <form action="guardar_nota.php" method="POST">
+            
+            <!-- Selección o Registro de Cliente -->
+            <fieldset class="border p-3 mb-3">
+                <legend>Datos del Cliente</legend>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="buscar_cliente">Buscar Cliente:</label>
+                        <input type="text" id="buscar_cliente" class="form-control" placeholder="Escriba para buscar...">
+                        <div id="lista_clientes" class="list-group"></div>
+                        <input type="hidden" id="id_cliente" name="id_cliente">
+                    </div>
                 </div>
-            <?php } ?>
-        <?php } ?>
-        
-        <!-- Datos del Producto -->
-        <h5>Detalles del Producto</h5>
-        <input type="text" name="tipo" class="form-control mb-2" placeholder="Tipo">
-        <input type="text" name="material" class="form-control mb-2" placeholder="Material">
-        <input type="text" name="armazon" class="form-control mb-2" placeholder="Armazón">
-        <input type="text" name="color" class="form-control mb-2" placeholder="Color">
-        <input type="text" name="tamano" class="form-control mb-2" placeholder="Tamaño">
-        <textarea name="observaciones" class="form-control mb-2" placeholder="Observaciones"></textarea>
-        
-        <button type="submit" class="btn btn-primary">Guardar Nota</button>
-    </form>
+                <div id="nuevoCliente">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="telefono">Teléfono:</label>
+                            <input type="text" id="telefono" name="telefono" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="domicilio">Domicilio:</label>
+                            <input type="text" id="domicilio" name="domicilio" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="border p-3 mb-3">
+                <legend>Datos de la Nota</legend>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="fecha_expedicion">Fecha de Expedición:</label>
+                        <input type="date" id="fecha_expedicion" name="fecha_expedicion" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="fecha_entrega">Fecha Estimada de Entrega:</label>
+                        <input type="date" id="fecha_entrega" name="fecha_entrega" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="precio_total">Precio Total:</label>
+                        <input type="number" step="0.01" id="precio_total" name="precio_total" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="anticipo">Anticipo:</label>
+                        <input type="number" step="0.01" id="anticipo" name="anticipo" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="resta">Resta:</label>
+                        <input type="number" step="0.01" id="resta" name="resta" class="form-control" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Graduación -->
+            <fieldset class="border p-3 mb-3">
+                <legend>Graduación</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Ojo Izquierdo</h5>
+                        <label>Lejos:</label>
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" name="esf_lejos_oi" placeholder="Esf" class="form-control">
+                            </div>
+                            <div class="col">
+                                <input type="text" name="cil_lejos_oi" placeholder="Cil" class="form-control">
+                            </div>
+                            <div class="col">
+                                <input type="text" name="eje_lejos_oi" placeholder="Eje" class="form-control">
+                            </div>
+                        </div>
+                        <label>Cerca:</label>
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" name="esf_cerca_oi" placeholder="Esf" class="form-control">
+                            </div>
+                            <div class="col">
+                                <input type="text" name="cil_cerca_oi" placeholder="Cil" class="form-control">
+                            </div>
+                            <div class="col">
+                                <input type="text" name="eje_cerca_oi" placeholder="Eje" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Ojo Derecho</h5>
+                        <label>Lejos:</label>
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" name="esf_lejos_od" placeholder="Esf" class="form-control">
+                            </div>
+                            <div class="col">
+                                <input type="text" name="cil_lejos_od" placeholder="Cil" class="form-control">
+                            </div>
+                            <div class="col">
+                                <input type="text" name="eje_lejos_od" placeholder="Eje" class="form-control">
+                            </div>
+                        </div>
+                        <label>Cerca:</label>
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" name="esf_cerca_od" placeholder="Esf" class="form-control">
+                            </div>
+                            <div class="col">
+                                <input type="text" name="cil_cerca_od" placeholder="Cil" class="form-control">
+                            </div>
+                            <div class="col">
+                                <input type="text" name="eje_cerca_od" placeholder="Eje" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+           <!-- Datos del Producto -->
+           <fieldset class="border p-3 mb-3">
+                <legend>Datos del Producto</legend>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="tipo">Tipo:</label>
+                        <input type="text" id="tipo" name="tipo" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="material">Material:</label>
+                        <input type="text" id="material" name="material" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="armazon">Armazón:</label>
+                        <input type="text" id="armazon" name="armazon" class="form-control">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label for="color">Color:</label>
+                        <input type="text" id="color" name="color" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="tamano">Tamaño:</label>
+                        <input type="text" id="tamano" name="tamano" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="observaciones">Observaciones:</label>
+                        <textarea id="observaciones" name="observaciones" class="form-control"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Botón de envío -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Guardar Nota</button>
+            </div>
+        </form>
+    </div>
 
     <script>
-        document.getElementById('selectCliente').addEventListener('change', function() {
-            document.getElementById('nuevoCliente').style.display = this.value ? 'none' : 'block';
+        $(document).ready(function() {
+            $("#buscar_cliente").on("input", function() {
+                let query = $(this).val();
+                if (query.length > 1) {
+                    $.ajax({
+                        url: "buscar_cliente.php",
+                        method: "POST",
+                        data: { query: query },
+                        success: function(data) {
+                            $("#lista_clientes").html(data).show();
+                        }
+                    });
+                } else {
+                    $("#lista_clientes").hide();
+                }
+            });
+
+            $(document).on("click", ".cliente-item", function() {
+                let id = $(this).data("id");
+                let nombre = $(this).text();
+                $("#id_cliente").val(id);
+                $("#buscar_cliente").val(nombre);
+                $("#lista_clientes").hide();
+                $("#nuevoCliente").hide();
+            });
+
+            $("#buscar_cliente").on("focus", function() {
+                if ($("#id_cliente").val() === "") {
+                    $("#nuevoCliente").show();
+                }
+            });
         });
     </script>
 </body>

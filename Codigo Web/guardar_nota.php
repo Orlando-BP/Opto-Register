@@ -49,14 +49,14 @@ if ($fecha_expedicion && $precio_total !== false && $anticipo !== false && $rest
 }
 
 // Insertar la graduación visual
-$ojos = ['OD' => 'Ojo Derecho', 'OI' => 'Ojo Izquierdo'];
-$distancias = ['Lejos', 'Cerca'];
+$ojos = ['od', 'oi'];
+$distancias = ['lejos', 'cerca'];
 $stmt = $conn->prepare("INSERT INTO Graduaciones (id_nota, ojo, distancia, esf, cil, eje) VALUES (?, ?, ?, ?, ?, ?)");
 foreach ($ojos as $ojo => $nombre_ojo) {
     foreach ($distancias as $distancia) {
-        $esf = validarDato($_POST['esf_' . $ojo . '_' . $distancia] ?? NULL, 'float');
-        $cil = validarDato($_POST['cil_' . $ojo . '_' . $distancia] ?? NULL, 'float');
-        $eje = validarDato($_POST['eje_' . $ojo . '_' . $distancia] ?? NULL, 'int');
+        $esf = validarDato($_POST['esf_' . $distancia . '_' . $ojo] ?? NULL, 'float');
+        $cil = validarDato($_POST['cil_' . $distancia . '_' . $ojo] ?? NULL, 'float');
+        $eje = validarDato($_POST['eje_' . $distancia . '_' . $ojo] ?? NULL, 'int');
         $stmt->bind_param("issddd", $id_nota, $ojo, $distancia, $esf, $cil, $eje);
         $stmt->execute();
     }
@@ -81,6 +81,6 @@ if ($tipo && $material && $armazon && $color && $tamano) {
 }
 
 // Redirigir a una página de éxito
-header("Location: exito.php");
+header("Location: consultar_cliente.php");
 exit;
 ?>
