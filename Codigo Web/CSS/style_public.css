@@ -1,0 +1,99 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #2e86c1;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    padding: 2rem;
+    background-color: white;
+    margin: 1rem auto;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #2e86c1;
+    color: white;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+form input, form textarea, form button {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    background-color: #2e86c1;
+    color: white;
+    border: none;
+    cursor: pointer;
+}  
+form button:hover {
+    background-color: #1b4f72;
+}
+
+.catalogo {
+    display: flex;
+    flex-wrap: wrap;         /* Permite que pasen a otra fila si no caben */
+    gap: 1.5rem;             /* Espacio entre cápsulas */
+    justify-content: center; /* Centra las cápsulas */
+    padding: 2rem;
+}
+
+article.producto {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    width: 200px;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+article.producto:hover {
+    transform: scale(1.05);
+}
+article.producto img {
+    width: 200px;   /* Ancho fijo */
+    height: 200px;  /* Alto fijo */
+    object-fit: cover; /* Opcional: ajusta la imagen al tamaño sin deformarla */
+    border-radius: 8px; /* Opcional: bordes redondeados */
+}
