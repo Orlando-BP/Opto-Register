@@ -133,35 +133,35 @@ header {
     background-color: #2e86c1;
     color: white;
     padding: 1rem 2rem;
-  }
-  
-  .contenedor-header {
+}
+
+.contenedor-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-  }
-  
-  .menu-izquierda {
+}
+
+.menu-izquierda {
     display: flex;
     align-items: center;
     gap: 1rem;
-  }
-  
-  .menu-izquierda h1 {
+}
+
+.menu-izquierda h1 {
     margin: 0;
     font-size: 1.5rem;
-  }
-  
+}
+
   /* Estilo para los iconos a la derecha */
-  .iconos-derecha {
+.iconos-derecha {
     display: flex-end;
     align-items: right;
     gap: 1rem;
-  }
-  
+}
 
-  .iconos-derecha a img:hover {
+
+.iconos-derecha a img:hover {
     transform: scale(1.1);
-  }
-  
+}
+
