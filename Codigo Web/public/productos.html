@@ -5,39 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos - Óptica Barba</title>
     <link rel="stylesheet" href="../CSS/style_public.css">
+    <script src="../JS/carrito.js"></script>
 </head>
 <body>
     <header>
-        <h1>Óptica Barba</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="productos.html">Productos</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
-            </ul>
-        </nav>
+        <div class="menu-izquierda">
+            <h1>Óptica Barba</h1>
+        </div>
+        <div class="menu-derecha">
+            <a href="carrito.html">
+                <img src="../images/carrito.png">
+            </a>
+            <a href="https://maps.app.goo.gl/pdPdtgtNMXVrzqBf9?g_st=aw">
+                <img src="../images/ubicacion.png">
+            </a>
+            <a href="contacto.html">
+                <img src="../images/contacto.png">
+            </a>
+        </div>
     </header>
 
     <main>
         <h2>Productos Disponibles</h2>
         <section class="catalogo">
+            <!--Producto 1-->
             <article class="producto">
                 <img src="../images/lentes1.jpg" alt="Lentes de sol">
                 <h3>Lentes de Sol</h3>
                 <p>Protege tus ojos con estilo. Disponibles en varios diseños.</p>
                 <p><strong>Precio:</strong> $500 MXN</p>
+                <label for="cantidad-lentes1">Cantidad:</label>
+                <input type="number" id="cantidad-lentes1" name="cantidad" min="1" max="10" value="1">
+                <button onclick="agregarAlCarrito('Lentes de Sol', 500, 'cantidad-lentes1')">
+                    Agregar al carrito
+                </button>
             </article>
+            <!--Producto 2-->
             <article class="producto">
                 <img src="../images/lentes2.png" alt="Lentes graduados">
                 <h3>Lentes Graduados</h3>
                 <p>Corrección visual con monturas modernas y cómodas.</p>
                 <p><strong>Precio:</strong> $1200 MXN</p>
+                <label for="cantidad-lentes2">Cantidad:</label>
+                <input type="number" id="cantidad-lentes2" name="cantidad" min="1" max="10" value="1">
+                <button onclick="agregarAlCarrito('Lentes graduados', 1200, 'cantidad-lentes2')">
+                    Agregar al carrito
+                </button>
             </article>
+            <!--Producto 3-->
             <article class="producto">
                 <img src="../images/lentes3.webp" alt="Lentes de contacto">
                 <h3>Lentes de Contacto</h3>
                 <p>Variedad de lentes de contacto para diferentes necesidades.</p>
                 <p><strong>Precio:</strong> $800 MXN</p>
+                <label for="cantidad-lentes3">Cantidad:</label>
+                <input type="number" id="cantidad-lentes3" name="cantidad" min="1" max="10" value="1">
+                <button onclick="agregarAlCarrito('Lentes de contacto', 800, 'cantidad-lentes3')">
+                    Agregar al carrito
+                </button>
+            </article>
+            <!--Producto 4-->
+            <article class="producto">
+                <img src="../images/opticas1.jpg" alt="Ci">
+                <h3>CI</h3>
+                <p>Ci.</p>
+                <p><strong>Precio:</strong> $69,420 MXN</p>
+                <label for="cantidad-lentes4">Cantidad:</label>
+                <input type="number" id="cantidad-lentes4" name="cantidad" min="1" max="10" value="1">
+                <button onclick="agregarAlCarrito('Ci', 69420, 'cantidad-lentes3')">
+                    Agregar al carrito
+                </button>
             </article>
         </section>
     </main>

@@ -15,7 +15,7 @@ header {
     background-color: #2e86c1;
     color: white;
     padding: 1rem;
-    text-align: center;
+    text-align: right;
 }
 
 main {
@@ -37,6 +37,9 @@ footer {
     bottom: 0;
 }
 
+/* Aqui empiezan las cosas específicas*/
+
+/*Contacto Formulario*/
 form input, form textarea, form button {
     width: 100%;
     padding: 0.5rem;
@@ -56,6 +59,7 @@ form button:hover {
     background-color: #1b4f72;
 }
 
+/*Listado de Productos*/
 .catalogo {
     display: flex;
     flex-wrap: wrap;         /* Permite que pasen a otra fila si no caben */
@@ -84,24 +88,31 @@ article.producto img {
     border-radius: 8px; /* Opcional: bordes redondeados */
 }
 
-div.iconos-derecha a img {
+
+/*Header things*/
+div.menu-derecha a img {
     width: 40px;
     height: 40px;
-    object-fit: cover;
+
     border-radius: 8px;
     transition: transform 0.2s ease;
 }
 
 .menu-izquierda {
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
     gap: 1rem;
 }
 
 .menu-izquierda h1 {
     margin: 0;
     font-size: 1.5rem;
-}  
+    
+}
+
+
+
+/* Estilo para el botón de menú desplegable */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -129,39 +140,10 @@ div.iconos-derecha a img {
 }
 
 
-header {
-    background-color: #2e86c1;
-    color: white;
-    padding: 1rem 2rem;
+.item-carrito {
+    background-color: #fff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-
-.contenedor-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.menu-izquierda {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.menu-izquierda h1 {
-    margin: 0;
-    font-size: 1.5rem;
-}
-
-  /* Estilo para los iconos a la derecha */
-.iconos-derecha {
-    display: flex-end;
-    align-items: right;
-    gap: 1rem;
-}
-
-
-.iconos-derecha a img:hover {
-    transform: scale(1.1);
-}
-
