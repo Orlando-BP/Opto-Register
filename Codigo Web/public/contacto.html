@@ -9,36 +9,61 @@
     <body>
         <header>
             <div class="menu-izquierda">
-                <h1>Óptica Barba</h1>
+                <a href="index.html"><h1>Óptica Barba</h1></a>
             </div>
             <div class="menu-derecha">
-                <a href="carrito.html">
-                    <img src="../images/carrito.png">
-                </a>
-                <a href="https://maps.app.goo.gl/pdPdtgtNMXVrzqBf9?g_st=aw">
-                    <img src="../images/ubicacion.png">
-                </a>
-                <a href="contacto.html">
-                    <img src="../images/contacto.png">
-                </a>
+                <a href="carrito.html"><img src="../images/carrito.png" alt="Carrito"></a>
+                <a href="https://maps.app.goo.gl/pdPdtgtNMXVrzqBf9?g_st=aw" target="_blank"><img src="../images/ubicacion.png" alt="Ubicación"></a>
+                <a href="contacto.html"><img src="../images/contacto.png" alt="Contacto"></a>
             </div>
         </header>
 
         <main>
-        <h2>Contáctanos</h2>
-        <form>
-            <label>Nombre:</label>
-            <input type="text" name="nombre" required /><br />
-            <label>Email:</label>
-            <input type="email" name="email" required /><br />
-            <label>Mensaje:</label><br />
-            <textarea name="mensaje" rows="4" required></textarea><br />
-            <button type="submit">Enviar</button>
-        </form>
+            <h2>Contáctanos</h2>
+            <div class="contacto-container">
+
+                <!-- Info directa de contacto -->
+                <section class="info-contacto">
+                    <h3>Información de contacto</h3>
+                    <p><strong>Teléfono:</strong> <a href="tel:+523311437215">+52 33 1143 7215</a></p>
+                    <p><strong>Email:</strong> <a href="mailto:darkness0928.sm@gmail.com">darkness0928.sm@gmail.com</a></p>
+                    <p><strong>Dirección:</strong> <a href="https://maps.app.goo.gl/5vpah66tciaw21kY8">C. Pablo Valdez 2613, San Isidro, 44740 Guadalajara, Jal.</a></p>
+                    <p><strong>Horario:</strong> Lun-Vie 11:00 - 14:00, 16:30 - 19:30,  Sáb 11:00 - 14:00</p>
+                    <a class="whatsapp-btn" href="https://wa.me/523311437215" target="_blank">Enviar WhatsApp</a>
+                </section>
+
+                <h3>O Envínaos una notificación para enviarte un correo</h3>
+
+                <!-- Formulario -->
+                <form action="procesar_correo.php" method="POST">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" name="nombre" id="nombre" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" id="email" required>
+
+                    <label for="mensaje">Mensaje:</label>
+                    <textarea name="mensaje" id="mensaje" rows="4" required></textarea>
+
+                    <button type="submit">Enviar</button>
+                </form>
+
+                <!-- Mapa -->
+                <section>
+                    <h3>¿Dónde estamos?</h3>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3732.869794684516!2d-103.30243652568772!3d20.674875599840995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428b1635c0fdaff%3A0x63e7e1546483456f!2s%C3%93PTICA%20BARBA!5e0!3m2!1ses-419!2smx!4v1752955289213!5m2!1ses-419!2smx"
+                        width="1000" 
+                        height="450" 
+
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </section>
+            </div>
         </main>
 
         <footer>
-            <p>&copy; 2025 Óptica Visión Clara</p>
+            <p>&copy; 2025 Óptica Barba</p>
         </footer>
     </body>
 </html>
