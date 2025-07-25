@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 25-03-2025 a las 02:46:38
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Jul 25, 2025 at 09:05 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `optica_barba_bd`
+-- Database: `optica_barba_bd`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `clientes`
+-- Table structure for table `clientes`
 --
 
 CREATE TABLE `clientes` (
@@ -37,7 +37,28 @@ CREATE TABLE `clientes` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `graduaciones`
+-- Table structure for table `correos`
+--
+
+CREATE TABLE `correos` (
+  `id_correo` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `mensaje` text NOT NULL,
+  `fecha_envio` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `correos`
+--
+
+INSERT INTO `correos` (`id_correo`, `nombre`, `email`, `mensaje`, `fecha_envio`) VALUES
+(1, 'Marco', 'darkness0928.sm@gmail.com', 'Ci', '2025-07-19 19:49:28');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `graduaciones`
 --
 
 CREATE TABLE `graduaciones` (
@@ -56,7 +77,7 @@ CREATE TABLE `graduaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `notas_venta`
+-- Table structure for table `notas_venta`
 --
 
 CREATE TABLE `notas_venta` (
@@ -72,7 +93,7 @@ CREATE TABLE `notas_venta` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productos`
+-- Table structure for table `productos`
 --
 
 CREATE TABLE `productos` (
@@ -86,83 +107,131 @@ CREATE TABLE `productos` (
   `observaciones` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Índices para tablas volcadas
+-- Table structure for table `productos_vista`
+--
+
+CREATE TABLE `productos_vista` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `precio` decimal(10,2) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `img` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `productos_vista`
+--
+
+INSERT INTO `productos_vista` (`id`, `nombre`, `precio`, `descripcion`, `img`) VALUES
+(1, 'Lentes de Sol', 500.00, 'Protege tus ojos con estilo. Disponibles en varios diseños.', '../images/lentes1.jpg'),
+(2, 'Lentes Graduados', 1200.00, 'Corrección visual con monturas modernas.', '../images/lentes2.png'),
+(3, 'Lentes de Contacto', 800.00, 'Variedad de lentes de contacto para diferentes necesidades.', '../images/lentes3.webp'),
+(4, 'Ci', 69420.00, 'Ci', '../images/opticas1.jpg');
+
+--
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `clientes`
+-- Indexes for table `clientes`
 --
 ALTER TABLE `clientes`
   ADD PRIMARY KEY (`id_cliente`);
 
 --
--- Indices de la tabla `graduaciones`
+-- Indexes for table `correos`
+--
+ALTER TABLE `correos`
+  ADD PRIMARY KEY (`id_correo`);
+
+--
+-- Indexes for table `graduaciones`
 --
 ALTER TABLE `graduaciones`
   ADD PRIMARY KEY (`id_graduacion`),
   ADD KEY `id_nota` (`id_nota`);
 
 --
--- Indices de la tabla `notas_venta`
+-- Indexes for table `notas_venta`
 --
 ALTER TABLE `notas_venta`
   ADD PRIMARY KEY (`id_nota`),
   ADD KEY `id_cliente` (`id_cliente`);
 
 --
--- Indices de la tabla `productos`
+-- Indexes for table `productos`
 --
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id_producto`),
   ADD KEY `id_nota` (`id_nota`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- Indexes for table `productos_vista`
+--
+ALTER TABLE `productos_vista`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `clientes`
+-- AUTO_INCREMENT for table `clientes`
 --
 ALTER TABLE `clientes`
   MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `graduaciones`
+-- AUTO_INCREMENT for table `correos`
+--
+ALTER TABLE `correos`
+  MODIFY `id_correo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `graduaciones`
 --
 ALTER TABLE `graduaciones`
   MODIFY `id_graduacion` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `notas_venta`
+-- AUTO_INCREMENT for table `notas_venta`
 --
 ALTER TABLE `notas_venta`
   MODIFY `id_nota` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `productos`
+-- AUTO_INCREMENT for table `productos`
 --
 ALTER TABLE `productos`
   MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Restricciones para tablas volcadas
+-- AUTO_INCREMENT for table `productos_vista`
+--
+ALTER TABLE `productos_vista`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `graduaciones`
+-- Constraints for table `graduaciones`
 --
 ALTER TABLE `graduaciones`
   ADD CONSTRAINT `graduaciones_ibfk_1` FOREIGN KEY (`id_nota`) REFERENCES `notas_venta` (`id_nota`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `notas_venta`
+-- Constraints for table `notas_venta`
 --
 ALTER TABLE `notas_venta`
   ADD CONSTRAINT `notas_venta_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id_cliente`) ON DELETE SET NULL;
 
 --
--- Filtros para la tabla `productos`
+-- Constraints for table `productos`
 --
 ALTER TABLE `productos`
   ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_nota`) REFERENCES `notas_venta` (`id_nota`) ON DELETE CASCADE;
