@@ -1,0 +1,49 @@
+
+Temas a tratar
+
+-Investigar sobre Node.js, Socket.io para mostrar informacion en tiempo real y posible chat con cliente?
+-Nombres de variable, comentarios.
+-Notificar cambios y adecuasiones a la BD asi como registros necesarios para funcionamiento.
+-delimitar bien que archivos se tocaran para evitar conflicto al realizar commit
+-Actualizacion de codigo.
+-Modificacion puntual de funciones necesarias.
+-Estructura de archivos
+
+Sistema de usuario
+    -Login
+    -Registro de usuarios por el Admin
+    -Definir opciones solo disponibles para Admin.
+Sistema de clientes
+    *Mostrar informacion de cliente al ingresar un codigo?
+    *Crear credenciales para cliente?
+    -Listado de informacion del cliente.
+    -Modificacion de datos de contacto y nombre
+    *Chat directo?
+Sistema de listado de clientes.
+    -Listado de los clientes.
+    -Busqueda de clientes.
+    -Flitros de busqueda.
+    -Boton de registro de cliente.
+Sistema de Registro de cliente.
+    -nombres
+    -contacto
+    -Examen de la vista
+    (Solo se registran clientes que se hicieron examen de la vista)
+    -al registrar permite opcion de salir de registro o pasar a vista de compra de producto.
+Sistema de compra de producto 
+    -Producto a comprar
+    -observaciones
+    -Anticipo
+    -Restante
+    -Total
+    (Esta parte no es urgente como tal y se puede pensar mas a delante, no afecta a los otros Sistemas)
+Creacion de algoritmo de arbol de decision
+    -Desarrollar codigo python conectado a los datos de la BD.
+    -ejecucion y recepsion de resultados.
+    -reflejar resultados en graficas en dashboard.
+Sistema de Dashboard
+    (Se requieren los otros sistemas para desarrollar este de mejor manera)
+    -Sera pantalla principal de usuario
+    -Mostrar opciones de listado, registro, compra, chats?
+    -Chat con clientes?
+    -Graficas de datos clinicos(ya implementado el arbol de clasificacion).
