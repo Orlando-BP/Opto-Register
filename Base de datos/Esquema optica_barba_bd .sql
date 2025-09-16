@@ -4,6 +4,7 @@ CREATE TABLE Clientes (
     id_cliente INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     telefono VARCHAR(20),
+    correo VARCHAR(100),
     domicilio TEXT
 );
 
@@ -20,16 +21,16 @@ CREATE TABLE Notas_Venta (
 
 CREATE TABLE Graduaciones (
     id_graduacion INT AUTO_INCREMENT PRIMARY KEY,
-    id_nota INT,
-    ojo ENUM('OD', 'OI') NOT NULL,
-    distancia ENUM('Lejos', 'Cerca') NOT NULL,
-    esf DECIMAL(4,2),
-    cil DECIMAL(4,2),
-    eje INT,
-    dp INT,
-    o VARCHAR(10),
+    id_cliente INT,
+    edad INT,
+    right_SP DECIMAL(4,2),
+    right_CYL DECIMAL(4,2),
+    right_Axis INT,
+    left_SP DECIMAL(4,2),
+    left_CYL DECIMAL(4,2),
+    left_Axis INT,
     fecha_registro DATE NOT NULL,
-    FOREIGN KEY (id_nota) REFERENCES Notas_Venta(id_nota) ON DELETE CASCADE
+    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente) ON DELETE SET NULL
 );
 
 CREATE TABLE Productos (
