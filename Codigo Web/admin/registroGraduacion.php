@@ -16,12 +16,7 @@
             display: block;
             margin-top: 15px;
         }
-        input[type="right_SP"],
-        input[type="right_CYL"],
-        input[type="right_Axis"],
-        input[type="left_SP"],
-        input[type="left_CYL"],
-        input[type="left_Axis"] {
+        input[type="number"] {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
@@ -38,22 +33,25 @@
         <h2>Registro de Graduaciones</h2>
         <!-- Datos de ojo derecho --> 
         <label for="right_SP">right_SP:</label>
-        <input type="right_SP" id="right_SP" name="right_SP" required>
+        <input type="number" id="right_SP" name="right_SP" required>
 
         <label for="right_CYL">right_CYL:</label>
-        <input type="right_CYL" id="right_CYL" name="right_CYL" requiredo>
+        <input type="number" id="right_CYL" name="right_CYL" required>
 
         <label for="right_Axis">right_Axis:</label>
-        <input type="right_Axis" id="right_Axis" name="right_Axis" required>
+        <input type="number" id="right_Axis" name="right_Axis" required>
         <!-- Datos de ojo izquierdo -->
         <label for="left_SP">left_SP:</label>
-        <input type="left_SP" id="left_SP" name="left_SP" required>
+        <input type="number" id="left_SP" name="left_SP" required>
 
         <label for="left_CYL">left_CYL:</label>
-        <input type="left_CYL" id="left_CYL" name="left_CYL" required>
+        <input type="number" id="left_CYL" name="left_CYL" required>
 
         <label for="left_Axis">left_Axis:</label>
-        <input type="left_Axis" id="left_Axis" name="left_Axis" required>
+        <input type="number" id="left_Axis" name="left_Axis" required>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" required>
 
         <button type="submit">Registrar</button>
     </form>

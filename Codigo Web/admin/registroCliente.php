@@ -18,7 +18,8 @@
         }
         input[type="text"],
         input[type="email"],
-        input[type="tel"] {
+        input[type="tel"],
+        input[type="number"]{
             width: 100%;
             padding: 8px;
             margin-top: 5px;
@@ -31,7 +32,7 @@
     </style>
 </head>
 <body>
-    <form action="procesarRegistroCliente.php" method="post">
+    <form name="registroCliente" action="procesarRegistroCliente.php" method="post">
         <h2>Registro de Cliente</h2>
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" required>
@@ -44,6 +45,30 @@
 
         <label for="domicilio">Domicilio:</label>
         <input type="text" id="domicilio" name="domicilio" required>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" required>
+
+        <h2>Graduacion</h2>
+        <!-- Datos de ojo derecho --> 
+
+    <label for="right_SP">right_SP:</label>
+    <input type="number" id="right_SP" name="right_SP" step="any" required>
+
+    <label for="right_CYL">right_CYL:</label>
+    <input type="number" id="right_CYL" name="right_CYL" step="any" required>
+
+    <label for="right_Axis">right_Axis:</label>
+    <input type="number" id="right_Axis" name="right_Axis" step="any" required>
+    <!-- Datos de ojo izquierdo -->
+    <label for="left_SP">left_SP:</label>
+    <input type="number" id="left_SP" name="left_SP" step="any" required>
+
+    <label for="left_CYL">left_CYL:</label>
+    <input type="number" id="left_CYL" name="left_CYL" step="any" required>
+
+    <label for="left_Axis">left_Axis:</label>
+    <input type="number" id="left_Axis" name="left_Axis" step="any" required>
 
         <button type="submit">Registrar</button>
     </form>
