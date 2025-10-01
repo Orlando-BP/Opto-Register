@@ -15,9 +15,10 @@
     <header>
         <h1>Óptica Barba</h1>
         <nav>
-            <a href="#">Inicio</a>
-            <a href="#">Servicios</a>
-            <a href="#">Contacto</a>
+            <a href="Index.php">Inicio</a>
+            <a href="carrito.php">Carrito</a>
+            <a href="ubicacion.php">Ubicación</a>
+            <a href="contacto.php">Contacto</a>
         </nav>
     </header>
 
@@ -53,7 +54,7 @@
             </div>
         </section>
 
-        <!-- Bloque de mapa -->
+        <!-- Bloque de mapa 
         <div class="mapa">
             <h3>Encuéntranos aquí</h3>
             <iframe 
@@ -64,7 +65,7 @@
                 allowfullscreen="" 
                 loading="lazy">
             </iframe>
-        </div>
+        </div>-->
 
 
         <!-- Botón flotante de WhatsApp -->
