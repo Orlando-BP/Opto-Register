@@ -10,6 +10,7 @@ if (!isset($_SESSION['user'])) {
     <head>
         <meta charset="UTF-8">
         <title>Dashboard</title>
+        <link rel="stylesheet" href="CSS/style_admin.css">
     </head>
     <body>
         <h2>Bienvenido, <?php echo $_SESSION['user']; ?>!</h2>
@@ -21,7 +22,7 @@ if (!isset($_SESSION['user'])) {
         </div>
         <div id="productos" class="tabcontent" style="display:block;">
             <h3>Gestión de Productos</h3>
-            <form id="form-producto" method="post" action="registroProducto.php" style="margin-bottom:20px;">
+            <form id="form-producto" method="post" action="registroProducto.php">
                 <label>Tipo:</label>
                 <input type="text" name="tipo" required>
                 <label>Material:</label>
@@ -36,7 +37,7 @@ if (!isset($_SESSION['user'])) {
                 <input type="text" name="observaciones">
                 <button type="submit">Registrar Producto</button>
             </form>
-            <table border="1" width="100%" id="tabla-productos">
+            <table id="tabla-productos">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -54,24 +55,34 @@ if (!isset($_SESSION['user'])) {
                 </tbody>
             </table>
         </div>
-        </div>
         <div id="correos" class="tabcontent" style="display:none;">
             <h3>Gestión de Correos</h3>
-            <!-- Aquí irá el formulario y la tabla de correos -->
+            <form id="form-correo" method="post" action="registroCorreo.php">
+                <label>Nombre:</label>
+                <input type="text" name="nombre" required>
+                <label>Correo:</label>
+                <input type="email" name="correo" required>
+                <label>Teléfono:</label>
+                <input type="text" name="telefono">
+                <button type="submit">Registrar Correo</button>
+            </form>
+            <table id="tabla-correos">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se cargarán los correos desde la base de datos -->
+                </tbody>
+            </table>
         </div>
         <style>
-            .tabs { margin-bottom: 20px; }
-            .tablink {
-                background-color: #eee;
-                border: none;
-                outline: none;
-                cursor: pointer;
-                padding: 10px 20px;
-                transition: background 0.3s;
-                font-size: 16px;
-            }
-            .tablink.active, .tablink:hover { background-color: #ccc; }
-            .tabcontent { display: none; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+            
         </style>
         <script>
             function openTab(evt, tabName) {

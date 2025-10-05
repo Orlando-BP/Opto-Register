@@ -1,0 +1,133 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e4d7d7; /* Gris claro */
+    text-align: center;
+    margin-top: 50px;
+}
+
+h2 {
+    color: #333333; /* Gris oscuro */
+}
+
+form {
+    background-color: #ffffff; /* Blanco */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    margin-top: 20px;
+}
+
+label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input {
+    padding: 10px;
+    width: 250px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #56CCF2; /* Azul claro */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45A6D1; /* Azul oscuro */
+}
+
+p {
+    color: red;
+    font-weight: bold;
+}
+
+.header-dashboard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 0 30px;
+}
+.bienvenido-icon {
+    font-size: 28px;
+    margin-right: 8px;
+}
+.user-name {
+    color: #56CCF2;
+    font-weight: bold;
+}
+.btn-logout {
+    background-color: #56CCF2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+.btn-logout:hover {
+    background-color: #45A6D1;
+}
+.tabs { 
+    margin-bottom: 20px; 
+}
+.tablink {
+    background-color: #56CCF2;
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    margin-right: 5px;
+    border-radius: 5px 5px 0 0;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    transition: background 0.3s;
+}
+.tablink.active, .tablink:hover {
+    background-color: #45A6D1;
+}
+.tabcontent {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 0 0 8px 8px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.07);
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#tabla-productos, #tabla-correos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+}
+#tabla-productos th, #tabla-productos td,
+#tabla-correos th, #tabla-correos td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+#tabla-productos th, #tabla-correos th {
+    background-color: #56CCF2;
+    color: #fff;
+}
+#tabla-productos tr:nth-child(even), #tabla-correos tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
