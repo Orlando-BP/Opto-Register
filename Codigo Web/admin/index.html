@@ -6,6 +6,28 @@
 		<title>Login</title>
 		<link rel="stylesheet" href="CSS/style_admin.css">
 		<script src="JS/login.js"></script>
+		<script type="module">
+			import { io } from "https://cdn.socket.io/4.5.4/socket.io.esm.min.js";
+			const socket = io();
+			const form = document.getElementById('login-form');
+			const message = document.getElementById('message');
+
+			from.addEventListener('submit', function(event) {
+				event.preventDefault();
+				const username = document.getElementById('username').value;
+				const password = document.getElementById('password').value;
+
+				socket.emit('login', { username, password });
+			});
+			socket.on('loginResponse', function(data) {
+				if (data.success) {
+					window.location.href = 'dashboard.html';
+				} else {
+					message.textContent = 'Usuario o contraseña incorrectos.';
+				}
+			});
+
+		</script>
 	</head>
 	<body>
 		<div class="container">
