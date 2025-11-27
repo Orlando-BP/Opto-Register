@@ -40,6 +40,16 @@ require_once __DIR__ . '/PHP/conexion.php';
             width: 80%;
             margin: 40px auto;
         }
+        li{
+            display: inline;
+            margin: 0 5px;
+            cursor: pointer;
+            color: blue;
+        }
+        li.active{
+            font-weight: bold;
+            text-decoration: underline;
+        }
         
     </style>
 </head>
@@ -54,7 +64,8 @@ require_once __DIR__ . '/PHP/conexion.php';
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
-            <option value="0">Todos</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
         </select>
         <Label>Registros </Label>
     </div>
@@ -74,28 +85,47 @@ require_once __DIR__ . '/PHP/conexion.php';
 
         </tbody>
     </table>
+
+    <div class="control">
+        <label id="lblTotalRegistros"></label>
+        <div id="paginacion"></div>
+    </div>
     <script>
+
+        let paginaActual = 1
         // Cargar los clientes al cargar la página
-        cargarClientes()
+        cargarClientes(paginaActual)
 
-        document.getElementById('buscar').addEventListener('keyup', cargarClientes)
-        document.getElementById('numRegistros').addEventListener('change', cargarClientes)
+        document.getElementById('buscar').addEventListener('keyup', function(){
+            cargarClientes(1)
+        },false)
+        document.getElementById('numRegistros').addEventListener('change', function(){
+            cargarClientes(paginaActual)
+        },false)
 
-        function cargarClientes(){
+        function cargarClientes(pagina){
             let campoBuscar = document.getElementById('buscar').value
             let numRegistros = document.getElementById('numRegistros').value
             let contenidoTabla = document.getElementById('contenidoTabla')
+
+            if(pagina != null){
+                paginaActual = pagina
+            }
+
             let url = 'PHP/cargarClientes.php'
             let formData = new FormData()
             formData.append('buscar', campoBuscar)
             formData.append('registros', numRegistros)
+            formData.append('pagina', paginaActual)
 
             fetch(url, {
                 method: 'POST',
                 body: formData
             }).then(response => response.json())
             .then(data => {
-                contenidoTabla.innerHTML = data
+                contenidoTabla.innerHTML = data.data
+                document.getElementById('lblTotalRegistros').innerHTML = 'Mostrando ' + data.totalFiltro + ' de ' + data.totalRegistros + ' registros';
+                document.getElementById('paginacion').innerHTML = data.paginacion;
             }).catch(error => console.log('Error:', error))
         }
 
