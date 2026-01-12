@@ -1,7 +1,7 @@
 <?php
 
 // Incluir la conexión a la base de datos
-require_once __DIR__ . '/PHP/conexion.php';
+require_once __DIR__ . '/conexion.php';
 
 // Recibir los datos del formulario de registro de cliente
 

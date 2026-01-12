@@ -32,7 +32,7 @@
     </style>
 </head>
 <body>
-    <form name="registroCliente" action="procesarRegistroCliente.php" method="post">
+    <form name="registroCliente" action="/PHP/procesarRegistroCliente.php" method="post">
         <h2>Registro de Cliente</h2>
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" required>
