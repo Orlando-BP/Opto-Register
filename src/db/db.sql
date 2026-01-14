@@ -9,13 +9,23 @@ CREATE TABLE Clients (
 CREATE TABLE SalesNotes (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     idClient INT,
-    issueDate DATE NOT NULL,
-    deliveryDate DATE,
-    totalPrice DECIMAL(10,2) NOT NULL,
-    advance DECIMAL(10,2) NOT NULL,
-    balance DECIMAL(10,2) NOT NULL,
+    date DATE ,
+    advance DECIMAL(10,2) ,
+    remaining DECIMAL(10,2) ,
+    totalPrice DECIMAL(10,2) ,
     FOREIGN KEY (idClient) REFERENCES Clients(id) ON DELETE SET NULL
 );
+
+CREATE TABLE Product (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    idSalesNote INT,
+    idCalibration INT,
+    name VARCHAR(100),
+    description TEXT,
+    value DECIMAL(10,2),
+    FOREIGN KEY (idSalesNote) REFERENCES SalesNotes(id) ON DELETE SET NULL
+);
+
 
 CREATE TABLE Calibrations (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -27,20 +37,8 @@ CREATE TABLE Calibrations (
     left_SP DECIMAL(4,2),
     left_CYL DECIMAL(4,2),
     left_Axis INT,
-    registrationDate DATE NOT NULL,
+    registrationDate DATE ,
     FOREIGN KEY (idClient) REFERENCES Clients(id) ON DELETE SET NULL
-);
-
-CREATE TABLE Products (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    idNote INT,
-    type VARCHAR(50) NOT NULL,
-    material VARCHAR(50),
-    frame VARCHAR(50),
-    color VARCHAR(30),
-    size VARCHAR(20),
-    observations TEXT,
-    FOREIGN KEY (idNote) REFERENCES SalesNotes(id) ON DELETE CASCADE
 );
 
 

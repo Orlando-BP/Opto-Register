@@ -1,6 +1,6 @@
-import ClientsModel from "../models/clients.model.js";
+import CalibrationsModel from "../models/calibrations.model.js";
 
-class Clients {
+class Calibrations {
     constructor() {
         this.create = this.create.bind(this);
         this.readAll = this.readAll.bind(this);
@@ -13,7 +13,7 @@ class Clients {
     async create(req, res) {
         try {
             const data = req.body;
-            const result = await ClientsModel.create(data);
+            const result = await CalibrationsModel.create(data);
             res.status(201).json(result);
         } catch (error) {
             console.error(error);
@@ -23,7 +23,7 @@ class Clients {
 
     async readAll(req, res) {
         try {
-            const results = await ClientsModel.findAll();
+            const results = await CalibrationsModel.findAll();
             res.json(results);
         } catch (error) {
             console.error(error);
@@ -34,11 +34,11 @@ class Clients {
     async readOne(req, res) {
         try {
             const { id } = req.params;
-            const result = await ClientsModel.findById(id);
+            const result = await CalibrationsModel.findById(id);
             if (!result)
                 return res
                     .status(404)
-                    .json({ message: "Usuario no encontrado" });
+                    .json({ message: "Calibración no encontrada" });
             res.json(result);
         } catch (error) {
             console.error(error);
@@ -50,7 +50,7 @@ class Clients {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await ClientsModel.update(id, data);
+            const result = await CalibrationsModel.update(id, data);
             res.json(result);
         } catch (error) {
             console.error(error);
@@ -62,7 +62,7 @@ class Clients {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await ClientsModel.replace(id, data);
+            const result = await CalibrationsModel.replace(id, data);
             res.json(result);
         } catch (error) {
             console.error(error);
@@ -73,11 +73,11 @@ class Clients {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const result = await ClientsModel.delete(id);
+            const result = await CalibrationsModel.delete(id);
             if (!result)
                 return res
                     .status(404)
-                    .json({ message: "Usuario no encontrado" });
+                    .json({ message: "Calibración no encontrada" });
             return res.sendStatus(204);
         } catch (error) {
             console.error(error);
@@ -86,4 +86,4 @@ class Clients {
     }
 }
 
-export default new Clients();
+export default new Calibrations();

@@ -1,6 +1,6 @@
-import ClientsModel from "../models/clients.model.js";
+import ProductsModel from "../models/products.model.js";
 
-class Clients {
+class Products {
     constructor() {
         this.create = this.create.bind(this);
         this.readAll = this.readAll.bind(this);
@@ -13,7 +13,7 @@ class Clients {
     async create(req, res) {
         try {
             const data = req.body;
-            const result = await ClientsModel.create(data);
+            const result = await ProductsModel.create(data);
             res.status(201).json(result);
         } catch (error) {
             console.error(error);
@@ -23,7 +23,7 @@ class Clients {
 
     async readAll(req, res) {
         try {
-            const results = await ClientsModel.findAll();
+            const results = await ProductsModel.findAll();
             res.json(results);
         } catch (error) {
             console.error(error);
@@ -34,11 +34,11 @@ class Clients {
     async readOne(req, res) {
         try {
             const { id } = req.params;
-            const result = await ClientsModel.findById(id);
+            const result = await ProductsModel.findById(id);
             if (!result)
                 return res
                     .status(404)
-                    .json({ message: "Usuario no encontrado" });
+                    .json({ message: "Producto no encontrado" });
             res.json(result);
         } catch (error) {
             console.error(error);
@@ -50,7 +50,7 @@ class Clients {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await ClientsModel.update(id, data);
+            const result = await ProductsModel.update(id, data);
             res.json(result);
         } catch (error) {
             console.error(error);
@@ -62,7 +62,7 @@ class Clients {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await ClientsModel.replace(id, data);
+            const result = await ProductsModel.replace(id, data);
             res.json(result);
         } catch (error) {
             console.error(error);
@@ -73,11 +73,11 @@ class Clients {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const result = await ClientsModel.delete(id);
+            const result = await ProductsModel.delete(id);
             if (!result)
                 return res
                     .status(404)
-                    .json({ message: "Usuario no encontrado" });
+                    .json({ message: "Producto no encontrado" });
             return res.sendStatus(204);
         } catch (error) {
             console.error(error);
@@ -86,4 +86,4 @@ class Clients {
     }
 }
 
-export default new Clients();
+export default new Products();
