@@ -14,20 +14,20 @@ class SalesNotes {
         try {
             const data = req.body;
             const result = await SalesNotesModel.create(data);
-            res.status(201).json(result);
+            res.status(201).json({ status: "201", message: "Created", data: result });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
 
     async readAll(req, res) {
         try {
             const results = await SalesNotesModel.findAll();
-            res.json(results);
+            res.json({ status: "200", message: "OK", data: results });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
 
@@ -38,11 +38,11 @@ class SalesNotes {
             if (!result)
                 return res
                     .status(404)
-                    .json({ message: "Nota de venta no encontrada" });
-            res.json(result);
+                    .json({ status: "404", message: "Nota de venta no encontrada", data: null });
+            res.json({ status: "200", message: "OK", data: result });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
 
@@ -51,10 +51,10 @@ class SalesNotes {
             const { id } = req.params;
             const data = req.body;
             const result = await SalesNotesModel.update(id, data);
-            res.json(result);
+            res.json({ status: "200", message: "Updated", data: result });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
 
@@ -63,10 +63,10 @@ class SalesNotes {
             const { id } = req.params;
             const data = req.body;
             const result = await SalesNotesModel.replace(id, data);
-            res.json(result);
+            res.json({ status: "200", message: "Replaced", data: result });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
 
@@ -77,11 +77,11 @@ class SalesNotes {
             if (!result)
                 return res
                     .status(404)
-                    .json({ message: "Nota de venta no encontrada" });
-            return res.sendStatus(204);
+                    .json({ status: "404", message: "Nota de venta no encontrada", data: null });
+            return res.status(200).json({ status: "200", message: "Deleted", data: null });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
 }

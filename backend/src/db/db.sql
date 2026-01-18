@@ -41,7 +41,11 @@ CREATE TABLE Calibrations (
     FOREIGN KEY (idClient) REFERENCES Clients(id) ON DELETE SET NULL
 );
 
-
+CREATE TABLE Admins (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+)
 
 
 
