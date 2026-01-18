@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type ApiResponse = {
     status: string;
@@ -12,6 +13,7 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [user, setUser] = useState<any>(null);
+    const navigate = useNavigate();
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -30,6 +32,10 @@ export default function Login() {
                 return;
             }
             setUser(body.data.user);
+            if (body.data?.token) {
+                localStorage.setItem("token", body.data.token);
+            }
+            navigate("/dashboard");
         } catch (err: any) {
             setError(err.message || "Network error");
         } finally {
@@ -37,13 +43,7 @@ export default function Login() {
         }
     }
 
-    if (user)
-        return (
-            <div>
-                <p>Bienvenido, {user.username}</p>
-                <pre>{JSON.stringify(user, null, 2)}</pre>
-            </div>
-        );
+    // Nota: redirección tras login maneja la vista del dashboard.
 
     return (
         <form onSubmit={handleSubmit} className="login-form">
