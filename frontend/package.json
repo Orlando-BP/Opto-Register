@@ -1,6 +1,7 @@
 {
     "name": "opto-register-frontend",
     "version": "0.0.0",
+    "type": "module",
     "private": true,
     "scripts": {
         "dev": "vite",
@@ -11,12 +12,15 @@
         "@": "dist"
     },
     "dependencies": {
+        "@tailwindcss/vite": "^4.1.18",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "^7.12.0",
-        "sonner": "^2.0.7"
+        "sonner": "^2.0.7",
+        "tailwindcss": "^4.1.18"
     },
     "devDependencies": {
+        "@types/node": "^25.0.9",
         "@types/react": "^18.0.0",
         "@types/react-dom": "^18.0.0",
         "typescript": "^5.0.0",

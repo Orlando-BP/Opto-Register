@@ -7,18 +7,20 @@ import RequireAuth from "./routes/RequireAuth.jsx";
 
 export default function App() {
     return (
-        <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route
-                path="/dashboard"
-                element={
-                    <RequireAuth>
-                        <Dashboard />
-                    </RequireAuth>
-                }
-            />
-            <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="min-h-screen bg-slate-950 text-slate-100 antialiased">
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <RequireAuth>
+                            <Dashboard />
+                        </RequireAuth>
+                    }
+                />
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </div>
     );
 }
