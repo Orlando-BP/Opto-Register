@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./features/Login";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard.jsx";
+import RegistroCliente from "./pages/RegistroCliente.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import RequireAuth from "./routes/RequireAuth.jsx";
 
@@ -11,6 +12,7 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/registro-cliente" element={<RegistroCliente />} />
                 <Route
                     path="/dashboard"
                     element={

@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { toast } from "sonner";
 
 import { fetchApi } from "@/api/fetchApi";
- // Si el alias '@' no funciona con Vite: añade "paths" en tsconfig.json y configura "resolve.alias" en vite.config.ts
+//  Si el alias '@' no funciona con Vite: añade "paths" en tsconfig.json y configura "resolve.alias" en vite.config.ts
 
 /**
  * Recursively normalize string values in an object or array
