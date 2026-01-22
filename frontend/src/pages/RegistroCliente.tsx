@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Button from "../components/ui/Button";
 
 
@@ -18,7 +18,11 @@ export default function RegistroCliente() {
     const [left_CYL, setLeft_CYL] = useState("");
     const [left_Axis, setLeft_Axis] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showGraduaciones, setShowGraduaciones] = useState(false);
 
+    async function handleSubmit(e: React.FormEvent) {
+    
+        }
     // logica de registro de cliente 
     return (
         <div className="mx-auto flex min-h-screen max-w-3xl flex-col items-start justify-center gap-6 px-6 py-16">
@@ -71,7 +75,17 @@ export default function RegistroCliente() {
                             />
                         </label>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border border-slate-700 rounded-md bg-slate-800">
+                    {/* Checkbox para mostrar/ocultar graduaciones */}
+                    <label className="flex items-center gap-3 text-sm font-medium text-slate-200 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            checked={showGraduaciones}
+                            onChange={(e) => setShowGraduaciones(e.target.checked)}
+                            className="h-4 w-4 rounded border-slate-700 bg-slate-950 text-sky-500 cursor-pointer"
+                        />
+                        <span>Agregar Graduación</span>
+                    </label>
+                    <div className={` ${!showGraduaciones ? 'hidden' : ''} grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border border-slate-700 rounded-md bg-slate-800 `}>
                         <label className="block text-sm font-medium text-slate-200">
                             Right SP
                             <input
