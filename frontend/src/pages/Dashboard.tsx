@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/Button";
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -18,12 +19,29 @@ export default function Dashboard() {
                     Contenido protegido para administradores.
                 </p>
             </div>
-            <button
-                onClick={handleLogout}
-                className="inline-flex w-fit items-center justify-center rounded-md border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-800"
-            >
-                Cerrar sesión
-            </button>
+            <div className="flex flex-wrap gap-3">
+                <Button
+                    type="button"
+                    onClick={() => navigate("/clientes")}
+                    className="inline-flex w-fit items-center justify-center rounded-md border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-800"
+                >
+                    Clientes
+                </Button>
+                <Button
+                    type="button"
+                    onClick={() => navigate("/graduaciones")}
+                    className="inline-flex w-fit items-center justify-center rounded-md border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-800"
+                >
+                    Graduaciones
+                </Button>
+                <Button
+                    type="button"
+                    onClick={handleLogout}
+                    className="inline-flex w-fit items-center justify-center rounded-md border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-800"
+                >
+                    Cerrar sesión
+                </Button>
+            </div>
         </div>
     );
 }

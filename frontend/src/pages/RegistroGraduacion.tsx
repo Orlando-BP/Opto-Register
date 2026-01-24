@@ -1,99 +1,118 @@
-import { Link } from "react-router-dom";
-import React, { useState } from "react";
-import Button from "../components/ui/Button";
-
-
-
+import RegistroGraduacionForm from "@/components/RegistroGraduacion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFetch } from "@/hooks";
 
 export default function RegistroGraduacion() {
-    const [right_SP, setRight_SP] = useState("");
-    const [right_CYL, setRight_CYL] = useState("");
-    const [right_Axis, setRight_Axis] = useState("");
-    const [left_SP, setLeft_SP] = useState("");
-    const [left_CYL, setLeft_CYL] = useState("");
-    const [left_Axis, setLeft_Axis] = useState("");
-    const [loading, setLoading] = useState(false);
+    const { response, loading, error } = useFetch({ url: "/v1/calibrations" });
+    const graduations = Array.isArray(response?.data) ? response?.data : [];
 
-    // logica de registro de graduacion
     return (
-        <div className="mx-auto flex min-h-screen max-w-3xl flex-col items-start justify-center gap-6 px-6 py-16">
-            <div className="w-full flex min-h-screen items-center justify-center px-4 py-12">
-                <div className="w-full  space-y-6 rounded-xl border border-slate-800 bg-slate-900/70 p-8 shadow-xl">
-                    {/* Formulario de registro de graduación */}
-                    <div className="space-y-2 text-center">
-                        <h1 className="text-2xl font-semibold text-white">
-                            Registro de Graduación
-                        </h1>
-                        <p className="text-sm text-slate-400">
-                            Ingresa los datos de la graduación
-                        </p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border border-slate-700 rounded-md bg-slate-800">
-                        <label className="block text-sm font-medium text-slate-200">
-                            Right SP
-                            <input
-                                value={right_SP}
-                                onChange={(e) => setRight_SP(e.target.value)}
-                                className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
-                                placeholder="Right SP"
-                            />
-                        </label>
-                        <label className="block text-sm font-medium text-slate-200">
-                            Right CYL
-                            <input
-                                value={right_CYL}
-                                onChange={(e) => setRight_CYL(e.target.value)}
-                                className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
-                                placeholder="Right CYL"
-                            />
-                        </label>
-                        <label className="block text-sm font-medium text-slate-200">
-                            Right Axis
-                            <input
-                                value={right_Axis}
-                                onChange={(e) => setRight_Axis(e.target.value)}
-                                className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
-                                placeholder="Right Axis"
-                            />
-                        </label>
-                        <label className="block text-sm font-medium text-slate-200">
-                            Left SP
-                            <input
-                                value={left_SP}
-                                onChange={(e) => setLeft_SP(e.target.value)}
-                                className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
-                                placeholder="Left SP"
-                            />
-                        </label>
-                        <label className="block text-sm font-medium text-slate-200">
-                            Left CYL
-                            <input
-                                value={left_CYL}
-                                onChange={(e) => setLeft_CYL(e.target.value)}
-                                className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
-                                placeholder="Left CYL"
-                            />
-                        </label>
-                        <label className="block text-sm font-medium text-slate-200">
-                            Left Axis
-                            <input
-                                value={left_Axis}
-                                onChange={(e) => setLeft_Axis(e.target.value)}
-                                className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
-                                placeholder="Left Axis"
-                            />
-                        </label>
-                    </div>
-                    <div className="max-w-md text-center mx-auto">
-                        <Button
-                            type="submit"
-                            disabled={loading}
-                            label={loading ? "Añadiendo..." : "Añadir Graduación"}
-                            fullWidth
-                        />
-                    </div>
-                </div>
+        <div className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-6 py-16">
+            <div className="space-y-2">
+                <h2 className="text-3xl font-semibold text-white">
+                    Graduaciones
+                </h2>
+                <p className="text-slate-400">
+                    Registro y listado de graduaciones
+                </p>
             </div>
+
+            <Tabs defaultValue="registro">
+                <TabsList>
+                    <TabsTrigger value="registro">Registrar</TabsTrigger>
+                    <TabsTrigger value="lista">Lista</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="registro" className="mt-4">
+                    <RegistroGraduacionForm />
+                </TabsContent>
+
+                <TabsContent value="lista" className="mt-4">
+                    <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+                        {loading && (
+                            <p className="text-sm text-slate-400">
+                                Cargando graduaciones...
+                            </p>
+                        )}
+                        {error && (
+                            <p className="text-sm text-red-300">
+                                No se pudieron cargar las graduaciones.
+                            </p>
+                        )}
+                        {!loading && !error && graduations.length === 0 && (
+                            <p className="text-sm text-slate-400">
+                                No hay graduaciones registradas.
+                            </p>
+                        )}
+
+                        {!loading && !error && graduations.length > 0 && (
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full text-left text-sm text-slate-200">
+                                    <thead className="text-xs uppercase text-slate-400">
+                                        <tr>
+                                            <th className="px-3 py-2">ID</th>
+                                            <th className="px-3 py-2">
+                                                Cliente
+                                            </th>
+                                            <th className="px-3 py-2">Edad</th>
+                                            <th className="px-3 py-2">R-SP</th>
+                                            <th className="px-3 py-2">R-CYL</th>
+                                            <th className="px-3 py-2">
+                                                R-Axis
+                                            </th>
+                                            <th className="px-3 py-2">L-SP</th>
+                                            <th className="px-3 py-2">L-CYL</th>
+                                            <th className="px-3 py-2">
+                                                L-Axis
+                                            </th>
+                                            <th className="px-3 py-2">Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-800">
+                                        {graduations.map((item: any) => (
+                                            <tr
+                                                key={item?.id}
+                                                className="hover:bg-slate-800/50"
+                                            >
+                                                <td className="px-3 py-2">
+                                                    {item?.id}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    {item?.idClient}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    {item?.age}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    {item?.right_SP}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    {item?.right_CYL}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    {item?.right_Axis}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    {item?.left_SP}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    {item?.left_CYL}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    {item?.left_Axis}
+                                                </td>
+                                                <td className="px-3 py-2">
+                                                    {item?.registrationDate}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }

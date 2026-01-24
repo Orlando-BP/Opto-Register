@@ -1,5 +1,6 @@
 import AdminsModel from "../models/admins.model.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 class Admins {
 	constructor() {
@@ -70,7 +71,18 @@ class Admins {
 			const match = await bcrypt.compare(password, user.password);
 			if (!match) return res.status(401).json({ status: "401", message: "Invalid credentials", data: null });
 			const { password: _pw, ...safeUser } = user;
-			res.json({ status: "200", message: "Login successful", data: { user: safeUser } });
+
+			// Generar token JWT
+			const secret = process.env.JWT_SECRET || "TetoPear";
+			const token = jwt.sign({ id: safeUser.id, username: safeUser.username }, secret, {
+				expiresIn: "1h",
+			});
+
+			res.json({
+				status: "200",
+				message: "Login successful",
+				data: { token, user: safeUser },
+			});
 		} catch (error) {
 			console.error(error);
 			res.status(500).json({ status: "500", message: "Internal server error", data: null });

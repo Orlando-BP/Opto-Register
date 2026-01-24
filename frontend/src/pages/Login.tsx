@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { usePost, useToast } from "@/hooks";
 
 export default function Login() {
@@ -11,44 +11,50 @@ export default function Login() {
     const { execute, loading } = usePost();
     const { toast } = useToast();
 
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
+    async function handleLogin() {
         setError(null);
 
-        execute({
-            url: "/v1/admins/login",
-            body: { username, password },
-            method: "post",
-        }).then(
-            (res: {
-                status?: number;
-                ok?: boolean;
-                data?: {
-                    token?: string;
-                    user?: { id?: number; username?: string };
-                };
-                message?: React.SetStateAction<string | null>;
-            }) => {
-                if (res.ok ?? res.status === 200) {
-                    const token = res.data?.token;
-                    if (token) {
-                        localStorage.setItem("token", token);
-                    }
-                    toast({
-                        title: "Bienvenido Señor Stark",
-                        description: "✅ Has iniciado sesión correctamente",
-                    });
-                    navigate("/dashboard");
+        try {
+            const res: any = await execute({
+                url: "/v1/admins/login",
+                body: { username, password },
+                method: "post",
+            });
+
+            if (res.ok ?? res.status === 200) {
+                const token = res.data?.token;
+                if (token) {
+                    localStorage.setItem("token", token);
+                    console.log("token:", token);
                 } else {
-                    setError(res.message ?? "No se pudo iniciar sesión.");
-                    toast({
-                        title: "Error al iniciar sesión",
-                        description:
-                            "❌ No se pudo iniciar sesión. Por favor, verifica tus credenciales.",
-                    });
+                    console.log("token ausente en respuesta:", res);
                 }
-            },
-        );
+                toast({
+                    title: "Bienvenido Señor Stark",
+                    description: "✅ Has iniciado sesión correctamente",
+                });
+                navigate("/dashboard");
+                console.log("Este Log si se imprime");
+            } else {
+                setError(res.message ?? "No se pudo iniciar sesión.");
+                toast({
+                    title: "Error al iniciar sesión",
+                    description:
+                        "❌ No se pudo iniciar sesión. Por favor, verifica tus credenciales.",
+                });
+            }
+        } catch (err) {
+            setError("Error de conexión");
+            toast({
+                title: "Error",
+                description: "❌ No se pudo conectar al servidor.",
+            });
+        }
+    }
+
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        void handleLogin();
     }
 
     return (
@@ -94,12 +100,13 @@ export default function Login() {
                     </label>
                 </div>
 
-                <Button
-                    type="submit"
-                    disabled={loading}
-                    label={loading ? "Ingresando..." : "Ingresar"}
-                    fullWidth
-                />
+                <Button 
+                    disabled={loading} 
+                    onClick={handleLogin}
+                    className="w-full"
+                >
+                    {loading ? "Ingresando..." : "Ingresar"}
+                </Button>
             </form>
         </div>
     );
