@@ -10,12 +10,10 @@ export default defineConfig({
     server: {
         port: 5173,
     },
-    plugins: [
-        tailwindcss()
-    ],
+    plugins: [tailwindcss()],
     resolve: {
         alias: {
-            "@": path.resolve(__dirname, "./"),
+            "@": path.resolve(__dirname, "./src"),
             // fix loading all icon chunks in dev mode
             // https://github.com/tabler/tabler-icons/issues/1233
             "@tabler/icons-react":

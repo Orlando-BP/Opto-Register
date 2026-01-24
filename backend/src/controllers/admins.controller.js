@@ -62,8 +62,6 @@ class Admins {
 	async login(req, res) {
 		try {
 			const { username, password } = req.body;
-			console.log(username, password);
-			console.log("Ci")
 			if (!username || !password)
 				return res.status(400).json({ status: "400", message: "username and password required", data: null });
 			const admins = await AdminsModel.findAll();

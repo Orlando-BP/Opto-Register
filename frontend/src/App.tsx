@@ -1,11 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "./features/Login";
-import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard.jsx";
+import Login from "./pages/Login.js";
 import RegistroCliente from "./pages/RegistroCliente.jsx";
 import RegistroGraduacion from "./pages/RegistroGraduacion.jsx";
-import NotFound from "./pages/NotFound.jsx";
+import Home from "./pages/Home.js";
+import Dashboard from "./pages/Dashboard.js";
+import NotFound from "./pages/NotFound.js";
 import RequireAuth from "./routes/RequireAuth.jsx";
+import Toaster from "./components/ui/toaster";
 
 export default function App() {
     return (
@@ -14,7 +15,10 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/registro-cliente" element={<RegistroCliente />} />
-                <Route path="/registro-graduacion" element={<RegistroGraduacion />} />
+                <Route
+                    path="/registro-graduacion"
+                    element={<RegistroGraduacion />}
+                />
                 <Route
                     path="/dashboard"
                     element={
@@ -25,6 +29,7 @@ export default function App() {
                 />
                 <Route path="*" element={<NotFound />} />
             </Routes>
+            <Toaster />
         </div>
     );
 }

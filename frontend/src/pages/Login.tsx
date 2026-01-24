@@ -1,50 +1,55 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/ui/Button";
-
-type ApiResponse = {
-    status: string;
-    message: string;
-    data: any;
-};
+import Button from "@/components/ui/Button";
+import { usePost, useToast } from "@/hooks";
 
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [user, setUser] = useState<any>(null);
     const navigate = useNavigate();
+    const { execute, loading } = usePost();
+    const { toast } = useToast();
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        setLoading(true);
         setError(null);
-        try {
-            const res = await fetch("http://localhost:3000/v1/admins/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password }),
-            });
-            const body: ApiResponse = await res.json();
-            if (!res.ok) {
-                setError(body.message || "Error");
-                setLoading(false);
-                return;
-            }
-            setUser(body.data.user);
-            if (body.data?.token) {
-                localStorage.setItem("token", body.data.token);
-            }
-            navigate("/dashboard");
-        } catch (err: any) {
-            setError(err.message || "Network error");
-        } finally {
-            setLoading(false);
-        }
-    }
 
-    // Nota: redirección tras login maneja la vista del dashboard.
+        execute({
+            url: "/v1/admins/login",
+            body: { username, password },
+            method: "post",
+        }).then(
+            (res: {
+                status?: number;
+                ok?: boolean;
+                data?: {
+                    token?: string;
+                    user?: { id?: number; username?: string };
+                };
+                message?: React.SetStateAction<string | null>;
+            }) => {
+                if (res.ok ?? res.status === 200) {
+                    const token = res.data?.token;
+                    if (token) {
+                        localStorage.setItem("token", token);
+                    }
+                    toast({
+                        title: "Bienvenido Señor Stark",
+                        description: "✅ Has iniciado sesión correctamente",
+                    });
+                    navigate("/dashboard");
+                } else {
+                    setError(res.message ?? "No se pudo iniciar sesión.");
+                    toast({
+                        title: "Error al iniciar sesión",
+                        description:
+                            "❌ No se pudo iniciar sesión. Por favor, verifica tus credenciales.",
+                    });
+                }
+            },
+        );
+    }
 
     return (
         <div className="flex min-h-screen items-center justify-center px-4 py-12">
