@@ -1,5 +1,5 @@
 import RegistroGraduacionForm from "@/components/RegistroGraduacion";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useFetch } from "@/hooks";
 
 export default function RegistroGraduacion() {

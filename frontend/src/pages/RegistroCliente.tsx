@@ -1,5 +1,5 @@
 import RegistroClienteForm from "@/components/RegistroCliente";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useFetch } from "@/hooks";
 
 export default function RegistroCliente() {
