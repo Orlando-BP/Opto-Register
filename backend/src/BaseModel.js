@@ -1,4 +1,4 @@
-import { pool } from "../db.js";
+import { pool } from "./db.js";
 
 class ModelValidationError extends Error {
     constructor(message, details = null) {
@@ -18,6 +18,13 @@ class BaseModel {
         this.primaryKey = options.primaryKey || "id";
         this.relations = options.relations || {};
         this.foreignKeys = options.foreignKeys || {};
+    }
+
+    resolveModel(modelRef) {
+        if (typeof modelRef === "function") {
+            return modelRef();
+        }
+        return modelRef;
     }
 
     isTypeValid(value, type) {
@@ -74,6 +81,46 @@ class BaseModel {
         return result;
     }
 
+    buildWhereClause(data) {
+        if (!data || typeof data !== "object") return { clause: "", values: [] };
+        const filtered = this.filterData(data);
+        this.validateData(filtered, { mode: "filter" });
+
+        const entries = Object.entries(filtered).filter(([, value]) => value !== undefined);
+        if (entries.length === 0) return { clause: "", values: [] };
+
+        const values = [];
+        const clauses = [];
+        let index = 1;
+
+        for (const [key, value] of entries) {
+            if (value === null) {
+                clauses.push(`${key} IS NULL`);
+                continue;
+            }
+            clauses.push(`${key} = $${index}`);
+            values.push(value);
+            index += 1;
+        }
+
+        return { clause: `WHERE ${clauses.join(" AND ")}`, values };
+    }
+
+    normalizeId(id) {
+        const expected = this.schema[this.primaryKey];
+        if (expected === "number" || expected === "integer") {
+            const numericId = Number(id);
+            if (Number.isNaN(numericId)) {
+                throw new ModelValidationError(`ID inválido para ${this.tableName}`, {
+                    field: this.primaryKey,
+                    expected,
+                });
+            }
+            return numericId;
+        }
+        return id;
+    }
+
     async ensureForeignKeys(data) {
         const entries = Object.entries(this.foreignKeys);
         for (const [field, config] of entries) {
@@ -81,12 +128,16 @@ class BaseModel {
             const value = data[field];
             if (value === null || value === undefined) continue;
             const refColumn = config.refColumn || "id";
-            const rows = await config.model.findByColumn(refColumn, value, { attributes: [refColumn] });
+            const model = this.resolveModel(config.model);
+            if (!model) continue;
+            const rows = await model.findByColumn(refColumn, value, { attributes: [refColumn] });
             if (!rows || rows.length === 0) {
-                throw new ModelValidationError("Llave foránea no existe", {
+                const refTable = config.refTable || model?.tableName || "tabla referenciada";
+                throw new ModelValidationError(`Llave foránea no existe: ${field} -> ${refTable}.${refColumn}`, {
                     field,
                     value,
-                    refTable: config.refTable || config.model?.tableName,
+                    refTable,
+                    refColumn,
                 });
             }
         }
@@ -104,6 +155,10 @@ class BaseModel {
                 name: item.name,
                 attributes: item.attributes,
                 ...(this.relations[item.name] || {}),
+            }))
+            .map(rel => ({
+                ...rel,
+                model: this.resolveModel(rel.model),
             }))
             .filter(rel => rel.model && rel.foreignKey)
             .map(rel => ({
@@ -151,6 +206,9 @@ class BaseModel {
 
     async create(data) {
         const payload = this.fillDefaults(this.filterData(data));
+        if (payload[this.primaryKey] === null || payload[this.primaryKey] === undefined) {
+            delete payload[this.primaryKey];
+        }
         this.validateData(payload, { mode: "create" });
         await this.ensureForeignKeys(payload);
 
@@ -165,17 +223,32 @@ class BaseModel {
     }
 
     async findAll(options = {}) {
-        const query = `SELECT * FROM ${this.tableName}`;
-        const { rows } = await pool.query(query);
+        const { clause, values } = this.buildWhereClause(options.where);
+        const query = `SELECT * FROM ${this.tableName} ${clause}`;
+        const { rows } = await pool.query(query, values);
         if (options.include) {
             return this.attachRelations(rows, options.include);
         }
         return rows;
     }
 
+    async findOne(where = {}, options = {}) {
+        const { clause, values } = this.buildWhereClause(where);
+        const query = `SELECT * FROM ${this.tableName} ${clause} LIMIT 1`;
+        const { rows } = await pool.query(query, values);
+        const row = rows[0] || null;
+        if (!row) return null;
+        if (options.include) {
+            const [withRelations] = await this.attachRelations([row], options.include);
+            return withRelations;
+        }
+        return row;
+    }
+
     async findById(id, options = {}) {
+        const normalizedId = this.normalizeId(id);
         const query = `SELECT * FROM ${this.tableName} WHERE id = $1`;
-        const { rows } = await pool.query(query, [id]);
+        const { rows } = await pool.query(query, [normalizedId]);
         const row = rows[0];
         if (!row) return null;
         if (options.include) {
@@ -198,7 +271,8 @@ class BaseModel {
         const setClauses = entries
             .map(([key], i) => `${key} = COALESCE($${i + 1}, ${key})`)
             .join(", ");
-        const values = [...Object.values(payload), id];
+        const normalizedId = this.normalizeId(id);
+        const values = [...Object.values(payload), normalizedId];
 
         const query = `UPDATE ${this.tableName} SET ${setClauses} WHERE id = $${values.length} RETURNING *`;
         const { rows } = await pool.query(query, values);
@@ -207,6 +281,9 @@ class BaseModel {
 
     async replace(id, data) {
         const payload = this.fillDefaults(this.filterData(data));
+        if (payload[this.primaryKey] === null || payload[this.primaryKey] === undefined) {
+            delete payload[this.primaryKey];
+        }
         this.validateData(payload, { mode: "replace" });
         await this.ensureForeignKeys(payload);
 
@@ -215,13 +292,15 @@ class BaseModel {
         const setClauses = keys.map((key, i) => `${key} = $${i + 1}`).join(", ");
 
         const query = `UPDATE ${this.tableName} SET ${setClauses} WHERE id = $${values.length + 1} RETURNING *`;
-        const { rows } = await pool.query(query, [...values, id]);
+        const normalizedId = this.normalizeId(id);
+        const { rows } = await pool.query(query, [...values, normalizedId]);
         return rows[0];
     }
 
     async delete(id) {
+        const normalizedId = this.normalizeId(id);
         const query = `DELETE FROM ${this.tableName} WHERE id = $1 RETURNING *`;
-        const { rows } = await pool.query(query, [id]);
+        const { rows } = await pool.query(query, [normalizedId]);
         return rows[0];
     }
 }

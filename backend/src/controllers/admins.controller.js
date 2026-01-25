@@ -31,7 +31,8 @@ class Admins {
 
 	async readAll(req, res) {
 		try {
-			const results = await AdminsService.findAll();
+			const filters = req.body && typeof req.body === "object" ? req.body : {};
+			const results = await AdminsService.findAllByWhere(filters);
 			const safe = results.map(r => {
 				const { password, ...rest } = r;
 				return rest;
@@ -49,7 +50,14 @@ class Admins {
 	async readOne(req, res) {
 		try {
 			const { id } = req.params;
-			const result = await AdminsService.findById(id);
+			const filters = req.body && typeof req.body === "object" ? req.body : {};
+			const hasFilters = Object.keys(filters).length > 0;
+			let result = null;
+			if (hasFilters) {
+				result = await AdminsService.findOneByWhere(filters);
+			} else {
+				result = await AdminsService.findById(id);
+			}
 			if (!result)
 				return res
 					.status(404)

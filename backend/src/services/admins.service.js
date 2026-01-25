@@ -19,8 +19,16 @@ const AdminsService = {
 		return AdminsModel.findAll();
 	},
 
+	async findAllByWhere(where = {}) {
+		return AdminsModel.findAll({ where });
+	},
+
 	async findById(id) {
 		return AdminsModel.findById(id);
+	},
+
+	async findOneByWhere(where = {}) {
+		return AdminsModel.findOne(where);
 	},
 
 	async authenticate(username, password) {

@@ -5,12 +5,16 @@ const ProductsService = {
 		return ProductsModel.create(data);
 	},
 
-	async findAll() {
-		return ProductsModel.findAll();
+	async findAll(where = {}) {
+		return ProductsModel.findAll({ where });
 	},
 
 	async findById(id) {
 		return ProductsModel.findById(id);
+	},
+
+	async findOneByWhere(where = {}) {
+		return ProductsModel.findOne(where);
 	},
 
 	async update(id, data) {

@@ -27,7 +27,8 @@ class Calibrations {
 
     async readAll(req, res) {
         try {
-            const results = await CalibrationsService.findAll();
+            const filters = req.body && typeof req.body === "object" ? req.body : {};
+            const results = await CalibrationsService.findAll(filters);
             res.json({ status: "200", message: "OK", data: results });
         } catch (error) {
             console.error(error);
@@ -41,7 +42,14 @@ class Calibrations {
     async readOne(req, res) {
         try {
             const { id } = req.params;
-            const result = await CalibrationsService.findById(id);
+            const filters = req.body && typeof req.body === "object" ? req.body : {};
+            const hasFilters = Object.keys(filters).length > 0;
+            let result = null;
+            if (hasFilters) {
+                result = await CalibrationsService.findOneByWhere(filters);
+            } else {
+                result = await CalibrationsService.findById(id);
+            }
             if (!result)
                 return res
                     .status(404)

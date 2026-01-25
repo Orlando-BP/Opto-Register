@@ -44,7 +44,7 @@ class CalibrationsModel extends BaseModel {
 
         this.foreignKeys = {
             idClient: {
-                model: ClientsModel,
+                model: () => ClientsModel,
                 refColumn: "id",
                 refTable: "Clients",
             },

@@ -25,14 +25,14 @@ class ClientsModel extends BaseModel {
         this.relations = {
             Calibration: {
                 type: "hasOne",
-                model: CalibrationsModel,
+                model: () => CalibrationsModel,
                 foreignKey: "idClient",
                 localKey: "id",
                 as: "Calibration",
             },
             SalesNotes: {
                 type: "hasMany",
-                model: SalesNotesModel,
+                model: () => SalesNotesModel,
                 foreignKey: "idClient",
                 localKey: "id",
                 as: "SalesNotes",

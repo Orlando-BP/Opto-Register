@@ -5,8 +5,9 @@ const SalesNotesService = {
 		return SalesNotesModel.create(data);
 	},
 
-	async findAll() {
+	async findAll(where = {}) {
 		return SalesNotesModel.findAll({
+			where,
 			include: [
 				{
 					name: "Products",
@@ -18,6 +19,17 @@ const SalesNotesService = {
 
 	async findById(id) {
 		return SalesNotesModel.findById(id, {
+			include: [
+				{
+					name: "Products",
+					attributes: ["id", "type", "material", "frame", "color", "size", "observations"],
+				},
+			],
+		});
+	},
+
+	async findOneByWhere(where = {}) {
+		return SalesNotesModel.findOne(where, {
 			include: [
 				{
 					name: "Products",

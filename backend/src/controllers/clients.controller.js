@@ -27,7 +27,8 @@ class Clients {
 
     async readAll(req, res) {
         try {
-            const results = await ClientsService.findAll();
+            const filters = req.body && typeof req.body === "object" ? req.body : {};
+            const results = await ClientsService.findAll(filters);
             res.json({ status: "200", message: "OK", data: results });
         } catch (error) {
             console.error(error);
@@ -41,7 +42,14 @@ class Clients {
     async readOne(req, res) {
         try {
             const { id } = req.params;
-            const result = await ClientsService.findById(id);
+            const filters = req.body && typeof req.body === "object" ? req.body : {};
+            const hasFilters = Object.keys(filters).length > 0;
+            let result = null;
+            if (hasFilters) {
+                result = await ClientsService.findOneByWhere(filters);
+            } else {
+                result = await ClientsService.findById(id);
+            }
             if (!result)
                 return res
                     .status(404)

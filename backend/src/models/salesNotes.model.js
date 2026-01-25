@@ -37,7 +37,7 @@ class SalesNotesModel extends BaseModel {
         this.relations = {
             Products: {
                 type: "hasMany",
-                model: ProductsModel,
+                model: () => ProductsModel,
                 foreignKey: "idNote",
                 localKey: "id",
                 as: "Products",
@@ -46,7 +46,7 @@ class SalesNotesModel extends BaseModel {
 
         this.foreignKeys = {
             idClient: {
-                model: ClientsModel,
+                model: () => ClientsModel,
                 refColumn: "id",
                 refTable: "Clients",
             },

@@ -38,7 +38,7 @@ class ProductsModel extends BaseModel {
 
         this.foreignKeys = {
             idNote: {
-                model: SalesNotesModel,
+                model: () => SalesNotesModel,
                 refColumn: "id",
                 refTable: "SalesNotes",
             },

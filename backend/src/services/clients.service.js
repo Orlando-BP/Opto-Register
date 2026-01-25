@@ -5,8 +5,9 @@ const ClientsService = {
 		return ClientsModel.create(data);
 	},
 
-	async findAll() {
+	async findAll(where = {}) {
 		return ClientsModel.findAll({
+			where,
 			include: [
 				{
 					name: "Calibration",
@@ -22,6 +23,21 @@ const ClientsService = {
 
 	async findById(id) {
 		return ClientsModel.findById(id, {
+			include: [
+				{
+					name: "Calibration",
+					attributes: ["id", "age", "registrationDate"],
+				},
+				{
+					name: "SalesNotes",
+					attributes: ["id", "issueDate", "deliveryDate", "totalPrice", "advance", "balance"],
+				},
+			],
+		});
+	},
+
+	async findOneByWhere(where = {}) {
+		return ClientsModel.findOne(where, {
 			include: [
 				{
 					name: "Calibration",

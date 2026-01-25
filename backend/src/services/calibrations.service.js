@@ -5,12 +5,16 @@ const CalibrationsService = {
 		return CalibrationsModel.create(data);
 	},
 
-	async findAll() {
-		return CalibrationsModel.findAll();
+	async findAll(where = {}) {
+		return CalibrationsModel.findAll({ where });
 	},
 
 	async findById(id) {
 		return CalibrationsModel.findById(id);
+	},
+
+	async findOneByWhere(where = {}) {
+		return CalibrationsModel.findOne(where);
 	},
 
 	async update(id, data) {
