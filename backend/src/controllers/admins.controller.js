@@ -1,6 +1,6 @@
-import AdminsModel from "../models/admins.model.js";
-import bcrypt from "bcryptjs";
+import AdminsService from "../services/admins.service.js";
 import jwt from "jsonwebtoken";
+import { ModelValidationError } from "../BaseModel.js";
 
 class Admins {
 	constructor() {
@@ -17,22 +17,21 @@ class Admins {
 	async create(req, res) {
 		try {
 			const data = { ...req.body };
-			if (data.password) {
-				const hashed = await bcrypt.hash(data.password, 10);
-				data.password = hashed;
-			}
-			const result = await AdminsModel.create(data);
+			const result = await AdminsService.create(data);
 			const { password, ...safe } = result;
 			res.status(201).json({ status: "201", message: "Created", data: safe });
 		} catch (error) {
 			console.error(error);
+			if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+				return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+			}
 			res.status(500).json({ status: "500", message: "Internal server error", data: null });
 		}
 	}
 
 	async readAll(req, res) {
 		try {
-			const results = await AdminsModel.findAll();
+			const results = await AdminsService.findAll();
 			const safe = results.map(r => {
 				const { password, ...rest } = r;
 				return rest;
@@ -40,6 +39,9 @@ class Admins {
 			res.json({ status: "200", message: "OK", data: safe });
 		} catch (error) {
 			console.error(error);
+			if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+				return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+			}
 			res.status(500).json({ status: "500", message: "Internal server error", data: null });
 		}
 	}
@@ -47,7 +49,7 @@ class Admins {
 	async readOne(req, res) {
 		try {
 			const { id } = req.params;
-			const result = await AdminsModel.findById(id);
+			const result = await AdminsService.findById(id);
 			if (!result)
 				return res
 					.status(404)
@@ -56,6 +58,9 @@ class Admins {
 			res.json({ status: "200", message: "OK", data: safe });
 		} catch (error) {
 			console.error(error);
+			if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+				return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+			}
 			res.status(500).json({ status: "500", message: "Internal server error", data: null });
 		}
 	}
@@ -65,11 +70,8 @@ class Admins {
 			const { username, password } = req.body;
 			if (!username || !password)
 				return res.status(400).json({ status: "400", message: "username and password required", data: null });
-			const admins = await AdminsModel.findAll();
-			const user = admins.find(a => a.username === username);
+			const user = await AdminsService.authenticate(username, password);
 			if (!user) return res.status(401).json({ status: "401", message: "Invalid credentials", data: null });
-			const match = await bcrypt.compare(password, user.password);
-			if (!match) return res.status(401).json({ status: "401", message: "Invalid credentials", data: null });
 			const { password: _pw, ...safeUser } = user;
 
 			// Generar token JWT
@@ -94,13 +96,15 @@ class Admins {
 			const { id } = req.params;
 			const { password } = req.body;
 			if (!password) return res.status(400).json({ status: "400", message: "password required", data: null });
-			const user = await AdminsModel.findById(id);
+			const { user, match } = await AdminsService.verifyPassword(id, password);
 			if (!user) return res.status(404).json({ status: "404", message: "Administrador no encontrado", data: null });
-			const match = await bcrypt.compare(password, user.password);
 			if (match) return res.status(200).json({ status: "200", message: "Password OK", data: null });
 			return res.status(401).json({ status: "401", message: "Invalid credentials", data: null });
 		} catch (error) {
 			console.error(error);
+			if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+				return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+			}
 			res.status(500).json({ status: "500", message: "Internal server error", data: null });
 		}
 	}
@@ -109,11 +113,14 @@ class Admins {
 		try {
 			const { id } = req.params;
 			const data = req.body;
-			const result = await AdminsModel.update(id, data);
+			const result = await AdminsService.update(id, data);
 			const { password: pw, ...safeRes } = result || {};
 			res.json({ status: "200", message: "Updated", data: safeRes });
 		} catch (error) {
 			console.error(error);
+			if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+				return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+			}
 			res.status(500).json({ status: "500", message: "Internal server error", data: null });
 		}
 	}
@@ -122,11 +129,14 @@ class Admins {
 		try {
 			const { id } = req.params;
 			const data = req.body;
-			const result = await AdminsModel.replace(id, data);
+			const result = await AdminsService.replace(id, data);
 			const { password: pw2, ...safeRes2 } = result || {};
 			res.json({ status: "200", message: "Replaced", data: safeRes2 });
 		} catch (error) {
 			console.error(error);
+			if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+				return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+			}
 			res.status(500).json({ status: "500", message: "Internal server error", data: null });
 		}
 	}
@@ -134,7 +144,7 @@ class Admins {
 	async delete(req, res) {
 		try {
 			const { id } = req.params;
-			const result = await AdminsModel.delete(id);
+			const result = await AdminsService.delete(id);
 			if (!result)
 				return res
 					.status(404)

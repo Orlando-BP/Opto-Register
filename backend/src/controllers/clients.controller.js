@@ -1,4 +1,5 @@
-import ClientsModel from "../models/clients.model.js";
+import ClientsService from "../services/clients.service.js";
+import { ModelValidationError } from "../BaseModel.js";
 
 class Clients {
     constructor() {
@@ -13,20 +14,26 @@ class Clients {
     async create(req, res) {
         try {
             const data = req.body;
-            const result = await ClientsModel.create(data);
+            const result = await ClientsService.create(data);
             res.status(201).json({ status: "201", message: "Created", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
 
     async readAll(req, res) {
         try {
-            const results = await ClientsModel.findAll();
+            const results = await ClientsService.findAll();
             res.json({ status: "200", message: "OK", data: results });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -34,7 +41,7 @@ class Clients {
     async readOne(req, res) {
         try {
             const { id } = req.params;
-            const result = await ClientsModel.findById(id);
+            const result = await ClientsService.findById(id);
             if (!result)
                 return res
                     .status(404)
@@ -42,6 +49,9 @@ class Clients {
             res.json({ status: "200", message: "OK", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -50,10 +60,13 @@ class Clients {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await ClientsModel.update(id, data);
+            const result = await ClientsService.update(id, data);
             res.json({ status: "200", message: "Updated", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -62,10 +75,13 @@ class Clients {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await ClientsModel.replace(id, data);
+            const result = await ClientsService.replace(id, data);
             res.json({ status: "200", message: "Replaced", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -73,7 +89,7 @@ class Clients {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const result = await ClientsModel.delete(id);
+            const result = await ClientsService.delete(id);
             if (!result)
                 return res
                     .status(404)
@@ -81,6 +97,9 @@ class Clients {
             return res.status(200).json({ status: "200", message: "Deleted", data: null });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }

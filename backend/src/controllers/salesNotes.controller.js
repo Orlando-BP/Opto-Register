@@ -1,4 +1,5 @@
-import SalesNotesModel from "../models/salesNotes.model.js";
+import SalesNotesService from "../services/salesNotes.service.js";
+import { ModelValidationError } from "../BaseModel.js";
 
 class SalesNotes {
     constructor() {
@@ -13,20 +14,26 @@ class SalesNotes {
     async create(req, res) {
         try {
             const data = req.body;
-            const result = await SalesNotesModel.create(data);
+            const result = await SalesNotesService.create(data);
             res.status(201).json({ status: "201", message: "Created", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
 
     async readAll(req, res) {
         try {
-            const results = await SalesNotesModel.findAll();
+            const results = await SalesNotesService.findAll();
             res.json({ status: "200", message: "OK", data: results });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -34,7 +41,7 @@ class SalesNotes {
     async readOne(req, res) {
         try {
             const { id } = req.params;
-            const result = await SalesNotesModel.findById(id);
+            const result = await SalesNotesService.findById(id);
             if (!result)
                 return res
                     .status(404)
@@ -42,6 +49,9 @@ class SalesNotes {
             res.json({ status: "200", message: "OK", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -50,10 +60,13 @@ class SalesNotes {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await SalesNotesModel.update(id, data);
+            const result = await SalesNotesService.update(id, data);
             res.json({ status: "200", message: "Updated", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -62,10 +75,13 @@ class SalesNotes {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await SalesNotesModel.replace(id, data);
+            const result = await SalesNotesService.replace(id, data);
             res.json({ status: "200", message: "Replaced", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -73,7 +89,7 @@ class SalesNotes {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const result = await SalesNotesModel.delete(id);
+            const result = await SalesNotesService.delete(id);
             if (!result)
                 return res
                     .status(404)
@@ -81,6 +97,9 @@ class SalesNotes {
             return res.status(200).json({ status: "200", message: "Deleted", data: null });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }

@@ -1,4 +1,5 @@
-import ProductsModel from "../models/products.model.js";
+import ProductsService from "../services/products.service.js";
+import { ModelValidationError } from "../BaseModel.js";
 
 class Products {
     constructor() {
@@ -13,20 +14,26 @@ class Products {
     async create(req, res) {
         try {
             const data = req.body;
-            const result = await ProductsModel.create(data);
+            const result = await ProductsService.create(data);
             res.status(201).json({ status: "201", message: "Created", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
 
     async readAll(req, res) {
         try {
-            const results = await ProductsModel.findAll();
+            const results = await ProductsService.findAll();
             res.json({ status: "200", message: "OK", data: results });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -34,7 +41,7 @@ class Products {
     async readOne(req, res) {
         try {
             const { id } = req.params;
-            const result = await ProductsModel.findById(id);
+            const result = await ProductsService.findById(id);
             if (!result)
                 return res
                     .status(404)
@@ -42,6 +49,9 @@ class Products {
             res.json({ status: "200", message: "OK", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -50,10 +60,13 @@ class Products {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await ProductsModel.update(id, data);
+            const result = await ProductsService.update(id, data);
             res.json({ status: "200", message: "Updated", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -62,10 +75,13 @@ class Products {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await ProductsModel.replace(id, data);
+            const result = await ProductsService.replace(id, data);
             res.json({ status: "200", message: "Replaced", data: result });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
@@ -73,7 +89,7 @@ class Products {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const result = await ProductsModel.delete(id);
+            const result = await ProductsService.delete(id);
             if (!result)
                 return res
                     .status(404)
@@ -81,6 +97,9 @@ class Products {
             return res.status(200).json({ status: "200", message: "Deleted", data: null });
         } catch (error) {
             console.error(error);
+            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
+                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            }
             res.status(500).json({ status: "500", message: "Internal server error", data: null });
         }
     }
