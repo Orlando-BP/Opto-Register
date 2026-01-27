@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { io, Socket } from "socket.io-client";
 import ChatMiniTab from "@/components/ChatMiniTab";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
-// Datos hardcodeados de ejemplo (sin conexión a base de datos)
+import { API_URL } from "@/api/config";
+import { useFetch } from "@/hooks/useFetch";
 
 type ChatItem = {
     id: string;
@@ -22,10 +24,39 @@ type ChatMessage = {
     time: string;
 };
 
-// No hay tipos de API aquí: todo es local y hardcodeado
+type ApiChat = {
+    id: number;
+    idClient: number | null;
+    Client?: {
+        id: number;
+        name: string;
+        phone?: string | null;
+        email?: string | null;
+    } | null;
+    Messages?: ApiMessage[];
+};
+
+type ApiMessage = {
+    id: number;
+    idChat: number;
+    sender: string;
+    remitent: string;
+    message: string;
+    timestamp?: string | null;
+};
 
 const initialChats: ChatItem[] = [];
 const initialMessages: ChatMessage[] = [];
+
+const formatTime = (value?: string | null) => {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    return date.toLocaleTimeString("es-ES", {
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+};
 
 export default function ChatPage() {
     const [chats, setChats] = useState<ChatItem[]>(initialChats);
@@ -33,8 +64,14 @@ export default function ChatPage() {
     const [activeChatId, setActiveChatId] = useState("");
     const [search, setSearch] = useState("");
     const [draft, setDraft] = useState("");
-    const [, setLoadingChats] = useState(false);
-    const [, setLoadingMessages] = useState(false);
+    const [socketId, setSocketId] = useState<string | null>(null);
+    const socketRef = useRef<Socket | null>(null);
+    const activeChatIdRef = useRef(activeChatId);
+    const {
+        response: chatsResponse,
+        loading: chatsLoading,
+        error: chatsError,
+    } = useFetch({ url: "/v1/chats" });
 
     const activeChat = useMemo(
         () => chats.find((chat) => chat.id === activeChatId) ?? chats[0],
@@ -65,79 +102,158 @@ export default function ChatPage() {
         );
     }
 
-    useEffect(() => {}, [activeChatId]);
-
-    // Cargar chats hardcodeados (sin conexión a la API)
     useEffect(() => {
-        setLoadingChats(true);
-        const sampleChats: ChatItem[] = [
-            {
-                id: "1",
-                title: "Juan Pérez",
-                subtitle: "juan.perez@example.com",
+        activeChatIdRef.current = activeChatId;
+    }, [activeChatId]);
+
+    useEffect(() => {
+        const data = Array.isArray(chatsResponse?.data)
+            ? (chatsResponse?.data as ApiChat[])
+            : [];
+
+        const mappedChats = data.map((chat) => {
+            const id = String(chat.id);
+            const sortedMessages = (chat.Messages ?? [])
+                .slice()
+                .sort((a, b) =>
+                    String(a.timestamp ?? "").localeCompare(
+                        String(b.timestamp ?? ""),
+                    ),
+                );
+            const lastMessage =
+                sortedMessages.length > 0
+                    ? sortedMessages[sortedMessages.length - 1].message
+                    : "";
+
+            return {
+                id,
+                title:
+                    chat.Client?.name ?? `Cliente ${chat.idClient ?? chat.id}`,
+                subtitle: chat.Client?.email ?? undefined,
                 online: true,
-                unreadCount: 2,
-                lastMessage: "Hola, ¿tienen la graduación lista?",
-            },
-            {
-                id: "2",
-                title: "María Gómez",
-                subtitle: "maria.gomez@example.com",
-                online: false,
                 unreadCount: 0,
-                lastMessage: "Gracias por la ayuda!",
-            },
-        ];
+                lastMessage,
+            };
+        });
 
-        setChats(sampleChats);
-        if (sampleChats.length > 0 && !activeChatId) {
-            setActiveChatId(sampleChats[0].id);
+        const mappedMessagesWithTimestamp: Array<
+            ChatMessage & { timestamp: string }
+        > = data.flatMap((chat) =>
+            (chat.Messages ?? []).map((msg) => {
+                const sender: ChatMessage["sender"] =
+                    msg.sender === "admin" ? "me" : "other";
+                return {
+                    id: String(msg.id),
+                    chatId: String(msg.idChat),
+                    sender,
+                    text: msg.message,
+                    time: formatTime(msg.timestamp),
+                    timestamp: msg.timestamp ?? "",
+                };
+            }),
+        );
+
+        const mappedMessages = mappedMessagesWithTimestamp
+            .sort((a, b) =>
+                String(a.timestamp ?? "").localeCompare(
+                    String(b.timestamp ?? ""),
+                ),
+            )
+            .map(({ timestamp, ...rest }) => rest);
+
+        setChats(mappedChats);
+        setMessages(mappedMessages);
+
+        if (mappedChats.length > 0) {
+            const stillExists = mappedChats.some(
+                (chat) => chat.id === activeChatIdRef.current,
+            );
+            if (!activeChatIdRef.current || !stillExists) {
+                setActiveChatId(mappedChats[0].id);
+            }
         }
-        setLoadingChats(false);
-    }, []);
+    }, [chatsResponse]);
 
-    // Cargar mensajes hardcodeados por chat (sin conexión a la API)
     useEffect(() => {
-        if (!activeChatId) return;
-        setLoadingMessages(true);
+        const socket = io(API_URL, {
+            transports: ["websocket"],
+        });
 
-        const sampleMessages: Record<string, ChatMessage[]> = {
-            "1": [
-                {
-                    id: "m1",
-                    chatId: "1",
-                    sender: "other",
-                    text: "Hola, ¿tienen la graduación lista?",
-                    time: "09:12",
-                },
-                {
-                    id: "m2",
-                    chatId: "1",
-                    sender: "me",
-                    text: "Sí, estará lista mañana.",
-                    time: "09:15",
-                },
-            ],
-            "2": [
-                {
-                    id: "m3",
-                    chatId: "2",
-                    sender: "other",
-                    text: "Muchas gracias por la atención",
-                    time: "11:05",
-                },
-            ],
+        socketRef.current = socket;
+
+        socket.on("connect", () => {
+            setSocketId(socket.id ?? null);
+            socket.emit("admin:join");
+        });
+
+        socket.on("disconnect", () => {
+            setSocketId(null);
+        });
+
+        const onMessage = (payload: {
+            text: string;
+            senderId: string;
+            chatId: string | number;
+            sender?: string;
+        }) => {
+            if (!payload?.text || !payload?.chatId) return;
+            if (payload.senderId && payload.senderId === socket.id) return;
+
+            const now = new Date();
+            const time = now.toLocaleTimeString("es-ES", {
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+
+            const currentChatId = String(payload.chatId);
+            const newMessage: ChatMessage = {
+                id: `m${Date.now()}`,
+                chatId: currentChatId,
+                sender: payload.sender === "admin" ? "me" : "other",
+                text: payload.text,
+                time,
+            };
+
+            setMessages((prev) => [...prev, newMessage]);
+            setChats((prev) => {
+                const existing = prev.find((chat) => chat.id === currentChatId);
+                const isActive = currentChatId === activeChatIdRef.current;
+                if (!existing) {
+                    const label = currentChatId.slice(0, 4).toUpperCase();
+                    return [
+                        {
+                            id: currentChatId,
+                            title: `Cliente ${label}`,
+                            online: true,
+                            unreadCount: isActive ? 0 : 1,
+                            lastMessage: payload.text,
+                        },
+                        ...prev,
+                    ];
+                }
+
+                return prev.map((chat) =>
+                    chat.id === currentChatId
+                        ? {
+                              ...chat,
+                              lastMessage: payload.text,
+                              unreadCount: isActive
+                                  ? 0
+                                  : (chat.unreadCount ?? 0) + 1,
+                          }
+                        : chat,
+                );
+            });
         };
 
-        const msgs = sampleMessages[activeChatId] ?? [];
-        setMessages((prev) => {
-            const rest = prev.filter(
-                (message) => message.chatId !== activeChatId,
-            );
-            return [...rest, ...msgs];
-        });
-        setLoadingMessages(false);
-    }, [activeChatId]);
+        socket.on("chat message", onMessage);
+
+        return () => {
+            socket.off("chat message", onMessage);
+            socket.disconnect();
+            socketRef.current = null;
+        };
+    }, []);
 
     function handleSendMessage() {
         const text = draft.trim();
@@ -166,7 +282,13 @@ export default function ChatPage() {
                     : chat,
             ),
         );
-        // Sin envío a servidor: quedan guardados en estado local (hardcode temporal)
+        socketRef.current?.emit("chat message", {
+            text,
+            senderId: socketId ?? undefined,
+            chatId: activeChat.id,
+            sender: "admin",
+            remitent: "client",
+        });
     }
 
     return (
@@ -195,6 +317,16 @@ export default function ChatPage() {
                         </div>
 
                         <div className="flex-1 space-y-3 overflow-y-auto pr-1">
+                            {chatsLoading && (
+                                <div className="rounded-xl border border-dashed border-slate-700 p-4 text-center text-sm text-slate-400">
+                                    Cargando conversaciones...
+                                </div>
+                            )}
+                            {chatsError && !chatsLoading && (
+                                <div className="rounded-xl border border-dashed border-red-700/60 p-4 text-center text-sm text-red-300">
+                                    No se pudieron cargar las conversaciones.
+                                </div>
+                            )}
                             {filteredChats.map((chat) => (
                                 <ChatMiniTab
                                     key={chat.id}
@@ -206,11 +338,13 @@ export default function ChatPage() {
                                     onClick={() => handleSelectChat(chat.id)}
                                 />
                             ))}
-                            {filteredChats.length === 0 && (
-                                <div className="rounded-xl border border-dashed border-slate-700 p-6 text-center text-sm text-slate-400">
-                                    No hay conversaciones que coincidan.
-                                </div>
-                            )}
+                            {filteredChats.length === 0 &&
+                                !chatsLoading &&
+                                !chatsError && (
+                                    <div className="rounded-xl border border-dashed border-slate-700 p-6 text-center text-sm text-slate-400">
+                                        No hay conversaciones que coincidan.
+                                    </div>
+                                )}
                         </div>
                     </section>
 

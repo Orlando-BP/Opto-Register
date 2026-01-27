@@ -4,6 +4,7 @@ import Login from "@/pages/admin/Login";
 import Home from "@/pages/Home";
 import Chat from "@/pages/admin/Chats";
 import Dashboard from "../pages/admin/Dashboard";
+import NotasVentasPage from "@/pages/admin/NotasVentas";
 import RegistroCliente from "@/pages/admin/RegistroCliente";
 import RegistroGraduacion from "@/pages/admin/RegistroGraduacion";
 import SidebarLayout from "@/components/SidebarLayout";
@@ -29,6 +30,7 @@ export default function AppRoutes() {
             >
                 <Route path="/admin/chats" element={<Chat />} />
                 <Route path="/admin/dashboard" element={<Dashboard />} />
+                <Route path="/admin/notas-ventas" element={<NotasVentasPage />} />
                 <Route path="/admin/clientes" element={<RegistroCliente />} />
                 <Route
                     path="/admin/graduaciones"

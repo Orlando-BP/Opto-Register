@@ -12,6 +12,7 @@ class SalesNotesModel extends BaseModel {
             "total_price",
             "advance",
             "balance",
+            "code",
             "is_deleted"
         ]);
 
@@ -23,6 +24,7 @@ class SalesNotesModel extends BaseModel {
             total_price: "number",
             advance: "number",
             balance: "number",
+            code: "string",
             is_deleted: "boolean",
         };
 
@@ -34,6 +36,7 @@ class SalesNotesModel extends BaseModel {
             total_price: 0,
             advance: 0,
             balance: 0,
+            code: null,
             is_deleted: false,
         };
 

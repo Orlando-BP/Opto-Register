@@ -1,5 +1,5 @@
 import express from "express";
-import { PORT } from "./config.js";
+import { FRONTEND_URL, PORT } from "./config.js";
 import mainRoutes from "./api/v1/routes/index.js";
 import morgan from "morgan";
 import cors from "cors";
@@ -11,7 +11,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: true,
+        origin: FRONTEND_URL,
         credentials: true,
     },
     connectionStateRecovery: {
@@ -37,19 +37,19 @@ io.on("connection", (socket) => {
         const payload =
             typeof msg === "string"
                 ? {
-                    text: msg,
-                    senderId: socket.id,
-                    chatId: socket.id,
-                    sender: "client",
-                    remitent: "admin",
-                }
+                      text: msg,
+                      senderId: socket.id,
+                      chatId: socket.id,
+                      sender: "client",
+                      remitent: "admin",
+                  }
                 : {
-                    text: msg?.text ?? "",
-                    senderId: msg?.senderId ?? socket.id,
-                    chatId: msg?.chatId ?? socket.id,
-                    sender: msg?.sender ?? "client",
-                    remitent: msg?.remitent ?? "admin",
-                };
+                      text: msg?.text ?? "",
+                      senderId: msg?.senderId ?? socket.id,
+                      chatId: msg?.chatId ?? socket.id,
+                      sender: msg?.sender ?? "client",
+                      remitent: msg?.remitent ?? "admin",
+                  };
 
         if (!payload.text) return;
 
@@ -73,7 +73,12 @@ io.on("connection", (socket) => {
 
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(cors());
+app.use(
+    cors({
+        origin: FRONTEND_URL,
+        credentials: true,
+    }),
+);
 app.use("/v1", mainRoutes);
 
 app.get("/", (req, res) => {

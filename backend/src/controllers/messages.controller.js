@@ -45,13 +45,11 @@ class Messages {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -78,13 +76,11 @@ class Messages {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -112,13 +108,11 @@ class Messages {
                 result = await MessagesService.findById(id);
             }
             if (!result)
-                return res
-                    .status(404)
-                    .json({
-                        status: "404",
-                        message: "Mensaje no encontrado",
-                        data: null,
-                    });
+                return res.status(404).json({
+                    status: "404",
+                    message: "Mensaje no encontrado",
+                    data: null,
+                });
             res.json({ status: "200", message: "OK", data: result });
         } catch (error) {
             console.error(error);
@@ -126,13 +120,11 @@ class Messages {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -154,13 +146,11 @@ class Messages {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -182,13 +172,11 @@ class Messages {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -203,13 +191,11 @@ class Messages {
             const { id } = req.params;
             const result = await MessagesService.delete(id);
             if (!result)
-                return res
-                    .status(404)
-                    .json({
-                        status: "404",
-                        message: "Mensaje no encontrado",
-                        data: null,
-                    });
+                return res.status(404).json({
+                    status: "404",
+                    message: "Mensaje no encontrado",
+                    data: null,
+                });
             return res
                 .status(200)
                 .json({ status: "200", message: "Deleted", data: null });
@@ -219,13 +205,11 @@ class Messages {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",

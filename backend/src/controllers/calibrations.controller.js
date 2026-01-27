@@ -16,25 +16,45 @@ class Calibrations {
         try {
             const data = req.body;
             const result = await CalibrationsService.create(data);
-            res.status(201).json({ status: "201", message: "Created", data: result });
+            res.status(201).json({
+                status: "201",
+                message: "Created",
+                data: result,
+            });
         } catch (error) {
             console.error(error);
-            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
-                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            if (
+                error instanceof ModelValidationError ||
+                error?.name === "ModelValidationError"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        status: "400",
+                        message: error.message,
+                        data: error.details ?? null,
+                    });
             }
-            res.status(500).json({ status: "500", message: "Internal server error", data: null });
+            res.status(500).json({
+                status: "500",
+                message: "Internal server error",
+                data: null,
+            });
         }
     }
 
     async readAll(req, res) {
         try {
-            const filters = req.body && typeof req.body === "object" ? req.body : {};
+            const filters =
+                req.body && typeof req.body === "object" ? req.body : {};
             const results = await CalibrationsService.findAll(filters);
             const clients = await ClientsService.findAll();
             const data = results.map((item) => ({
                 id: item.id,
                 idClient: item.id_client,
-                clientName: clients.find(client => client.id === item.id_client)?.name || null,
+                clientName:
+                    clients.find((client) => client.id === item.id_client)
+                        ?.name || null,
                 age: item.age,
                 right_sp: item.right_sp,
                 right_cyl: item.right_cyl,
@@ -48,17 +68,31 @@ class Calibrations {
             res.json({ status: "200", message: "OK", data: data });
         } catch (error) {
             console.error(error);
-            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
-                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            if (
+                error instanceof ModelValidationError ||
+                error?.name === "ModelValidationError"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        status: "400",
+                        message: error.message,
+                        data: error.details ?? null,
+                    });
             }
-            res.status(500).json({ status: "500", message: "Internal server error", data: null });
+            res.status(500).json({
+                status: "500",
+                message: "Internal server error",
+                data: null,
+            });
         }
     }
 
     async readOne(req, res) {
         try {
             const { id } = req.params;
-            const filters = req.body && typeof req.body === "object" ? req.body : {};
+            const filters =
+                req.body && typeof req.body === "object" ? req.body : {};
             const hasFilters = Object.keys(filters).length > 0;
             let result = null;
             if (hasFilters) {
@@ -69,14 +103,31 @@ class Calibrations {
             if (!result)
                 return res
                     .status(404)
-                    .json({ status: "404", message: "Calibración no encontrada", data: null });
+                    .json({
+                        status: "404",
+                        message: "Calibración no encontrada",
+                        data: null,
+                    });
             res.json({ status: "200", message: "OK", data: result });
         } catch (error) {
             console.error(error);
-            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
-                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            if (
+                error instanceof ModelValidationError ||
+                error?.name === "ModelValidationError"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        status: "400",
+                        message: error.message,
+                        data: error.details ?? null,
+                    });
             }
-            res.status(500).json({ status: "500", message: "Internal server error", data: null });
+            res.status(500).json({
+                status: "500",
+                message: "Internal server error",
+                data: null,
+            });
         }
     }
 
@@ -88,10 +139,23 @@ class Calibrations {
             res.json({ status: "200", message: "Updated", data: result });
         } catch (error) {
             console.error(error);
-            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
-                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            if (
+                error instanceof ModelValidationError ||
+                error?.name === "ModelValidationError"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        status: "400",
+                        message: error.message,
+                        data: error.details ?? null,
+                    });
             }
-            res.status(500).json({ status: "500", message: "Internal server error", data: null });
+            res.status(500).json({
+                status: "500",
+                message: "Internal server error",
+                data: null,
+            });
         }
     }
 
@@ -103,10 +167,23 @@ class Calibrations {
             res.json({ status: "200", message: "Replaced", data: result });
         } catch (error) {
             console.error(error);
-            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
-                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            if (
+                error instanceof ModelValidationError ||
+                error?.name === "ModelValidationError"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        status: "400",
+                        message: error.message,
+                        data: error.details ?? null,
+                    });
             }
-            res.status(500).json({ status: "500", message: "Internal server error", data: null });
+            res.status(500).json({
+                status: "500",
+                message: "Internal server error",
+                data: null,
+            });
         }
     }
 
@@ -117,14 +194,33 @@ class Calibrations {
             if (!result)
                 return res
                     .status(404)
-                    .json({ status: "404", message: "Calibración no encontrada", data: null });
-            return res.status(200).json({ status: "200", message: "Deleted", data: null });
+                    .json({
+                        status: "404",
+                        message: "Calibración no encontrada",
+                        data: null,
+                    });
+            return res
+                .status(200)
+                .json({ status: "200", message: "Deleted", data: null });
         } catch (error) {
             console.error(error);
-            if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {
-                return res.status(400).json({ status: "400", message: error.message, data: error.details ?? null });
+            if (
+                error instanceof ModelValidationError ||
+                error?.name === "ModelValidationError"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        status: "400",
+                        message: error.message,
+                        data: error.details ?? null,
+                    });
             }
-            res.status(500).json({ status: "500", message: "Internal server error", data: null });
+            res.status(500).json({
+                status: "500",
+                message: "Internal server error",
+                data: null,
+            });
         }
     }
 }

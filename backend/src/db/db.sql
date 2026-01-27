@@ -14,6 +14,7 @@ CREATE TABLE sales_notes (
     advance DECIMAL(10,2) ,
     remaining DECIMAL(10,2) ,
     total_price DECIMAL(10,2) ,
+    code, VARCHAR(10),
     is_deleted BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_client) REFERENCES clients(id) ON DELETE SET NULL
 );

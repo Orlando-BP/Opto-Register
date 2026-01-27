@@ -4,6 +4,7 @@ import salesNotes from "../controllers/salesNotes.controller.js";
 const router = Router();
 
 router.get("/", salesNotes.readAll);
+router.get("/admin", salesNotes.readAllAdmin);
 router.get("/:id", salesNotes.readOne);
 router.post("/", salesNotes.create);
 router.patch("/:id", salesNotes.update);
