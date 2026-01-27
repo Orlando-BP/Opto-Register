@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import RegistroNotasVentas from "@/components/RegistroNotasVentas";
 import { usePost, useToast, useFetch } from "@/hooks";
+import { describe } from "node:test";
 
 type SaleNote = {
     id: number;

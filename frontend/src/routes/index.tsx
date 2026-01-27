@@ -21,6 +21,7 @@ export default function AppRoutes() {
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/admin/login" element={<Login />} />
+            <Route path="/notas" element={<NotasVentasPage />} />
             <Route
                 element={
                     <RequireAuth>
