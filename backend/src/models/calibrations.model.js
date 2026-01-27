@@ -5,7 +5,7 @@ class CalibrationsModel extends BaseModel {
     constructor() {
         super("Calibrations", [
             "id",
-            "idClient",
+            "id_client",
             "age",
             "right_SP",
             "right_CYL",
@@ -13,12 +13,13 @@ class CalibrationsModel extends BaseModel {
             "left_SP",
             "left_CYL",
             "left_Axis",
-            "registrationDate",
+            "registration_date",
+            "is_deleted"
         ]);
 
         this.schema = {
             id: "number",
-            idClient: "number",
+            id_client: "number",
             age: "number",
             right_SP: "number",
             right_CYL: "number",
@@ -26,12 +27,13 @@ class CalibrationsModel extends BaseModel {
             left_SP: "number",
             left_CYL: "number",
             left_Axis: "number",
-            registrationDate: "date",
+            registration_date: "date",
+            is_deleted: "boolean",
         };
 
         this.attributes = {
             id: null,
-            idClient: null,
+            id_client: null,
             age: null,
             right_SP: 0,
             right_CYL: 0,
@@ -39,11 +41,12 @@ class CalibrationsModel extends BaseModel {
             left_SP: 0,
             left_CYL: 0,
             left_Axis: null,
-            registrationDate: null,
+            registration_date: null,
+            is_deleted: false,
         };
 
         this.foreignKeys = {
-            idClient: {
+            id_client: {
                 model: () => ClientsModel,
                 refColumn: "id",
                 refTable: "Clients",

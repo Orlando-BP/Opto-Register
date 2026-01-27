@@ -5,42 +5,45 @@ class ProductsModel extends BaseModel {
     constructor() {
         super("Products", [
             "id",
-            "idNote",
+            "id_note",
             "type",
             "material",
             "frame",
             "color",
             "size",
             "observations",
+            "is_deleted"
         ]);
 
         this.schema = {
             id: "number",
-            idNote: "number",
+            id_note: "number",
             type: "string",
             material: "string",
             frame: "string",
             color: "string",
             size: "string",
             observations: "string",
+            is_deleted: "boolean",
         };
 
         this.attributes = {
             id: null,
-            idNote: null,
+            id_note: null,
             type: "",
             material: "",
             frame: "",
             color: "",
             size: "",
             observations: "",
+            is_deleted: false,
         };
 
         this.foreignKeys = {
-            idNote: {
+            id_note: {
                 model: () => SalesNotesModel,
                 refColumn: "id",
-                refTable: "SalesNotes",
+                refTable: "Sales_Notes",
             },
         };
     }

@@ -6,7 +6,7 @@ export default function Dashboard() {
 
     function handleLogout() {
         localStorage.removeItem("token");
-        navigate("/login");
+        navigate("/admin/login");
     }
 
     return (
@@ -22,17 +22,25 @@ export default function Dashboard() {
             <div className="flex flex-wrap gap-3">
                 <Button
                     type="button"
-                    onClick={() => navigate("/clientes")}
+                    onClick={() => navigate("/admin/clientes")}
                     className="inline-flex w-fit items-center justify-center rounded-md border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-800"
                 >
                     Clientes
                 </Button>
                 <Button
                     type="button"
-                    onClick={() => navigate("/graduaciones")}
+                    onClick={() => navigate("/admin/graduaciones")}
                     className="inline-flex w-fit items-center justify-center rounded-md border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-800"
                 >
                     Graduaciones
+                </Button>
+
+                <Button
+                    type="button"
+                    onClick={() => navigate("/admin/chats")}
+                    className="inline-flex w-fit items-center justify-center rounded-md border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-800"
+                >
+                    Chats
                 </Button>
                 <Button
                     type="button"

@@ -4,48 +4,51 @@ import ClientsModel from "./clients.model.js";
 
 class SalesNotesModel extends BaseModel {
     constructor() {
-        super("SalesNotes", [
+        super("Sales_Notes", [
             "id",
-            "idClient",
-            "issueDate",
-            "deliveryDate",
-            "totalPrice",
+            "id_client",
+            "issue_date",
+            "delivery_date",
+            "total_price",
             "advance",
             "balance",
+            "is_deleted"
         ]);
 
         this.schema = {
             id: "number",
-            idClient: "number",
-            issueDate: "date",
-            deliveryDate: "date",
-            totalPrice: "number",
+            id_client: "number",
+            issue_date: "date",
+            delivery_date: "date",
+            total_price: "number",
             advance: "number",
             balance: "number",
+            is_deleted: "boolean",
         };
 
         this.attributes = {
             id: null,
-            idClient: null,
-            issueDate: null,
-            deliveryDate: null,
-            totalPrice: 0,
+            id_client: null,
+            issue_date: null,
+            delivery_date: null,
+            total_price: 0,
             advance: 0,
             balance: 0,
+            is_deleted: false,
         };
 
         this.relations = {
             Products: {
                 type: "hasMany",
                 model: () => ProductsModel,
-                foreignKey: "idNote",
+                foreignKey: "id_note",
                 localKey: "id",
                 as: "Products",
             },
         };
 
         this.foreignKeys = {
-            idClient: {
+            id_client: {
                 model: () => ClientsModel,
                 refColumn: "id",
                 refTable: "Clients",

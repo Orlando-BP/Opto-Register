@@ -1,55 +1,77 @@
-CREATE TABLE Clients (
+CREATE TABLE clients (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     phone VARCHAR(20),
     email VARCHAR(100),
-    address TEXT
+    address TEXT,
+    is_deleted BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE SalesNotes (
+CREATE TABLE sales_notes (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    idClient INT,
+    id_client INT,
     date DATE ,
     advance DECIMAL(10,2) ,
     remaining DECIMAL(10,2) ,
-    totalPrice DECIMAL(10,2) ,
-    FOREIGN KEY (idClient) REFERENCES Clients(id) ON DELETE SET NULL
+    total_price DECIMAL(10,2) ,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_client) REFERENCES clients(id) ON DELETE SET NULL
 );
 
-CREATE TABLE Product (
+CREATE TABLE product (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    idSalesNote INT,
-    idCalibration INT,
+    id_sales_note INT,
+    id_calibration INT,
     name VARCHAR(100),
     description TEXT,
     value DECIMAL(10,2),
-    FOREIGN KEY (idSalesNote) REFERENCES SalesNotes(id) ON DELETE SET NULL
+    is_deleted BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_sales_note) REFERENCES sales_notes(id) ON DELETE SET NULL
 );
 
 
-CREATE TABLE Calibrations (
+CREATE TABLE calibrations (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    idClient INT,
+    id_client INT,
     age INT,
-    right_SP DECIMAL(4,2),
-    right_CYL DECIMAL(4,2),
-    right_Axis INT,
-    left_SP DECIMAL(4,2),
-    left_CYL DECIMAL(4,2),
-    left_Axis INT,
-    registrationDate DATE ,
-    FOREIGN KEY (idClient) REFERENCES Clients(id) ON DELETE SET NULL
+    right_sp DECIMAL(4,2),
+    right_cyl DECIMAL(4,2),
+    right_axis INT,
+    left_sp DECIMAL(4,2),
+    left_cyl DECIMAL(4,2),
+    left_axis INT,
+    registration_date DATE ,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_client) REFERENCES clients(id) ON DELETE SET NULL
 );
 
-CREATE TABLE Admins (
+CREATE TABLE admins (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
-)
+    password VARCHAR(255) NOT NULL,
+    is_deleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE chats (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_client INT,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_client) REFERENCES clients(id) ON DELETE CASCADE
+);
+
+CREATE TABLE messages (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_chat INT,
+    sender VARCHAR(50) NOT NULL,
+    remitent VARCHAR(50) NOT NULL,
+    message TEXT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_chat) REFERENCES chats(id) ON DELETE CASCADE
+);
 
 
-
-INSERT INTO Clients (id, name, phone, email, address) VALUES
+INSERT INTO clients (id, name, phone, email, address) VALUES
 (1, 'Robert Nelson', NULL, NULL, NULL),
 (2, 'Ryan Guzman', NULL, NULL, NULL),
 (3, 'Claudia Becker', NULL, NULL, NULL),

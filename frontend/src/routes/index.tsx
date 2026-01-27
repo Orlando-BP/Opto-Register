@@ -1,10 +1,11 @@
 //ARCHIVO PARA CREAR LAS RUTAS DE LA APLICACION
 import { Routes, Route } from "react-router-dom";
-import Login from "@/pages/Login";
+import Login from "@/pages/admin/Login";
 import Home from "@/pages/Home";
-import Dashboard from "../pages/Dashboard";
-import RegistroCliente from "@/pages/RegistroCliente";
-import RegistroGraduacion from "@/pages/RegistroGraduacion";
+import Chat from "@/pages/admin/Chats";
+import Dashboard from "../pages/admin/Dashboard";
+import RegistroCliente from "@/pages/admin/RegistroCliente";
+import RegistroGraduacion from "@/pages/admin/RegistroGraduacion";
 import SidebarLayout from "@/components/SidebarLayout";
 import Unauthorized from "@/pages/errors/401";
 import Forbidden from "@/pages/errors/403";
@@ -17,7 +18,8 @@ export default function AppRoutes() {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/admin/login" element={<Login />} />
             <Route
                 element={
                     <RequireAuth>
@@ -25,9 +27,13 @@ export default function AppRoutes() {
                     </RequireAuth>
                 }
             >
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/clientes" element={<RegistroCliente />} />
-                <Route path="/graduaciones" element={<RegistroGraduacion />} />
+                <Route path="/admin/chats" element={<Chat />} />
+                <Route path="/admin/dashboard" element={<Dashboard />} />
+                <Route path="/admin/clientes" element={<RegistroCliente />} />
+                <Route
+                    path="/admin/graduaciones"
+                    element={<RegistroGraduacion />}
+                />
             </Route>
             <Route path="/401" element={<Unauthorized />} />
             <Route path="/403" element={<Forbidden />} />

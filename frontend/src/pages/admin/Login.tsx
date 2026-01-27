@@ -33,7 +33,7 @@ export default function Login() {
                     title: "Bienvenido Señor Stark",
                     description: "✅ Has iniciado sesión correctamente",
                 });
-                navigate("/dashboard");
+                navigate("/admin/dashboard");
                 console.log("Este Log si se imprime");
             } else {
                 setError(res.message ?? "No se pudo iniciar sesión.");

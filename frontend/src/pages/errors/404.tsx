@@ -25,12 +25,14 @@ export default function NotFound() {
                 <div className="mt-6 flex gap-4">
                     <Button
                         onClick={() => window.history.back()}
-                        label="Regresar"
-                    />
+                    >
+                        Regresar
+                    </Button>
                     <Button
                         onClick={() => navigate("/")}
-                        label="Ir al inicio"
-                    />
+                    >
+                        Ir al inicio
+                    </Button>
                 </div>
             </div>
         </div>

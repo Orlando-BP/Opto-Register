@@ -78,31 +78,31 @@ export default function RegistroGraduacion() {
                                                     {item?.id}
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {item?.idClient}
+                                                    {item?.clientName}
                                                 </td>
                                                 <td className="px-3 py-2">
                                                     {item?.age}
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {item?.right_SP}
+                                                    {item?.right_sp}
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {item?.right_CYL}
+                                                    {item?.right_cyl}
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {item?.right_Axis}
+                                                    {item?.right_axis}
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {item?.left_SP}
+                                                    {item?.left_sp}
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {item?.left_CYL}
+                                                    {item?.left_cyl}
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {item?.left_Axis}
+                                                    {item?.left_axis}
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {item?.registrationDate}
+                                                    {item?.registration_date}
                                                 </td>
                                             </tr>
                                         ))}

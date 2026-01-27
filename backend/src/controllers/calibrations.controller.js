@@ -1,5 +1,6 @@
 import CalibrationsService from "../services/calibrations.service.js";
 import { ModelValidationError } from "../BaseModel.js";
+import ClientsService from "../services/clients.service.js";
 
 class Calibrations {
     constructor() {
@@ -29,7 +30,22 @@ class Calibrations {
         try {
             const filters = req.body && typeof req.body === "object" ? req.body : {};
             const results = await CalibrationsService.findAll(filters);
-            res.json({ status: "200", message: "OK", data: results });
+            const clients = await ClientsService.findAll();
+            const data = results.map((item) => ({
+                id: item.id,
+                idClient: item.id_client,
+                clientName: clients.find(client => client.id === item.id_client)?.name || null,
+                age: item.age,
+                right_sp: item.right_sp,
+                right_cyl: item.right_cyl,
+                right_axis: item.right_axis,
+                left_sp: item.left_sp,
+                left_cyl: item.left_cyl,
+                left_axis: item.left_axis,
+                registration_date: item.registration_date,
+                is_deleted: item.is_deleted,
+            }));
+            res.json({ status: "200", message: "OK", data: data });
         } catch (error) {
             console.error(error);
             if (error instanceof ModelValidationError || error?.name === "ModelValidationError") {

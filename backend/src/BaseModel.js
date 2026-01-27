@@ -39,7 +39,8 @@ class BaseModel {
             case "boolean":
                 return typeof value === "boolean";
             case "date":
-                if (value instanceof Date) return !Number.isNaN(value.getTime());
+                if (value instanceof Date)
+                    return !Number.isNaN(value.getTime());
                 if (typeof value === "string" || typeof value === "number") {
                     return !Number.isNaN(new Date(value).getTime());
                 }
@@ -51,28 +52,39 @@ class BaseModel {
 
     validateData(data, { mode = "update" } = {}) {
         if (!data || typeof data !== "object") {
-            throw new ModelValidationError("Payload must be an object", { reason: "payload_not_object" });
+            throw new ModelValidationError("Payload must be an object", {
+                reason: "payload_not_object",
+            });
         }
 
         const keys = Object.keys(data);
         if (keys.length === 0 && mode === "create") {
-            throw new ModelValidationError("Payload vacío", { reason: "empty_payload" });
+            throw new ModelValidationError("Payload vacío", {
+                reason: "empty_payload",
+            });
         }
 
         for (const key of keys) {
             if (!this.columns.includes(key)) {
-                throw new ModelValidationError(`Campo no permitido: ${key}`, { field: key });
+                throw new ModelValidationError(`Campo no permitido: ${key}`, {
+                    field: key,
+                });
             }
 
             const expected = this.schema[key];
             if (expected && !this.isTypeValid(data[key], expected)) {
-                throw new ModelValidationError(`Tipo inválido para ${key}`, { field: key, expected });
+                throw new ModelValidationError(`Tipo inválido para ${key}`, {
+                    field: key,
+                    expected,
+                });
             }
         }
     }
 
     filterData(data) {
-        return Object.fromEntries(Object.entries(data).filter(([key]) => this.columns.includes(key)));
+        return Object.fromEntries(
+            Object.entries(data).filter(([key]) => this.columns.includes(key)),
+        );
     }
 
     fillDefaults(data) {
@@ -106,15 +118,53 @@ class BaseModel {
         return { clause: `WHERE ${clauses.join(" AND ")}`, values };
     }
 
+    // Similar a buildWhereClause pero añade por defecto filtro de soft-delete
+    buildWhereClauseWithDelete(data, { includeDeleted = false } = {}) {
+        const filtered = this.filterData(data || {});
+        this.validateData(filtered, { mode: "filter" });
+
+        const entries = Object.entries(filtered).filter(
+            ([, value]) => value !== undefined,
+        );
+        const values = [];
+        const clauses = [];
+        let index = 1;
+
+        for (const [key, value] of entries) {
+            if (value === null) {
+                clauses.push(`${key} IS NULL`);
+                continue;
+            }
+            clauses.push(`${key} = $${index}`);
+            values.push(value);
+            index += 1;
+        }
+
+        if (!includeDeleted) {
+            if (
+                this.columns.includes("is_deleted") &&
+                !Object.prototype.hasOwnProperty.call(filtered, "is_deleted")
+            ) {
+                clauses.push(`COALESCE(is_deleted, false) = false`);
+            }
+        }
+
+        if (clauses.length === 0) return { clause: "", values: [] };
+        return { clause: `WHERE ${clauses.join(" AND ")}`, values };
+    }
+
     normalizeId(id) {
         const expected = this.schema[this.primaryKey];
         if (expected === "number" || expected === "integer") {
             const numericId = Number(id);
             if (Number.isNaN(numericId)) {
-                throw new ModelValidationError(`ID inválido para ${this.tableName}`, {
-                    field: this.primaryKey,
-                    expected,
-                });
+                throw new ModelValidationError(
+                    `ID inválido para ${this.tableName}`,
+                    {
+                        field: this.primaryKey,
+                        expected,
+                    },
+                );
             }
             return numericId;
         }
@@ -130,15 +180,21 @@ class BaseModel {
             const refColumn = config.refColumn || "id";
             const model = this.resolveModel(config.model);
             if (!model) continue;
-            const rows = await model.findByColumn(refColumn, value, { attributes: [refColumn] });
+            const rows = await model.findByColumn(refColumn, value, {
+                attributes: [refColumn],
+            });
             if (!rows || rows.length === 0) {
-                const refTable = config.refTable || model?.tableName || "tabla referenciada";
-                throw new ModelValidationError(`Llave foránea no existe: ${field} -> ${refTable}.${refColumn}`, {
-                    field,
-                    value,
-                    refTable,
-                    refColumn,
-                });
+                const refTable =
+                    config.refTable || model?.tableName || "tabla referenciada";
+                throw new ModelValidationError(
+                    `Llave foránea no existe: ${field} -> ${refTable}.${refColumn}`,
+                    {
+                        field,
+                        value,
+                        refTable,
+                        refColumn,
+                    },
+                );
             }
         }
     }
@@ -147,21 +203,21 @@ class BaseModel {
         if (!include) return [];
         const list = Array.isArray(include) ? include : [include];
         return list
-            .map(item => {
+            .map((item) => {
                 if (typeof item === "string") return { name: item };
                 return { ...item };
             })
-            .map(item => ({
+            .map((item) => ({
                 name: item.name,
                 attributes: item.attributes,
                 ...(this.relations[item.name] || {}),
             }))
-            .map(rel => ({
+            .map((rel) => ({
                 ...rel,
                 model: this.resolveModel(rel.model),
             }))
-            .filter(rel => rel.model && rel.foreignKey)
-            .map(rel => ({
+            .filter((rel) => rel.model && rel.foreignKey)
+            .map((rel) => ({
                 ...rel,
                 localKey: rel.localKey || this.primaryKey,
                 as: rel.as || rel.name,
@@ -172,11 +228,18 @@ class BaseModel {
         if (!this.columns.includes(column)) {
             throw new ModelValidationError("Columna no permitida", { column });
         }
-        const selected = Array.isArray(options.attributes) && options.attributes.length > 0
-            ? options.attributes.filter(attr => this.columns.includes(attr))
-            : ["*"];
-        const query = `SELECT ${selected.join(", ")} FROM ${this.tableName} WHERE ${column} = $1`;
-        const { rows } = await pool.query(query, [value]);
+        const selected =
+            Array.isArray(options.attributes) && options.attributes.length > 0
+                ? options.attributes.filter((attr) =>
+                      this.columns.includes(attr),
+                  )
+                : ["*"];
+        const { clause, values } = this.buildWhereClauseWithDelete(
+            { [column]: value },
+            options,
+        );
+        const query = `SELECT ${selected.join(", ")} FROM ${this.tableName} ${clause}`;
+        const { rows } = await pool.query(query, values);
         return rows;
     }
 
@@ -185,28 +248,42 @@ class BaseModel {
         if (relations.length === 0) return rows;
 
         return Promise.all(
-            rows.map(async row => {
+            rows.map(async (row) => {
                 const enriched = { ...row };
                 for (const rel of relations) {
                     if (rel.type === "hasMany") {
-                        enriched[rel.as] = await rel.model.findByColumn(rel.foreignKey, row[rel.localKey], {
-                            attributes: rel.attributes,
-                        });
+                        enriched[rel.as] = await rel.model.findByColumn(
+                            rel.foreignKey,
+                            row[rel.localKey],
+                            {
+                                attributes: rel.attributes,
+                            },
+                        );
                     } else if (rel.type === "hasOne") {
-                        const related = await rel.model.findByColumn(rel.foreignKey, row[rel.localKey], {
-                            attributes: rel.attributes,
-                        });
+                        const related = await rel.model.findByColumn(
+                            rel.foreignKey,
+                            row[rel.localKey],
+                            {
+                                attributes: rel.attributes,
+                            },
+                        );
                         enriched[rel.as] = related[0] || null;
                     }
                 }
                 return enriched;
-            })
+            }),
         );
     }
 
     async create(data) {
         const payload = this.fillDefaults(this.filterData(data));
-        if (payload[this.primaryKey] === null || payload[this.primaryKey] === undefined) {
+        if (payload.is_deleted === undefined) {
+            payload.is_deleted = false;
+        }
+        if (
+            payload[this.primaryKey] === null ||
+            payload[this.primaryKey] === undefined
+        ) {
             delete payload[this.primaryKey];
         }
         this.validateData(payload, { mode: "create" });
@@ -223,7 +300,10 @@ class BaseModel {
     }
 
     async findAll(options = {}) {
-        const { clause, values } = this.buildWhereClause(options.where);
+        const { clause, values } = this.buildWhereClauseWithDelete(
+            options.where,
+            options,
+        );
         const query = `SELECT * FROM ${this.tableName} ${clause}`;
         const { rows } = await pool.query(query, values);
         if (options.include) {
@@ -233,13 +313,19 @@ class BaseModel {
     }
 
     async findOne(where = {}, options = {}) {
-        const { clause, values } = this.buildWhereClause(where);
+        const { clause, values } = this.buildWhereClauseWithDelete(
+            where,
+            options,
+        );
         const query = `SELECT * FROM ${this.tableName} ${clause} LIMIT 1`;
         const { rows } = await pool.query(query, values);
         const row = rows[0] || null;
         if (!row) return null;
         if (options.include) {
-            const [withRelations] = await this.attachRelations([row], options.include);
+            const [withRelations] = await this.attachRelations(
+                [row],
+                options.include,
+            );
             return withRelations;
         }
         return row;
@@ -247,12 +333,19 @@ class BaseModel {
 
     async findById(id, options = {}) {
         const normalizedId = this.normalizeId(id);
-        const query = `SELECT * FROM ${this.tableName} WHERE id = $1`;
-        const { rows } = await pool.query(query, [normalizedId]);
-        const row = rows[0];
+        const { clause, values } = this.buildWhereClauseWithDelete(
+            { [this.primaryKey]: normalizedId },
+            options,
+        );
+        const query = `SELECT * FROM ${this.tableName} ${clause} LIMIT 1`;
+        const { rows } = await pool.query(query, values);
+        const row = rows[0] || null;
         if (!row) return null;
         if (options.include) {
-            const [withRelations] = await this.attachRelations([row], options.include);
+            const [withRelations] = await this.attachRelations(
+                [row],
+                options.include,
+            );
             return withRelations;
         }
         return row;
@@ -281,7 +374,10 @@ class BaseModel {
 
     async replace(id, data) {
         const payload = this.fillDefaults(this.filterData(data));
-        if (payload[this.primaryKey] === null || payload[this.primaryKey] === undefined) {
+        if (
+            payload[this.primaryKey] === null ||
+            payload[this.primaryKey] === undefined
+        ) {
             delete payload[this.primaryKey];
         }
         this.validateData(payload, { mode: "replace" });
@@ -289,7 +385,9 @@ class BaseModel {
 
         const keys = Object.keys(payload);
         const values = Object.values(payload);
-        const setClauses = keys.map((key, i) => `${key} = $${i + 1}`).join(", ");
+        const setClauses = keys
+            .map((key, i) => `${key} = $${i + 1}`)
+            .join(", ");
 
         const query = `UPDATE ${this.tableName} SET ${setClauses} WHERE id = $${values.length + 1} RETURNING *`;
         const normalizedId = this.normalizeId(id);
@@ -299,7 +397,7 @@ class BaseModel {
 
     async delete(id) {
         const normalizedId = this.normalizeId(id);
-        const query = `DELETE FROM ${this.tableName} WHERE id = $1 RETURNING *`;
+        const query = `UPDATE ${this.tableName} SET is_deleted = true WHERE id = $1 RETURNING *`;
         const { rows } = await pool.query(query, [normalizedId]);
         return rows[0];
     }

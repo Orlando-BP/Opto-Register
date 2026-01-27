@@ -4,7 +4,7 @@ import SalesNotesModel from "./salesNotes.model.js";
 
 class ClientsModel extends BaseModel {
     constructor() {
-        super("Clients", ["id", "name", "phone", "email", "address"]);
+        super("Clients", ["id", "name", "phone", "email", "address", "is_deleted"]);
 
         this.schema = {
             id: "number",
@@ -12,6 +12,7 @@ class ClientsModel extends BaseModel {
             phone: "string",
             email: "string",
             address: "string",
+            is_deleted: "boolean",
         };
 
         this.attributes = {
@@ -20,20 +21,21 @@ class ClientsModel extends BaseModel {
             phone: "",
             email: "",
             address: "",
+            is_deleted: false,
         };
 
         this.relations = {
             Calibration: {
                 type: "hasOne",
                 model: () => CalibrationsModel,
-                foreignKey: "idClient",
+                foreignKey: "id_client",
                 localKey: "id",
                 as: "Calibration",
             },
             SalesNotes: {
                 type: "hasMany",
                 model: () => SalesNotesModel,
-                foreignKey: "idClient",
+                foreignKey: "id_client",
                 localKey: "id",
                 as: "SalesNotes",
             },
