@@ -4,7 +4,7 @@ import SalesNotesModel from "./salesNotes.model.js";
 
 class ClientsModel extends BaseModel {
     constructor() {
-        super("Clients", ["id", "name", "phone", "email", "address", "is_deleted"]);
+        super("clients", ["id", "name", "phone", "email", "address", "is_deleted"]);
 
         this.schema = {
             id: "number",

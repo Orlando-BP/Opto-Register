@@ -12,7 +12,7 @@ const router = Router();
 
 router.use("/admins", adminsRoutes);
 router.use("/clients", clientsRoutes);
-router.use("/salesnotes", salesNotesRoutes);
+router.use("/salesNotes", salesNotesRoutes);
 router.use("/calibrations", calibrationsRoutes);
 router.use("/products", productsRoutes);
 router.use("/chats", chatsRoutes);

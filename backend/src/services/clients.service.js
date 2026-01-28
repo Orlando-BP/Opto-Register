@@ -15,7 +15,7 @@ const ClientsService = {
 				},
 				{
 					name: "SalesNotes",
-					attributes: ["id", "issueDate", "deliveryDate", "totalPrice", "advance", "balance"],
+					attributes: ["id", "issueDate", "deliveryDate", "totalPrice", "advance"],
 				},
 			],
 		});

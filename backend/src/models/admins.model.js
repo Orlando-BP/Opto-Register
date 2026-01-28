@@ -2,7 +2,7 @@ import BaseModel from "../BaseModel.js";
 
 class AdminsModel extends BaseModel {
 	constructor() {
-		super("Admins", ["id", "username", "password", "is_deleted"]);
+		super("admins", ["id", "username", "password", "is_deleted"]);
 
 		// Schema: define the type for each attribute
 		this.schema = {
