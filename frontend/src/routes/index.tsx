@@ -1,12 +1,13 @@
 //ARCHIVO PARA CREAR LAS RUTAS DE LA APLICACION
 import { Routes, Route } from "react-router-dom";
-import Login from "@/pages/admin/Login";
 import Home from "@/pages/Home";
+import Login from "@/pages/clientes/Login";
 import Chat from "@/pages/admin/Chats";
 import Dashboard from "../pages/admin/Dashboard";
+import LoginAdmin from "@/pages/admin/Login";
 import NotasVentasPage from "@/pages/admin/NotasVentas";
-import RegistroCliente from "@/pages/admin/RegistroCliente";
-import RegistroGraduacion from "@/pages/admin/RegistroGraduacion";
+import RegistroCliente from "@/pages/admin/Clientes";
+import RegistroGraduacion from "@/pages/admin/Graduaciones";
 import SidebarLayout from "@/components/SidebarLayout";
 import Unauthorized from "@/pages/errors/401";
 import Forbidden from "@/pages/errors/403";
@@ -20,8 +21,8 @@ export default function AppRoutes() {
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/admin/login" element={<Login />} />
-            <Route path="/notas" element={<NotasVentasPage />} />
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/admin/login" element={<LoginAdmin />} />
             <Route
                 element={
                     <RequireAuth>

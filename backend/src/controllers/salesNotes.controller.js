@@ -1,5 +1,6 @@
 import SalesNotesService from "../services/salesNotes.service.js";
 import ClientsService from "../services/clients.service.js";
+import jwt from "jsonwebtoken";
 import { ModelValidationError } from "../BaseModel.js";
 
 class SalesNotes {
@@ -8,6 +9,7 @@ class SalesNotes {
         this.readAll = this.readAll.bind(this);
         this.readAllAdmin = this.readAllAdmin.bind(this);
         this.readOne = this.readOne.bind(this);
+        this.login = this.login.bind(this);
         this.update = this.update.bind(this);
         this.replace = this.replace.bind(this);
         this.delete = this.delete.bind(this);
@@ -126,10 +128,53 @@ class SalesNotes {
                     message: "Nota de venta no encontrada",
                     data: null,
                 });
-            res.json({ 
-                status: "200", 
-                message: "OK", 
-                data: result
+            res.json({
+                status: "200",
+                message: "OK",
+                data: result,
+            });
+        } catch (error) {
+            console.error(error);
+            if (
+                error instanceof ModelValidationError ||
+                error?.name === "ModelValidationError"
+            ) {
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
+            }
+            res.status(500).json({
+                status: "500",
+                message: "Internal server error",
+                data: null,
+            });
+        }
+    }
+
+    async login(req, res) {
+        try {
+            const { code } = req.body;
+            const result = await SalesNotesService.findOneByWhere({ code });
+            if (!result)
+                return res.status(404).json({
+                    status: "404",
+                    message: "Código de nota de venta inválido",
+                    data: null,
+                });
+            const secret = process.env.JWT_SECRET || "TetoPear";
+            const token = jwt.sign(
+                { id: result.id, code: result.code, role: "sales_note" },
+                secret,
+                {
+                    expiresIn: "1h",
+                },
+            );
+            res.json({
+                status: "200",
+                message: "OK",
+                data: { token, note: result },
             });
         } catch (error) {
             console.error(error);

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import ChatMiniTab from "@/components/ChatMiniTab";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { API_URL } from "@/api/config";
@@ -92,15 +91,6 @@ export default function ChatPage() {
         () => messages.filter((message) => message.chatId === activeChat?.id),
         [messages, activeChat?.id],
     );
-
-    function handleSelectChat(chatId: string) {
-        setActiveChatId(chatId);
-        setChats((prev) =>
-            prev.map((chat) =>
-                chat.id === chatId ? { ...chat, unreadCount: 0 } : chat,
-            ),
-        );
-    }
 
     useEffect(() => {
         activeChatIdRef.current = activeChatId;
@@ -327,17 +317,6 @@ export default function ChatPage() {
                                     No se pudieron cargar las conversaciones.
                                 </div>
                             )}
-                            {filteredChats.map((chat) => (
-                                <ChatMiniTab
-                                    key={chat.id}
-                                    title={chat.title}
-                                    subtitle={chat.lastMessage ?? chat.subtitle}
-                                    unreadCount={chat.unreadCount}
-                                    online={chat.online}
-                                    active={chat.id === activeChat?.id}
-                                    onClick={() => handleSelectChat(chat.id)}
-                                />
-                            ))}
                             {filteredChats.length === 0 &&
                                 !chatsLoading &&
                                 !chatsError && (

@@ -61,7 +61,7 @@ export const usePost = () => {
 
             const normalizedStatus = Number(data?.status ?? res?.status);
             const ok = Number.isFinite(normalizedStatus)
-                ? normalizedStatus === 200
+                ? normalizedStatus >= 200 && normalizedStatus < 300
                 : Boolean(res?.ok);
 
             return {

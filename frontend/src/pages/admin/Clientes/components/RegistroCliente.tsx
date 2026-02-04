@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { usePost, useToast } from "@/hooks";
 import { Button } from "@/components/ui/Button";
 
-export default function RegistroCliente() {
+export default function RegistroCliente({ refetch }: { refetch: () => void }) {
+    const { execute } = usePost();
+    const { toast } = useToast();
     const [clientname, setClientname] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
@@ -15,6 +18,47 @@ export default function RegistroCliente() {
     const [left_Axis, setLeft_Axis] = useState("");
     const [loading, ] = useState(false);
     const [showGraduaciones, setShowGraduaciones] = useState(false);
+
+
+    function create(data: any) {
+        // Lógica para crear el cliente con los datos proporcionados
+        console.log("Creando cliente con datos:", data);
+        execute({
+            url: "/v1/clients",
+            method: "post",
+            body: {
+                name: clientname,
+                phone: phone,
+                email: email,
+                address: address,
+            },
+        }).then((res) => {
+            if(res.status === 201) {
+                toast({
+                    title: "Éxito",
+                    description: "Cliente registrado correctamente.",
+                });
+                refetch();
+                // Limpiar el formulario
+                setClientname("");
+                setPhone("");
+                setEmail("");
+                setAddress("");
+                setRight_SP("");
+                setRight_CYL("");
+                setRight_Axis("");
+                setLeft_SP("");
+                setLeft_CYL("");
+                setLeft_Axis("");
+            }
+            else{
+                toast({
+                    title: "Error",
+                    description: "No se pudo registrar el cliente.",
+                });
+            }
+        });
+    }
 
     return (
         <div className="w-full space-y-6 rounded-xl border border-slate-800 bg-slate-900/70 p-8 shadow-xl">
@@ -136,7 +180,11 @@ export default function RegistroCliente() {
             </div>
 
             <div className="max-w-md text-center mx-auto">
-                <Button type="submit" disabled={loading}>
+                <Button
+                    type="submit"
+                    disabled={loading}
+                    onClick={() => create({})}
+                >
                     {loading ? "Registrando..." : "Registrar"}
                 </Button>
             </div>

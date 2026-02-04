@@ -30,13 +30,11 @@ class Admins {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -62,13 +60,11 @@ class Admins {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -91,13 +87,11 @@ class Admins {
                 result = await AdminsService.findById(id);
             }
             if (!result)
-                return res
-                    .status(404)
-                    .json({
-                        status: "404",
-                        message: "Administrador no encontrado",
-                        data: null,
-                    });
+                return res.status(404).json({
+                    status: "404",
+                    message: "Administrador no encontrado",
+                    data: null,
+                });
             const { password, ...safe } = result;
             res.json({ status: "200", message: "OK", data: safe });
         } catch (error) {
@@ -106,13 +100,11 @@ class Admins {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -126,28 +118,24 @@ class Admins {
         try {
             const { username, password } = req.body;
             if (!username || !password)
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: "username and password required",
-                        data: null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: "username and password required",
+                    data: null,
+                });
             const user = await AdminsService.authenticate(username, password);
             if (!user)
-                return res
-                    .status(401)
-                    .json({
-                        status: "401",
-                        message: "Invalid credentials",
-                        data: null,
-                    });
+                return res.status(401).json({
+                    status: "401",
+                    message: "Invalid credentials",
+                    data: null,
+                });
             const { password: _pw, ...safeUser } = user;
 
             // Generar token JWT
             const secret = process.env.JWT_SECRET || "TetoPear";
             const token = jwt.sign(
-                { id: safeUser.id, username: safeUser.username },
+                { id: safeUser.id, username: safeUser.username, role: "admin" },
                 secret,
                 {
                     expiresIn: "1h",
@@ -174,53 +162,43 @@ class Admins {
             const { id } = req.params;
             const { password } = req.body;
             if (!password)
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: "password required",
-                        data: null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: "password required",
+                    data: null,
+                });
             const { user, match } = await AdminsService.verifyPassword(
                 id,
                 password,
             );
             if (!user)
-                return res
-                    .status(404)
-                    .json({
-                        status: "404",
-                        message: "Administrador no encontrado",
-                        data: null,
-                    });
-            if (match)
-                return res
-                    .status(200)
-                    .json({
-                        status: "200",
-                        message: "Password OK",
-                        data: null,
-                    });
-            return res
-                .status(401)
-                .json({
-                    status: "401",
-                    message: "Invalid credentials",
+                return res.status(404).json({
+                    status: "404",
+                    message: "Administrador no encontrado",
                     data: null,
                 });
+            if (match)
+                return res.status(200).json({
+                    status: "200",
+                    message: "Password OK",
+                    data: null,
+                });
+            return res.status(401).json({
+                status: "401",
+                message: "Invalid credentials",
+                data: null,
+            });
         } catch (error) {
             console.error(error);
             if (
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -243,13 +221,11 @@ class Admins {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -272,13 +248,11 @@ class Admins {
                 error instanceof ModelValidationError ||
                 error?.name === "ModelValidationError"
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
+                return res.status(400).json({
+                    status: "400",
+                    message: error.message,
+                    data: error.details ?? null,
+                });
             }
             res.status(500).json({
                 status: "500",
@@ -293,13 +267,11 @@ class Admins {
             const { id } = req.params;
             const result = await AdminsService.delete(id);
             if (!result)
-                return res
-                    .status(404)
-                    .json({
-                        status: "404",
-                        message: "Administrador no encontrado",
-                        data: null,
-                    });
+                return res.status(404).json({
+                    status: "404",
+                    message: "Administrador no encontrado",
+                    data: null,
+                });
             return res
                 .status(200)
                 .json({ status: "200", message: "Deleted", data: null });
