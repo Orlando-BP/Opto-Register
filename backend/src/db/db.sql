@@ -14,7 +14,7 @@ CREATE TABLE sales_notes (
     advance DECIMAL(10,2) ,
     remaining DECIMAL(10,2) ,
     total_price DECIMAL(10,2) ,
-    code, VARCHAR(10),
+    code VARCHAR(10),
     is_deleted BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_client) REFERENCES clients(id) ON DELETE SET NULL
 );
@@ -1068,27 +1068,10 @@ INSERT INTO clients (id, name, phone, email, address) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `graduaciones`
+-- Volcado de datos para la tabla `calibrations`
 --
 
-CREATE TABLE `graduaciones` (
-  `id_graduacion` int(11) NOT NULL,
-  `id_cliente` int(11) DEFAULT NULL,
-  `edad` int(11) DEFAULT NULL,
-  `right_SP` decimal(4,2) DEFAULT NULL,
-  `right_CYL` decimal(4,2) DEFAULT NULL,
-  `right_Axis` int(11) DEFAULT NULL,
-  `left_SP` decimal(4,2) DEFAULT NULL,
-  `left_CYL` decimal(4,2) DEFAULT NULL,
-  `left_Axis` int(11) DEFAULT NULL,
-  `fecha_registro` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `graduaciones`
---
-
-INSERT INTO `graduaciones` (`id_graduacion`, `id_cliente`, `edad`, `right_SP`, `right_CYL`, `right_Axis`, `left_SP`, `left_CYL`, `left_Axis`, `fecha_registro`) VALUES
+INSERT INTO `calibrations` (`id`, `id_client`, `age`, `right_sp`, `right_cyl`, `right_axis`, `left_sp`, `left_cyl`, `left_axis`, `registration_date`) VALUES
 (1, 1, 47, -5.00, -0.37, 13, 4.17, -1.00, 59, '2025-08-13'),
 (2, 2, 59, 3.37, -3.00, 32, -3.53, 2.40, 33, '2025-08-13'),
 (3, 3, 79, 0.51, -2.50, 112, -4.48, 2.45, 12, '2025-08-13'),
