@@ -5,9 +5,10 @@ import Login from "@/pages/clientes/Login";
 import Chat from "@/pages/admin/Chats";
 import Dashboard from "../pages/admin/Dashboard";
 import LoginAdmin from "@/pages/admin/Login";
-import NotasVentasPage from "@/pages/admin/NotasVentas";
-import RegistroCliente from "@/pages/admin/Clientes";
-import RegistroGraduacion from "@/pages/admin/Graduaciones";
+import NotasVentas from "@/pages/admin/NotasVentas";
+import Cliente from "@/pages/admin/Clientes";
+import Graduacion from "@/pages/admin/Graduaciones";
+import Productos from "@/pages/admin/Productos";
 import SidebarLayout from "@/components/SidebarLayout";
 import Unauthorized from "@/pages/errors/401";
 import Forbidden from "@/pages/errors/403";
@@ -32,12 +33,13 @@ export default function AppRoutes() {
             >
                 <Route path="/admin/chats" element={<Chat />} />
                 <Route path="/admin/dashboard" element={<Dashboard />} />
-                <Route path="/admin/notas-ventas" element={<NotasVentasPage />} />
-                <Route path="/admin/clientes" element={<RegistroCliente />} />
+                <Route path="/admin/notas-ventas" element={<NotasVentas />} />
+                <Route path="/admin/clientes" element={<Cliente />} />
                 <Route
                     path="/admin/graduaciones"
-                    element={<RegistroGraduacion />}
+                    element={<Graduacion />}
                 />
+                <Route path="/admin/productos" element={<Productos />} />   
             </Route>
             <Route path="/401" element={<Unauthorized />} />
             <Route path="/403" element={<Forbidden />} />
