@@ -3,47 +3,42 @@ import SalesNotesModel from "./salesNotes.model.js";
 
 class ProductsModel extends BaseModel {
     constructor() {
-        super("Products", [
+        // table name and columns must match the DB schema (see src/db/db.sql)
+        super("product", [
             "id",
-            "id_note",
-            "type",
-            "material",
-            "frame",
-            "color",
-            "size",
-            "observations",
-            "is_deleted"
+            "id_sales_note",
+            "id_calibration",
+            "name",
+            "description",
+            "value",
+            "is_deleted",
         ]);
 
         this.schema = {
             id: "number",
-            id_note: "number",
-            type: "string",
-            material: "string",
-            frame: "string",
-            color: "string",
-            size: "string",
-            observations: "string",
+            id_sales_note: "number",
+            id_calibration: "number",
+            name: "string",
+            description: "string",
+            value: "number",
             is_deleted: "boolean",
         };
 
         this.attributes = {
             id: null,
-            id_note: null,
-            type: "",
-            material: "",
-            frame: "",
-            color: "",
-            size: "",
-            observations: "",
+            id_sales_note: null,
+            id_calibration: null,
+            name: "",
+            description: "",
+            value: 0,
             is_deleted: false,
         };
 
         this.foreignKeys = {
-            id_note: {
+            id_sales_note: {
                 model: () => SalesNotesModel,
                 refColumn: "id",
-                refTable: "Sales_Notes",
+                refTable: "sales_notes",
             },
         };
     }
