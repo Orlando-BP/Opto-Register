@@ -5,7 +5,10 @@ import { useFetch } from "@/hooks";
 
 export default function RegistroCliente() {
     
-    const { response, loading, error, refetch } = useFetch({ url: "/v1/clients" });
+    const { response, loading, error, refetch } = useFetch({
+        url: "/v1/clients",
+        qs: {},
+    });
     const clients = Array.isArray(response?.data) ? response?.data : [];
 
     return (

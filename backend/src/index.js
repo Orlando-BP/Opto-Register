@@ -79,6 +79,15 @@ app.use(
         credentials: true,
     }),
 );
+
+// Desactivar ETag para evitar respuestas 304 basadas en ETag
+app.disable("etag");
+
+// Forzar no-cache en todas las respuestas (útil en desarrollo)
+app.use((req, res, next) => {
+    res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+    next();
+});
 app.use("/v1", mainRoutes);
 
 app.get("/", (req, res) => {

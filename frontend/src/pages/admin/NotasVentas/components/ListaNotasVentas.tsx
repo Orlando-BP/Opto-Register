@@ -1,14 +1,20 @@
-import React from "react";
+import {
+    Table,
+    TableHeader,
+    TableBody,
+    TableRow,
+    TableHead,
+    TableCell,
+} from "@/components/ui/Table";
 
 export default function ListaNotasVentas({
     sales,
-    clients,
+    //clients,
     loading,
     error,
-    refetch,
 }: {
     sales: any[];
-    clients: any[];
+    //clients: any[];
     loading: boolean;
     error: any;
     refetch: () => void;
@@ -31,43 +37,74 @@ export default function ListaNotasVentas({
 
             {!loading && !error && sales.length > 0 && (
                 <div className="overflow-x-auto">
-                    <table className="min-w-full text-left text-sm text-slate-200">
-                        <thead className="text-xs uppercase text-slate-400">
-                            <tr>
-                                <th className="px-3 py-2">ID</th>
-                                <th className="px-3 py-2">Cliente</th>
-                                <th className="px-3 py-2">Total</th>
-                                <th className="px-3 py-2">Anticipo</th>
-                                <th className="px-3 py-2">Saldo</th>
-                                <th className="px-3 py-2">Emisión</th>
-                                <th className="px-3 py-2">Entrega</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-800">
+                    <Table className="min-w-full text-left text-sm text-slate-200">
+                        <TableHeader className="text-xs uppercase text-slate-400">
+                            <TableRow>
+                                <TableHead className="px-3 py-2">ID</TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Cliente
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Total
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Anticipo
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Saldo
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Emisión
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Entrega
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Editar
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Eliminar
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+
+                        <TableBody className="divide-y divide-slate-800">
                             {sales.map((s: any) => (
-                                <tr
+                                <TableRow
                                     key={s?.id}
                                     className="hover:bg-slate-800/50"
                                 >
-                                    <td className="px-3 py-2">{s?.id}</td>
-                                    <td className="px-3 py-2">
+                                    <TableCell className="px-3 py-2">
+                                        {s?.id}
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {s?.clientName ?? `#${s?.id_client}`}
-                                    </td>
-                                    <td className="px-3 py-2">
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {s?.total_price}
-                                    </td>
-                                    <td className="px-3 py-2">{s?.advance}</td>
-                                    <td className="px-3 py-2">{s?.balance}</td>
-                                    <td className="px-3 py-2">
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
+                                        {s?.advance}
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
+                                        {s?.balance}
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {s?.issue_date}
-                                    </td>
-                                    <td className="px-3 py-2">
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {s?.delivery_date}
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
+                                        Editar
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
+                                        Eliminar
+                                    </TableCell>
+                                </TableRow>
                             ))}
-                        </tbody>
-                    </table>
+                        </TableBody>
+                    </Table>
                 </div>
             )}
         </div>

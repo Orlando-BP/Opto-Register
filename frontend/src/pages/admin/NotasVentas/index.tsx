@@ -11,9 +11,9 @@ export default function NotasVentasPage() {
     const sales = Array.isArray(response?.data?.notas)
         ? response.data.notas
         : [];
-    const clients = Array.isArray(response?.data?.clients)
-        ? response.data.clients
-        : [];
+    // const clients = Array.isArray(response?.data?.clients)
+    //     ? response.data.clients
+    //     : [];
 
     return (
         <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 px-6 py-16">
@@ -38,7 +38,7 @@ export default function NotasVentasPage() {
                     <div className="space-y-6">
                         <ListaNotasVentas
                             sales={sales}
-                            clients={clients}
+                            
                             loading={loading}
                             error={error}
                             refetch={refetch}

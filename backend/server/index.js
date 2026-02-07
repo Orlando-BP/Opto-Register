@@ -16,6 +16,12 @@ io.on('connection', (socket) => {
 
 app.use(logger('dev'));
 
+app.disable('etag');
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  next();
+});
+
 // Servir archivos estáticos del admin (permitirá /CSS/... y /JS/...)
 app.use(express.static(join(process.cwd(), 'Codigo Web', 'admin'))); // <-- agregado
 

@@ -1,3 +1,12 @@
+import {
+    Table,
+    TableHeader,
+    TableBody,
+    TableRow,
+    TableHead,
+    TableCell,
+} from "@/components/ui/Table";
+
 export default function ListaGraduaciones({
     graduations,
     loading,
@@ -28,57 +37,92 @@ export default function ListaGraduaciones({
 
             {!loading && !error && graduations.length > 0 && (
                 <div className="overflow-x-auto">
-                    <table className="min-w-full text-left text-sm text-slate-200">
-                        <thead className="text-xs uppercase text-slate-400">
-                            <tr>
-                                <th className="px-3 py-2">ID</th>
-                                <th className="px-3 py-2">Cliente</th>
-                                <th className="px-3 py-2">Edad</th>
-                                <th className="px-3 py-2">R-SP</th>
-                                <th className="px-3 py-2">R-CYL</th>
-                                <th className="px-3 py-2">R-Axis</th>
-                                <th className="px-3 py-2">L-SP</th>
-                                <th className="px-3 py-2">L-CYL</th>
-                                <th className="px-3 py-2">L-Axis</th>
-                                <th className="px-3 py-2">Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-800">
+                    <Table className="min-w-full text-left text-sm text-slate-200">
+                        <TableHeader className="text-xs uppercase text-slate-400">
+                            <TableRow>
+                                <TableHead className="px-3 py-2">ID</TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Cliente
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Edad
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    R-SP
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    R-CYL
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    R-Axis
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    L-SP
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    L-CYL
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    L-Axis
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Fecha
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Editar
+                                </TableHead>
+                                <TableHead className="px-3 py-2">
+                                    Eliminar
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+
+                        <TableBody className="divide-y divide-slate-800">
                             {graduations.map((item: any) => (
-                                <tr
+                                <TableRow
                                     key={item?.id}
                                     className="hover:bg-slate-800/50"
                                 >
-                                    <td className="px-3 py-2">{item?.id}</td>
-                                    <td className="px-3 py-2">
+                                    <TableCell className="px-3 py-2">
+                                        {item?.id}
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {item?.clientName}
-                                    </td>
-                                    <td className="px-3 py-2">{item?.age}</td>
-                                    <td className="px-3 py-2">
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
+                                        {item?.age}
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {item?.right_sp}
-                                    </td>
-                                    <td className="px-3 py-2">
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {item?.right_cyl}
-                                    </td>
-                                    <td className="px-3 py-2">
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {item?.right_axis}
-                                    </td>
-                                    <td className="px-3 py-2">
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {item?.left_sp}
-                                    </td>
-                                    <td className="px-3 py-2">
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {item?.left_cyl}
-                                    </td>
-                                    <td className="px-3 py-2">
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {item?.left_axis}
-                                    </td>
-                                    <td className="px-3 py-2">
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
                                         {item?.registration_date}
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
+                                        Editar
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2">
+                                        Eliminar
+                                    </TableCell>
+                                </TableRow>
                             ))}
-                        </tbody>
-                    </table>
+                        </TableBody>
+                    </Table>
                 </div>
             )}
         </div>
