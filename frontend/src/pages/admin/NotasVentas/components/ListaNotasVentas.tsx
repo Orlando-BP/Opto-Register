@@ -7,18 +7,26 @@ import {
     TableCell,
 } from "@/components/ui/Table";
 
-export default function ListaNotasVentas({
-    sales,
-    //clients,
-    loading,
-    error,
-}: {
+type ListaNotasVentasProps = {
     sales: any[];
-    //clients: any[];
     loading: boolean;
     error: any;
     refetch: () => void;
-}) {
+    onSelectSale?: (sale: any) => void;
+};
+
+export default function ListaNotasVentas({
+    sales,
+    loading,
+    error,
+    onSelectSale,
+}: ListaNotasVentasProps) {
+    const handleRowClick = (sale: any) => {
+        if (typeof onSelectSale === "function") {
+            onSelectSale(sale);
+        }
+    };
+
     return (
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
             {loading && (
@@ -72,7 +80,8 @@ export default function ListaNotasVentas({
                             {sales.map((s: any) => (
                                 <TableRow
                                     key={s?.id}
-                                    className="hover:bg-slate-800/50"
+                                    className="cursor-pointer hover:bg-slate-800/50"
+                                    onClick={() => handleRowClick(s)}
                                 >
                                     <TableCell className="px-3 py-2">
                                         {s?.id}

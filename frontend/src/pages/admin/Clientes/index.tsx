@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { X } from "lucide-react";
 import { useFetch } from "@/hooks";
 import DetallesCliente from "@/pages/admin/Clientes/components/DetallesCliente";
 import ListaClientes from "@/pages/admin/Clientes/components/ListaClientes";
@@ -54,8 +55,26 @@ export default function RegistroCliente() {
                     <TabsTrigger value="registro">Registrar</TabsTrigger>
                     <TabsTrigger value="lista">Lista</TabsTrigger>
                     {showDetailsTab && (
-                        <TabsTrigger value="detalles">
-                            Detalles cliente
+                        <TabsTrigger
+                            value="detalles"
+                            className="group flex items-center gap-2"
+                        >
+                            <span>Detalles cliente</span>
+                            <button
+                                type="button"
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                    setShowDetailsTab(false);
+                                    setActiveTab("lista");
+                                    setSelectedClient(null);
+                                    setSelectedCalibrations([]);
+                                }}
+                                className="rounded p-1 text-slate-400 transition hover:bg-slate-800 hover:text-white"
+                                aria-label="Cerrar detalles"
+                            >
+                                <X className="h-3.5 w-3.5" />
+                            </button>
                         </TabsTrigger>
                     )}
                 </TabsList>

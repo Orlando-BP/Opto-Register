@@ -7,16 +7,26 @@ import {
     TableCell,
 } from "@/components/ui/Table";
 
-export default function ListaProductos({
-    products,
-    loading,
-    error,
-}: {
+type ListaProductosProps = {
     products: any[];
     loading: boolean;
     error: any;
     refetch: () => void;
-}) {
+    onSelectProduct?: (product: any) => void;
+};
+
+export default function ListaProductos({
+    products,
+    loading,
+    error,
+    onSelectProduct,
+}: ListaProductosProps) {
+    const handleRowClick = (product: any) => {
+        if (typeof onSelectProduct === "function") {
+            onSelectProduct(product);
+        }
+    };
+
     return (
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
             {loading && (
@@ -61,7 +71,8 @@ export default function ListaProductos({
                             {products.map((p: any) => (
                                 <TableRow
                                     key={p?.id}
-                                    className="hover:bg-slate-800/50"
+                                    className="cursor-pointer hover:bg-slate-800/50"
+                                    onClick={() => handleRowClick(p)}
                                 >
                                     <TableCell className="px-3 py-2">
                                         {p?.id}

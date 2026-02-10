@@ -7,16 +7,26 @@ import {
     TableCell,
 } from "@/components/ui/Table";
 
-export default function ListaGraduaciones({
-    graduations,
-    loading,
-    error,
-}: {
+type ListaGraduacionesProps = {
     graduations: any[];
     loading: boolean;
     error: any;
     refetch: () => void;
-}) {
+    onSelectGraduation?: (graduation: any) => void;
+};
+
+export default function ListaGraduaciones({
+    graduations,
+    loading,
+    error,
+    onSelectGraduation,
+}: ListaGraduacionesProps) {
+    const handleRowClick = (graduation: any) => {
+        if (typeof onSelectGraduation === "function") {
+            onSelectGraduation(graduation);
+        }
+    };
+
     return (
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
             {loading && (
@@ -81,7 +91,8 @@ export default function ListaGraduaciones({
                             {graduations.map((item: any) => (
                                 <TableRow
                                     key={item?.id}
-                                    className="hover:bg-slate-800/50"
+                                    className="cursor-pointer hover:bg-slate-800/50"
+                                    onClick={() => handleRowClick(item)}
                                 >
                                     <TableCell className="px-3 py-2">
                                         {item?.id}
