@@ -1,10 +1,12 @@
 import ClientsService from "../services/clients.service.js";
+import CalibrationsService from "../services/calibrations.service.js";
 import { ModelValidationError } from "../BaseModel.js";
 
 class Clients {
     constructor() {
         this.create = this.create.bind(this);
         this.readAll = this.readAll.bind(this);
+        this.readAllAdmin = this.readAllAdmin.bind(this);
         this.readOne = this.readOne.bind(this);
         this.update = this.update.bind(this);
         this.replace = this.replace.bind(this);
@@ -48,6 +50,46 @@ class Clients {
                 req.body && typeof req.body === "object" ? req.body : {};
             const results = await ClientsService.findAll(filters);
             res.json({ status: "200", message: "OK", data: results });
+        } catch (error) {
+            console.error(error);
+            if (
+                error instanceof ModelValidationError ||
+                error?.name === "ModelValidationError"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        status: "400",
+                        message: error.message,
+                        data: error.details ?? null,
+                    });
+            }
+            res.status(500).json({
+                status: "500",
+                message: "Internal server error",
+                data: null,
+            });
+        }
+    }
+
+    async readAllAdmin(req, res) {
+        try {
+            const filters =
+                req.body && typeof req.body === "object" ? req.body : {};
+
+            const [clients, calibrations] = await Promise.all([
+                ClientsService.findAll(filters),
+                CalibrationsService.findAll(),
+            ]);
+
+            res.json({
+                status: "200",
+                message: "OK",
+                data: {
+                    clientes: clients,
+                    calibraciones: calibrations,
+                },
+            });
         } catch (error) {
             console.error(error);
             if (

@@ -4,6 +4,7 @@ import clients from "../controllers/clients.controller.js";
 const router = Router();
 
 router.get("/", clients.readAll);
+router.get("/admin", clients.readAllAdmin);
 router.get("/:id", clients.readOne);
 router.post("/", clients.create);
 router.patch("/:id", clients.update);

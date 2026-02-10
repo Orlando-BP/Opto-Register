@@ -4,7 +4,7 @@ import { Server } from 'socket.io'
 import { createServer } from 'node:http';
 import { join } from 'node:path'; // <-- agregado
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3070;
 const app = express();
 
 const server = createServer(app);

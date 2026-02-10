@@ -17,13 +17,14 @@ export default function ListaClientes({
     loading,
     error,
     refetch,
+    onSelectClient,
 }: {
     clients: any[];
     loading: boolean;
     error: any;
     refetch: () => void;
-}) 
-    {
+    onSelectClient?: (client: any) => void;
+}) {
     const { execute } = usePost();
     const { toast } = useToast();
     const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -34,26 +35,35 @@ export default function ListaClientes({
         setDeleteDialogOpen(true);
     };
 
-    function Delete() {
-        execute({
+    const confirmDelete = async () => {
+        if (selectedId === null) return;
+        const res = await execute({
             url: `/v1/clients/${selectedId}`,
             method: "delete",
-        }).then((res) => {
-            if(res.status === 204) {
-                toast({
-                    title: "Éxito",
-                    description: "Cliente eliminado correctamente.",
-                });
-                refetch();
-            }
-            else{
-                toast({
-                    title: "Error",
-                    description: "No se pudo eliminar el cliente.",
-                });
-            }
-        })
-    }
+        });
+
+        if (res?.status === 200 || res?.status === 204) {
+            toast({
+                title: "Éxito",
+                description: "Cliente eliminado correctamente.",
+            });
+            setDeleteDialogOpen(false);
+            refetch();
+            return;
+        }
+
+        toast({
+            title: "Error",
+            description: "No se pudo eliminar el cliente.",
+        });
+    };
+
+    const handleRowClick = (client: any) => {
+        if (typeof onSelectClient === "function") {
+            onSelectClient(client);
+        }
+    };
+
     return (
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
             {loading && (
@@ -101,7 +111,8 @@ export default function ListaClientes({
                             {clients.map((client: any) => (
                                 <TableRow
                                     key={client?.id}
-                                    className="hover:bg-slate-800/50"
+                                    className="hover:bg-slate-800/50 cursor-pointer"
+                                    onClick={() => handleRowClick(client)}
                                 >
                                     <TableCell className="px-3 py-2">
                                         {client?.id}
@@ -119,7 +130,13 @@ export default function ListaClientes({
                                         {client?.address}
                                     </TableCell>
                                     <TableCell className="px-3 py-2">
-                                        <Button variant="ghost" size="icon">
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                            }}
+                                        >
                                             <Edit className="h-4 w-4" />
                                         </Button>
                                     </TableCell>
@@ -127,9 +144,10 @@ export default function ListaClientes({
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            onClick={() =>
-                                                handleDelete(client?.id)
-                                            }
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                handleDelete(client?.id);
+                                            }}
                                         >
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
@@ -145,7 +163,7 @@ export default function ListaClientes({
                         description="¿Estás seguro de que deseas Borrar el Cliente Seleccionado?"
                         okText="Borrar"
                         cancelText="Cancelar"
-                        onOk={() => Delete}
+                        onOk={confirmDelete}
                         onCancel={() => setDeleteDialogOpen(false)}
                     />
                 </div>

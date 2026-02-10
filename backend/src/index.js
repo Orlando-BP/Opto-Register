@@ -37,19 +37,19 @@ io.on("connection", (socket) => {
         const payload =
             typeof msg === "string"
                 ? {
-                      text: msg,
-                      senderId: socket.id,
-                      chatId: socket.id,
-                      sender: "client",
-                      remitent: "admin",
-                  }
+                    text: msg,
+                    senderId: socket.id,
+                    chatId: socket.id,
+                    sender: "client",
+                    remitent: "admin",
+                }
                 : {
-                      text: msg?.text ?? "",
-                      senderId: msg?.senderId ?? socket.id,
-                      chatId: msg?.chatId ?? socket.id,
-                      sender: msg?.sender ?? "client",
-                      remitent: msg?.remitent ?? "admin",
-                  };
+                    text: msg?.text ?? "",
+                    senderId: msg?.senderId ?? socket.id,
+                    chatId: msg?.chatId ?? socket.id,
+                    sender: msg?.sender ?? "client",
+                    remitent: msg?.remitent ?? "admin",
+                };
 
         if (!payload.text) return;
 
@@ -82,17 +82,13 @@ app.use(
 
 // Desactivar ETag para evitar respuestas 304 basadas en ETag
 app.disable("etag");
-
-// Forzar no-cache en todas las respuestas (útil en desarrollo)
+// Forzar no-cache en todas las respuestas
 app.use((req, res, next) => {
     res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
     next();
 });
-app.use("/v1", mainRoutes);
 
-app.get("/", (req, res) => {
-    res.sendFile(process.cwd() + "/src/pages/chat.html");
-});
+app.use("/v1", mainRoutes);
 
 server.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
