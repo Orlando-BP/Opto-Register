@@ -4,7 +4,7 @@ import MessagesModel from "./messages.model.js";
 
 class ChatsModel extends BaseModel {
     constructor() {
-        super("Chats", ["id", "id_client", "is_deleted"]);
+        super("chats", ["id", "id_client", "is_deleted"]);
 
         this.schema = {
             id: "number",
@@ -24,14 +24,14 @@ class ChatsModel extends BaseModel {
                 model: () => ClientsModel,
                 foreignKey: "id",
                 localKey: "id_client",
-                as: "Client",
+                as: "client",
             },
             Messages: {
                 type: "hasMany",
                 model: () => MessagesModel,
                 foreignKey: "id_chat",
                 localKey: "id",
-                as: "Messages",
+                as: "messages",
             },
         };
 
@@ -39,7 +39,7 @@ class ChatsModel extends BaseModel {
             id_client: {
                 model: () => ClientsModel,
                 refColumn: "id",
-                refTable: "Clients",
+                refTable: "clients",
             },
         };
     }

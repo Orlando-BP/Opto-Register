@@ -18,6 +18,12 @@ export default function Home() {
             >
                 Ingresar
             </Link>
+            <Link
+                to="/cliente/chat"
+                className="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-sky-700"
+            >
+                Chat del cliente
+            </Link>
         </div>
     );
 }

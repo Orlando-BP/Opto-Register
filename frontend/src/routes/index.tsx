@@ -2,6 +2,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
 import Login from "@/pages/clientes/Login";
+import ChatClientes from "@/pages/clientes/Chat";
 import Chat from "@/pages/admin/Chats";
 import Dashboard from "../pages/admin/Dashboard";
 import LoginAdmin from "@/pages/admin/Login";
@@ -23,6 +24,7 @@ export default function AppRoutes() {
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login/>}/>
+            <Route path="/cliente/chat" element={<ChatClientes />} />
             <Route path="/admin/login" element={<LoginAdmin />} />
             <Route
                 element={
