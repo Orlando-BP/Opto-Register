@@ -2,12 +2,17 @@ type DetallesNotaVentaProps = {
     sale: any | null;
 };
 
-const fields: { key: string; label: string }[] = [
-    { key: "clientName", label: "Cliente" },
-    { key: "total_price", label: "Total" },
-    { key: "advance", label: "Anticipo" },
-    { key: "balance", label: "Saldo" },
-];
+type FieldConfig = {
+    key: string;
+    label: string;
+    formatter?: (value: any) => string;
+};
+
+const formatCurrency = (value: any) => {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return "—";
+    return `$${numeric.toFixed(2)}`;
+};
 
 const formatValue = (value: any) => {
     if (value === null || value === undefined || value === "") return "—";
@@ -26,6 +31,14 @@ const formatDate = (value: any) => {
     return dateValue.toLocaleDateString();
 };
 
+const fields: FieldConfig[] = [
+    { key: "clientName", label: "Cliente" },
+    { key: "total_price", label: "Total", formatter: formatCurrency },
+    { key: "advance", label: "Anticipo", formatter: formatCurrency },
+    { key: "balance", label: "Saldo", formatter: formatCurrency },
+    { key: "code", label: "Código" },
+];
+
 export default function DetallesNotaVenta({ sale }: DetallesNotaVentaProps) {
     if (!sale) {
         return (
@@ -37,6 +50,13 @@ export default function DetallesNotaVenta({ sale }: DetallesNotaVentaProps) {
 
     const issueDate = sale?.issue_date ?? sale?.issueDate;
     const deliveryDate = sale?.delivery_date ?? sale?.deliveryDate;
+    const productItems = Array.isArray(sale?.Products)
+        ? sale.Products
+        : Array.isArray(sale?.products)
+          ? sale.products
+          : Array.isArray(sale?.details)
+            ? sale.details
+            : [];
 
     return (
         <div className="space-y-8">
@@ -60,16 +80,23 @@ export default function DetallesNotaVenta({ sale }: DetallesNotaVentaProps) {
                         </div>
                     </div>
 
-                    {fields.map(({ key, label }) => (
-                        <div key={key} className="space-y-1">
-                            <p className="text-xs uppercase tracking-wide text-slate-400">
-                                {label}
-                            </p>
-                            <div className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100">
-                                {formatValue(sale?.[key])}
+                    {fields.map(({ key, label, formatter }) => {
+                        const value = sale?.[key];
+                        const displayValue =
+                            typeof formatter === "function"
+                                ? formatter(value)
+                                : formatValue(value);
+                        return (
+                            <div key={key} className="space-y-1">
+                                <p className="text-xs uppercase tracking-wide text-slate-400">
+                                    {label}
+                                </p>
+                                <div className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100">
+                                    {displayValue}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
 
                     <div className="space-y-1">
                         <p className="text-xs uppercase tracking-wide text-slate-400">
@@ -91,7 +118,7 @@ export default function DetallesNotaVenta({ sale }: DetallesNotaVentaProps) {
                 </div>
             </div>
 
-            {Array.isArray(sale?.details) && sale.details.length > 0 && (
+            {Array.isArray(productItems) && productItems.length > 0 && (
                 <div className="w-full space-y-4 rounded-xl border border-slate-800 bg-slate-900/70 p-8 shadow-xl">
                     <div className="space-y-1 text-center">
                         <h2 className="text-xl font-semibold text-white">
@@ -103,31 +130,48 @@ export default function DetallesNotaVenta({ sale }: DetallesNotaVentaProps) {
                     </div>
 
                     <div className="space-y-3">
-                        {sale.details.map((item: any, index: number) => (
-                            <div
-                                key={item?.id ?? `sale-detail-${index}`}
-                                className="flex flex-col gap-2 rounded-lg border border-slate-700 bg-slate-800 p-4 text-sm text-slate-200 md:flex-row md:items-center md:justify-between"
-                            >
-                                <div>
-                                    <p className="font-medium">
-                                        {formatValue(
-                                            item?.productName ?? item?.name,
+                        {productItems.map((item: any, index: number) => {
+                            const quantity = item?.quantity;
+                            const price = item?.price ?? item?.value;
+                            const total = item?.total;
+                            return (
+                                <div
+                                    key={item?.id ?? `sale-detail-${index}`}
+                                    className="flex flex-col gap-2 rounded-lg border border-slate-700 bg-slate-800 p-4 text-sm text-slate-200 md:flex-row md:items-center md:justify-between"
+                                >
+                                    <div>
+                                        <p className="font-medium">
+                                            {formatValue(
+                                                item?.productName ?? item?.name,
+                                            )}
+                                        </p>
+                                        {item?.description && (
+                                            <p className="text-xs text-slate-400">
+                                                {formatValue(item.description)}
+                                            </p>
                                         )}
-                                    </p>
-                                    <p className="text-xs text-slate-400">
-                                        Cantidad: {formatValue(item?.quantity)}
-                                    </p>
+                                        {quantity !== undefined && (
+                                            <p className="text-xs text-slate-400">
+                                                Cantidad:{" "}
+                                                {formatValue(quantity)}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className="flex flex-wrap gap-4">
+                                        <span>
+                                            Precio: {formatCurrency(price)}
+                                        </span>
+                                        {total !== undefined &&
+                                            total !== null && (
+                                                <span>
+                                                    Total:{" "}
+                                                    {formatCurrency(total)}
+                                                </span>
+                                            )}
+                                    </div>
                                 </div>
-                                <div className="flex gap-4">
-                                    <span>
-                                        Precio: {formatValue(item?.price)}
-                                    </span>
-                                    <span>
-                                        Total: {formatValue(item?.total)}
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             )}

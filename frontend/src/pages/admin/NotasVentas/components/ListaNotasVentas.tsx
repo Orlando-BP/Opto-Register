@@ -27,6 +27,24 @@ export default function ListaNotasVentas({
         }
     };
 
+    const formatCurrency = (value: any) => {
+        const numeric = Number(value);
+        if (!Number.isFinite(numeric)) return "—";
+        return `$${numeric.toFixed(2)}`;
+    };
+
+    const formatDate = (value: any) => {
+        if (!value) return "—";
+        const dateValue =
+            typeof value === "string" || typeof value === "number"
+                ? new Date(value)
+                : value;
+        if (!(dateValue instanceof Date) || Number.isNaN(dateValue.getTime())) {
+            return String(value);
+        }
+        return dateValue.toLocaleDateString();
+    };
+
     return (
         <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
             {loading && (
@@ -87,22 +105,25 @@ export default function ListaNotasVentas({
                                         {s?.id}
                                     </TableCell>
                                     <TableCell className="px-3 py-2">
-                                        {s?.clientName ?? `#${s?.id_client}`}
+                                        {s?.clientName ??
+                                            (s?.id_client
+                                                ? `#${s.id_client}`
+                                                : "Cliente sin asignar")}
                                     </TableCell>
                                     <TableCell className="px-3 py-2">
-                                        {s?.total_price}
+                                        {formatCurrency(s?.total_price)}
                                     </TableCell>
                                     <TableCell className="px-3 py-2">
-                                        {s?.advance}
+                                        {formatCurrency(s?.advance)}
                                     </TableCell>
                                     <TableCell className="px-3 py-2">
-                                        {s?.balance}
+                                        {formatCurrency(s?.balance)}
                                     </TableCell>
                                     <TableCell className="px-3 py-2">
-                                        {s?.issue_date}
+                                        {formatDate(s?.issue_date)}
                                     </TableCell>
                                     <TableCell className="px-3 py-2">
-                                        {s?.delivery_date}
+                                        {formatDate(s?.delivery_date)}
                                     </TableCell>
                                     <TableCell className="px-3 py-2">
                                         Editar

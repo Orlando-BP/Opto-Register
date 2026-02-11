@@ -11,11 +11,57 @@ export default function NotasVentasPage() {
         url: "/v1/salesnotes/admin",
     });
 
-    const sales = useMemo(() => {
-        if (Array.isArray(response?.data?.notas)) return response.data.notas;
-        if (Array.isArray(response?.data)) return response.data;
+    const clients = useMemo(() => {
+        const rawClients = response?.data?.clients;
+        if (Array.isArray(rawClients)) return rawClients;
         return [];
-    }, [response?.data]);
+    }, [response?.data?.clients]);
+
+    const clientLookup = useMemo(() => {
+        const map: Record<string, string> = {};
+        for (const client of clients) {
+            const id = client?.id;
+            if (id === null || id === undefined) continue;
+            const key = String(id);
+            map[key] = client?.name ?? `Cliente #${key}`;
+        }
+        return map;
+    }, [clients]);
+
+    const sales = useMemo(() => {
+        const rawNotes = response?.data?.notas;
+        const list = Array.isArray(rawNotes)
+            ? rawNotes
+            : Array.isArray(response?.data)
+              ? response.data
+              : [];
+
+        return list.map((note: any) => {
+            const idClient = note?.id_client ?? note?.idClient ?? null;
+            const clientKey =
+                idClient === null || idClient === undefined
+                    ? null
+                    : String(idClient);
+            const products = Array.isArray(note?.Products)
+                ? note.Products
+                : Array.isArray(note?.products)
+                  ? note.products
+                  : [];
+
+            return {
+                ...note,
+                id_client: idClient,
+                clientName:
+                    clientKey !== null
+                        ? (clientLookup[clientKey] ?? `Cliente #${clientKey}`)
+                        : "Cliente sin asignar",
+                Products: products,
+                issue_date: note?.issue_date ?? note?.issueDate ?? null,
+                delivery_date:
+                    note?.delivery_date ?? note?.deliveryDate ?? null,
+            };
+        });
+    }, [clientLookup, response?.data, response?.data?.notas]);
 
     const [activeTab, setActiveTab] = useState("registro");
     const [showDetailsTab, setShowDetailsTab] = useState(false);
