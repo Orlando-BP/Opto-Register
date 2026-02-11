@@ -1,429 +1,16 @@
-// Codigo anterior
-//import { useEffect, useMemo, useRef, useState } from "react";
-// import { io, Socket } from "socket.io-client";
-// import { Button } from "@/components/ui/Button";
-// import { Input } from "@/components/ui/input";
-// import { API_URL } from "@/api/config";
-// import { useFetch } from "@/hooks/useFetch";
-
-// type ChatItem = {
-//     id: string;
-//     title: string;
-//     subtitle?: string;
-//     avatarUrl?: string;
-//     online?: boolean;
-//     unreadCount?: number;
-//     lastMessage?: string;
-// };
-
-// type ChatMessage = {
-//     id: string;
-//     chatId: string;
-//     sender: "me" | "other";
-//     text: string;
-//     time: string;
-// };
-
-// type ApiChat = {
-//     id: number;
-//     idClient: number | null;
-//     Client?: {
-//         id: number;
-//         name: string;
-//         phone?: string | null;
-//         email?: string | null;
-//     } | null;
-//     Messages?: ApiMessage[];
-// };
-
-// type ApiMessage = {
-//     id: number;
-//     idChat: number;
-//     sender: string;
-//     remitent: string;
-//     message: string;
-//     timestamp?: string | null;
-// };
-
-// const initialChats: ChatItem[] = [];
-// const initialMessages: ChatMessage[] = [];
-
-// const formatTime = (value?: string | null) => {
-//     if (!value) return "";
-//     const date = new Date(value);
-//     if (Number.isNaN(date.getTime())) return "";
-//     return date.toLocaleTimeString("es-ES", {
-//         hour: "2-digit",
-//         minute: "2-digit",
-//     });
-// };
-
-// export default function ChatPage() {
-//     const [chats, setChats] = useState<ChatItem[]>(initialChats);
-//     const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
-//     const [activeChatId, setActiveChatId] = useState("");
-//     const [search, setSearch] = useState("");
-//     const [draft, setDraft] = useState("");
-//     const [socketId, setSocketId] = useState<string | null>(null);
-//     const socketRef = useRef<Socket | null>(null);
-//     const activeChatIdRef = useRef(activeChatId);
-//     const {
-//         response: chatsResponse,
-//         loading: chatsLoading,
-//         error: chatsError,
-//     } = useFetch({ url: "/v1/chats" });
-
-//     const activeChat = useMemo(
-//         () => chats.find((chat) => chat.id === activeChatId) ?? chats[0],
-//         [activeChatId, chats],
-//     );
-
-//     const filteredChats = useMemo(() => {
-//         const normalized = search.trim().toLowerCase();
-//         if (!normalized) return chats;
-//         return chats.filter((chat) =>
-//             [chat.title, chat.subtitle, chat.lastMessage]
-//                 .filter(Boolean)
-//                 .some((value) => value?.toLowerCase().includes(normalized)),
-//         );
-//     }, [chats, search]);
-
-//     const chatMessages = useMemo(
-//         () => messages.filter((message) => message.chatId === activeChat?.id),
-//         [messages, activeChat?.id],
-//     );
-
-//     useEffect(() => {
-//         activeChatIdRef.current = activeChatId;
-//     }, [activeChatId]);
-
-//     useEffect(() => {
-//         const data = Array.isArray(chatsResponse?.data)
-//             ? (chatsResponse?.data as ApiChat[])
-//             : [];
-
-//         const mappedChats = data.map((chat) => {
-//             const id = String(chat.id);
-//             const sortedMessages = (chat.Messages ?? [])
-//                 .slice()
-//                 .sort((a, b) =>
-//                     String(a.timestamp ?? "").localeCompare(
-//                         String(b.timestamp ?? ""),
-//                     ),
-//                 );
-//             const lastMessage =
-//                 sortedMessages.length > 0
-//                     ? sortedMessages[sortedMessages.length - 1].message
-//                     : "";
-
-//             return {
-//                 id,
-//                 title:
-//                     chat.Client?.name ?? `Cliente ${chat.idClient ?? chat.id}`,
-//                 subtitle: chat.Client?.email ?? undefined,
-//                 online: true,
-//                 unreadCount: 0,
-//                 lastMessage,
-//             };
-//         });
-
-//         const mappedMessagesWithTimestamp: Array<
-//             ChatMessage & { timestamp: string }
-//         > = data.flatMap((chat) =>
-//             (chat.Messages ?? []).map((msg) => {
-//                 const sender: ChatMessage["sender"] =
-//                     msg.sender === "admin" ? "me" : "other";
-//                 return {
-//                     id: String(msg.id),
-//                     chatId: String(msg.idChat),
-//                     sender,
-//                     text: msg.message,
-//                     time: formatTime(msg.timestamp),
-//                     timestamp: msg.timestamp ?? "",
-//                 };
-//             }),
-//         );
-
-//         const mappedMessages = mappedMessagesWithTimestamp
-//             .sort((a, b) =>
-//                 String(a.timestamp ?? "").localeCompare(
-//                     String(b.timestamp ?? ""),
-//                 ),
-//             )
-//             .map(({ timestamp, ...rest }) => rest);
-
-//         setChats(mappedChats);
-//         setMessages(mappedMessages);
-
-//         if (mappedChats.length > 0) {
-//             const stillExists = mappedChats.some(
-//                 (chat) => chat.id === activeChatIdRef.current,
-//             );
-//             if (!activeChatIdRef.current || !stillExists) {
-//                 setActiveChatId(mappedChats[0].id);
-//             }
-//         }
-//     }, [chatsResponse]);
-
-//     useEffect(() => {
-//         const socket = io(API_URL, {
-//             transports: ["websocket"],
-//         });
-
-//         socketRef.current = socket;
-
-//         socket.on("connect", () => {
-//             setSocketId(socket.id ?? null);
-//             socket.emit("admin:join");
-//         });
-
-//         socket.on("disconnect", () => {
-//             setSocketId(null);
-//         });
-
-//         const onMessage = (payload: {
-//             text: string;
-//             senderId: string;
-//             chatId: string | number;
-//             sender?: string;
-//         }) => {
-//             if (!payload?.text || !payload?.chatId) return;
-//             if (payload.senderId && payload.senderId === socket.id) return;
-
-//             const now = new Date();
-//             const time = now.toLocaleTimeString("es-ES", {
-//                 hour: "2-digit",
-//                 minute: "2-digit",
-//             });
-
-//             const currentChatId = String(payload.chatId);
-//             const newMessage: ChatMessage = {
-//                 id: `m${Date.now()}`,
-//                 chatId: currentChatId,
-//                 sender: payload.sender === "admin" ? "me" : "other",
-//                 text: payload.text,
-//                 time,
-//             };
-
-//             setMessages((prev) => [...prev, newMessage]);
-//             setChats((prev) => {
-//                 const existing = prev.find((chat) => chat.id === currentChatId);
-//                 const isActive = currentChatId === activeChatIdRef.current;
-//                 if (!existing) {
-//                     const label = currentChatId.slice(0, 4).toUpperCase();
-//                     return [
-//                         {
-//                             id: currentChatId,
-//                             title: `Cliente ${label}`,
-//                             online: true,
-//                             unreadCount: isActive ? 0 : 1,
-//                             lastMessage: payload.text,
-//                         },
-//                         ...prev,
-//                     ];
-//                 }
-
-//                 return prev.map((chat) =>
-//                     chat.id === currentChatId
-//                         ? {
-//                               ...chat,
-//                               lastMessage: payload.text,
-//                               unreadCount: isActive
-//                                   ? 0
-//                                   : (chat.unreadCount ?? 0) + 1,
-//                           }
-//                         : chat,
-//                 );
-//             });
-//         };
-
-//         socket.on("chat message", onMessage);
-
-//         return () => {
-//             socket.off("chat message", onMessage);
-//             socket.disconnect();
-//             socketRef.current = null;
-//         };
-//     }, []);
-
-//     function handleSendMessage() {
-//         const text = draft.trim();
-//         if (!text || !activeChat) return;
-
-//         const now = new Date();
-//         const time = now.toLocaleTimeString("es-ES", {
-//             hour: "2-digit",
-//             minute: "2-digit",
-//         });
-
-//         const newMessage: ChatMessage = {
-//             id: `m${messages.length + 1}`,
-//             chatId: activeChat.id,
-//             sender: "me",
-//             text,
-//             time,
-//         };
-
-//         setMessages((prev) => [...prev, newMessage]);
-//         setDraft("");
-//         setChats((prev) =>
-//             prev.map((chat) =>
-//                 chat.id === activeChat.id
-//                     ? { ...chat, lastMessage: text }
-//                     : chat,
-//             ),
-//         );
-//         socketRef.current?.emit("chat message", {
-//             text,
-//             senderId: socketId ?? undefined,
-//             chatId: activeChat.id,
-//             sender: "admin",
-//             remitent: "client",
-//         });
-//     }
-
-//     return (
-//         <div className="h-svh bg-slate-950 text-slate-100">
-//             <div className="mx-auto flex h-full max-w-6xl flex-col gap-4 px-6 py-10">
-//                 <div className="space-y-1">
-//                     <h1 className="text-3xl font-semibold">Centro de chat</h1>
-//                     <p className="text-sm text-slate-400">
-//                         Atiende consultas de clientes en tiempo real.
-//                     </p>
-//                 </div>
-
-//                 <div className="grid h-full min-h-135 grid-cols-1 gap-4 lg:grid-cols-[320px_1fr]">
-//                     <section className="flex h-full flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-900/70 p-4">
-//                         <div className="space-y-2">
-//                             <h2 className="text-sm font-semibold text-slate-200">
-//                                 Conversaciones
-//                             </h2>
-//                             <Input
-//                                 value={search}
-//                                 onChange={(event) =>
-//                                     setSearch(event.target.value)
-//                                 }
-//                                 placeholder="Buscar por nombre"
-//                             />
-//                         </div>
-
-//                         <div className="flex-1 space-y-3 overflow-y-auto pr-1">
-//                             {chatsLoading && (
-//                                 <div className="rounded-xl border border-dashed border-slate-700 p-4 text-center text-sm text-slate-400">
-//                                     Cargando conversaciones...
-//                                 </div>
-//                             )}
-//                             {chatsError && !chatsLoading && (
-//                                 <div className="rounded-xl border border-dashed border-red-700/60 p-4 text-center text-sm text-red-300">
-//                                     No se pudieron cargar las conversaciones.
-//                                 </div>
-//                             )}
-//                             {filteredChats.length === 0 &&
-//                                 !chatsLoading &&
-//                                 !chatsError && (
-//                                     <div className="rounded-xl border border-dashed border-slate-700 p-6 text-center text-sm text-slate-400">
-//                                         No hay conversaciones que coincidan.
-//                                     </div>
-//                                 )}
-//                         </div>
-//                     </section>
-
-//                     <section className="flex h-full flex-col rounded-2xl border border-slate-800 bg-slate-900/70">
-//                         <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 px-5 py-4">
-//                             <div className="space-y-1">
-//                                 <h2 className="text-lg font-semibold">
-//                                     {activeChat?.title ?? "Chat"}
-//                                 </h2>
-//                                 <p className="text-xs text-slate-400">
-//                                     {activeChat?.online
-//                                         ? "En línea"
-//                                         : "Última conexión recientemente"}
-//                                 </p>
-//                             </div>
-//                             <div className="flex gap-2">
-//                                 <Button
-//                                     variant="outline"
-//                                     size="sm"
-//                                     className="border-slate-700 text-slate-200"
-//                                 >
-//                                     Ver perfil
-//                                 </Button>
-//                                 <Button
-//                                     variant="outline"
-//                                     size="sm"
-//                                     className="border-slate-700 text-slate-200"
-//                                 >
-//                                     Marcar como resuelto
-//                                 </Button>
-//                             </div>
-//                         </header>
-
-//                         <div className="flex-1 space-y-4 overflow-y-auto px-5 py-6">
-//                             {chatMessages.map((message) => (
-//                                 <div
-//                                     key={message.id}
-//                                     className={`flex ${
-//                                         message.sender === "me"
-//                                             ? "justify-end"
-//                                             : "justify-start"
-//                                     }`}
-//                                 >
-//                                     <div
-//                                         className={`max-w-[78%] space-y-1 rounded-2xl px-4 py-2 text-sm shadow-sm ${
-//                                             message.sender === "me"
-//                                                 ? "bg-blue-600 text-white"
-//                                                 : "bg-slate-800 text-slate-100"
-//                                         }`}
-//                                     >
-//                                         <p>{message.text}</p>
-//                                         <span className="text-[10px] opacity-70">
-//                                             {message.time}
-//                                         </span>
-//                                     </div>
-//                                 </div>
-//                             ))}
-//                         </div>
-
-//                         <footer className="border-t border-slate-800 px-5 py-4">
-//                             <form
-//                                 className="flex flex-wrap gap-2"
-//                                 onSubmit={(event) => {
-//                                     event.preventDefault();
-//                                     handleSendMessage();
-//                                 }}
-//                             >
-//                                 <Input
-//                                     value={draft}
-//                                     onChange={(event) =>
-//                                         setDraft(event.target.value)
-//                                     }
-//                                     placeholder="Escribe un mensaje..."
-//                                     className="flex-1"
-//                                 />
-//                                 <Button type="submit">Enviar</Button>
-//                             </form>
-//                         </footer>
-//                     </section>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
-import { useEffect, useMemo, useRef, useState } from "react";
-import { io, Socket } from "socket.io-client";
+import { useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { API_URL } from "@/api/config";
-import { useFetch } from "@/hooks/useFetch";
 
-type ChatItem = {
-    id: string;
+type Chat = {
+    id: number;
+    idClient: number;
     title: string;
-    subtitle?: string;
-    avatarUrl?: string;
-    online?: boolean;
-    unreadCount?: number;
-    lastMessage?: string;
+    client: { id: number; name: string; phone?: string; email?: string } | null;
+    lastMessage: string | null;
+    messages: ChatMessage[];
 };
 
 type ChatMessage = {
@@ -431,222 +18,93 @@ type ChatMessage = {
     chatId: string;
     sender: "me" | "other";
     text: string;
-    time: string;
-};
-
-type ApiChat = {
-    id: number;
-    idClient: number | null;
-    Client?: {
-        id: number;
-        name: string;
-        phone?: string | null;
-        email?: string | null;
-    } | null;
-    Messages?: ApiMessage[];
-};
-
-type ApiMessage = {
-    id: number;
-    idChat: number;
-    sender: string;
-    remitent: string;
-    message: string;
-    timestamp?: string | null;
-};
-
-const initialChats: ChatItem[] = [];
-const initialMessages: ChatMessage[] = [];
-
-const formatTime = (value?: string | null) => {
-    if (!value) return "";
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "";
-    return date.toLocaleTimeString("es-ES", {
-        hour: "2-digit",
-        minute: "2-digit",
-    });
+    time?: string;
 };
 
 export default function ChatPage() {
-    const [chats, setChats] = useState<ChatItem[]>(initialChats);
-    const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
-    const [activeChatId, setActiveChatId] = useState("");
-    const [search, setSearch] = useState("");
-    const [draft, setDraft] = useState("");
-    const [socketId, setSocketId] = useState<string | null>(null);
-    const socketRef = useRef<Socket | null>(null);
-    const activeChatIdRef = useRef(activeChatId);
-    const {
-        response: chatsResponse,
-        loading: chatsLoading,
-        error: chatsError,
-    } = useFetch({ url: "/v1/chats" });
+    const [chats, setChats] = useState<Chat[]>([]);
+    const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [loadingChats, setLoadingChats] = useState(false);
+    const [loadingMessages, setLoadingMessages] = useState(false);
+    const socketRef = useRef<any>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const activeChat = useMemo(
-        () => chats.find((chat) => chat.id === activeChatId) ?? chats[0],
-        [activeChatId, chats],
-    );
-
-    const filteredChats = useMemo(() => {
-        const normalized = search.trim().toLowerCase();
-        if (!normalized) return chats;
-        return chats.filter((chat) =>
-            [chat.title, chat.subtitle, chat.lastMessage]
-                .filter(Boolean)
-                .some((value) => value?.toLowerCase().includes(normalized)),
-        );
-    }, [chats, search]);
-
-    const chatMessages = useMemo(
-        () => messages.filter((message) => message.chatId === activeChat?.id),
-        [messages, activeChat?.id],
-    );
-
+    // Cargar todos los chats con sus mensajes
     useEffect(() => {
-        activeChatIdRef.current = activeChatId;
-    }, [activeChatId]);
+        setLoadingChats(true);
+        fetch(`${API_URL}/v1/chats`)
+            .then((r) => r.json())
+            .then((json) => {
+                let data = json?.data;
+                if (data && data.chats) data = data.chats;
+                if (!Array.isArray(data)) data = [];
+                setChats(data);
+                setLoadingChats(false);
+                // Seleccionar el primer chat si no hay uno seleccionado
+                if (data.length > 0 && selectedChatId == null) {
+                    setSelectedChatId(data[0].id);
+                }
+            })
+            .catch(() => setLoadingChats(false));
+    }, []);
 
+    // Cargar mensajes históricos solo cuando cambie el chat seleccionado
     useEffect(() => {
-        const data = Array.isArray(chatsResponse?.data)
-            ? (chatsResponse?.data as ApiChat[])
-            : [];
-
-        const mappedChats = data.map((chat) => {
-            const id = String(chat.id);
-            const sortedMessages = (chat.Messages ?? [])
-                .slice()
-                .sort((a, b) =>
-                    String(a.timestamp ?? "").localeCompare(
-                        String(b.timestamp ?? ""),
-                    ),
-                );
-            const lastMessage =
-                sortedMessages.length > 0
-                    ? sortedMessages[sortedMessages.length - 1].message
-                    : "";
-
-            return {
-                id,
-                title:
-                    chat.Client?.name ?? `Cliente ${chat.idClient ?? chat.id}`,
-                subtitle: chat.Client?.email ?? undefined,
-                online: true,
-                unreadCount: 0,
-                lastMessage,
-            };
-        });
-
-        const mappedMessagesWithTimestamp: Array<
-            ChatMessage & { timestamp: string }
-        > = data.flatMap((chat) =>
-            (chat.Messages ?? []).map((msg) => {
-                const sender: ChatMessage["sender"] =
-                    msg.sender === "admin" ? "me" : "other";
-                return {
-                    id: String(msg.id),
-                    chatId: String(msg.idChat),
-                    sender,
-                    text: msg.message,
-                    time: formatTime(msg.timestamp),
-                    timestamp: msg.timestamp ?? "",
-                };
-            }),
-        );
-
-        const mappedMessages = mappedMessagesWithTimestamp
-            .sort((a, b) =>
-                String(a.timestamp ?? "").localeCompare(
-                    String(b.timestamp ?? ""),
-                ),
-            )
-            .map(({ timestamp, ...rest }) => rest);
-
-        setChats(mappedChats);
-        setMessages(mappedMessages);
-
-        if (mappedChats.length > 0) {
-            const stillExists = mappedChats.some(
-                (chat) => chat.id === activeChatIdRef.current,
-            );
-            if (!activeChatIdRef.current || !stillExists) {
-                setActiveChatId(mappedChats[0].id);
-            }
+        if (!selectedChatId) {
+            setMessages([]);
+            return;
         }
-    }, [chatsResponse]);
+        setLoadingMessages(true);
+        const chat = chats.find((c) => c.id === selectedChatId);
+        if (chat) {
+            const mappedMsgs: ChatMessage[] = (chat.messages || []).map((m: any) => ({
+                id: String(m.id),
+                chatId: String(m.idChat ?? m.id_chat ?? chat.id),
+                sender: m.sender === "admin" ? "me" : "other",
+                text: m.message,
+                time: m.timestamp ? new Date(m.timestamp).toLocaleTimeString() : undefined,
+            }));
+            setMessages(mappedMsgs);
+        } else {
+            setMessages([]);
+        }
+        setLoadingMessages(false);
+    }, [selectedChatId]);
 
+    // Conexión socket.io y lógica de mensajes
     useEffect(() => {
-        const socket = io(API_URL, {
-            transports: ["websocket"],
-        });
-
+        const socket = io(API_URL, { transports: ["websocket"] });
         socketRef.current = socket;
 
         socket.on("connect", () => {
-            setSocketId(socket.id ?? null);
             socket.emit("admin:join");
         });
 
-        socket.on("disconnect", () => {
-            setSocketId(null);
-        });
-
-        const onMessage = (payload: {
-            text: string;
-            senderId: string;
-            chatId: string | number;
-            sender?: string;
-        }) => {
-            if (!payload?.text || !payload?.chatId) return;
-            if (payload.senderId && payload.senderId === socket.id) return;
-
-            const now = new Date();
-            const time = now.toLocaleTimeString("es-ES", {
-                hour: "2-digit",
-                minute: "2-digit",
-            });
-
-            const currentChatId = String(payload.chatId);
-            const newMessage: ChatMessage = {
-                id: `m${Date.now()}`,
-                chatId: currentChatId,
-                sender: payload.sender === "admin" ? "me" : "other",
-                text: payload.text,
+        // Recibir mensajes en tiempo real
+        const onMessage = (payload: any) => {
+            if (!payload) return;
+            const chatId = String(payload.idChat ?? payload.chatId ?? payload.chatID ?? "");
+            const sender = payload.sender === "admin" ? "me" : "other";
+            const time = payload.timestamp ? new Date(payload.timestamp).toLocaleTimeString() : undefined;
+            const newMsg: ChatMessage = {
+                id: String(payload.id ?? `s_${Date.now()}`),
+                chatId,
+                sender,
+                text: String(payload.message ?? payload.text ?? ""),
                 time,
             };
-
-            setMessages((prev) => [...prev, newMessage]);
-            setChats((prev) => {
-                const existing = prev.find((chat) => chat.id === currentChatId);
-                const isActive = currentChatId === activeChatIdRef.current;
-                if (!existing) {
-                    const label = currentChatId.slice(0, 4).toUpperCase();
-                    return [
-                        {
-                            id: currentChatId,
-                            title: `Cliente ${label}`,
-                            online: true,
-                            unreadCount: isActive ? 0 : 1,
-                            lastMessage: payload.text,
-                        },
-                        ...prev,
-                    ];
-                }
-
-                return prev.map((chat) =>
-                    chat.id === currentChatId
-                        ? {
-                              ...chat,
-                              lastMessage: payload.text,
-                              unreadCount: isActive
-                                  ? 0
-                                  : (chat.unreadCount ?? 0) + 1,
-                          }
-                        : chat,
-                );
-            });
+            // Debug: log para ver si el mensaje llega y a qué chat corresponde
+            console.log('[ADMIN SOCKET] Recibido', { payload, selectedChatId, chatId, newMsg });
+            // Si el mensaje es del chat seleccionado, agregarlo a la lista
+            if (selectedChatId && String(selectedChatId) === chatId) {
+                setMessages((prev) => [...prev, newMsg]);
+            }
+            // Actualizar el último mensaje en la lista de chats
+            setChats((prev) => prev.map((c) =>
+                String(c.id) === chatId ? { ...c, lastMessage: newMsg.text } : c
+            ));
         };
-
         socket.on("chat message", onMessage);
 
         return () => {
@@ -654,54 +112,39 @@ export default function ChatPage() {
             socket.disconnect();
             socketRef.current = null;
         };
-    }, []);
+    }, [selectedChatId]);
 
+    // Unirse a la sala del chat seleccionado
+    useEffect(() => {
+        if (!socketRef.current || !selectedChatId) return;
+        socketRef.current.emit("client:join", { chatId: selectedChatId });
+    }, [selectedChatId]);
+
+    // Enviar mensaje
     function handleSendMessage() {
-        const text = draft.trim();
-        if (!text || !activeChat) return;
-
+        const text = inputRef.current?.value.trim() ?? "";
+        if (!text || !selectedChatId) return;
         const now = new Date();
-        const time = now.toLocaleTimeString("es-ES", {
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-
-        const newMessage: ChatMessage = {
-            id: `m${messages.length + 1}`,
-            chatId: activeChat.id,
+        const time = now.toLocaleTimeString();
+        const outgoing: ChatMessage = {
+            id: `a_${Date.now()}`,
+            chatId: String(selectedChatId),
             sender: "me",
             text,
             time,
         };
-
-        setMessages((prev) => [...prev, newMessage]);
-        setDraft("");
-        setChats((prev) =>
-            prev.map((chat) =>
-                chat.id === activeChat.id
-                    ? { ...chat, lastMessage: text }
-                    : chat,
-            ),
-        );
-        // Buscar idClient del chat activo
-        let idClient = null;
-        if (activeChat) {
-            // Buscar en chatsResponse si está disponible
-            const data = Array.isArray(chatsResponse?.data)
-                ? (chatsResponse?.data as { id: number; idClient?: number; id_client?: number; Client?: { id: number } }[])
-                : [];
-            const found = data.find && data.find((c: { id: number }) => String(c.id) === activeChat.id);
-            idClient = found?.idClient ?? found?.id_client ?? found?.Client?.id ?? null;
-        }
+        setMessages((prev) => [...prev, outgoing]);
+        if (inputRef.current) inputRef.current.value = "";
         socketRef.current?.emit("chat message", {
             text,
-            senderId: socketId ?? undefined,
-            chatId: activeChat.id,
+            chatId: selectedChatId,
             sender: "admin",
             remitent: "client",
-            idClient,
         });
     }
+
+    // Obtener datos del chat seleccionado
+    const selectedChat = chats.find((c) => c.id === selectedChatId);
 
     return (
         <div className="h-svh bg-slate-950 text-slate-100">
@@ -719,67 +162,28 @@ export default function ChatPage() {
                             <h2 className="text-sm font-semibold text-slate-200">
                                 Conversaciones
                             </h2>
-                            <Input
-                                value={search}
-                                onChange={(event) =>
-                                    setSearch(event.target.value)
-                                }
-                                placeholder="Buscar por nombre"
-                            />
                         </div>
-
                         <div className="flex-1 space-y-3 overflow-y-auto pr-1">
-                            {chatsLoading && (
-                                <div className="rounded-xl border border-dashed border-slate-700 p-4 text-center text-sm text-slate-400">
-                                    Cargando conversaciones...
-                                </div>
-                            )}
-                            {chatsError && !chatsLoading && (
-                                <div className="rounded-xl border border-dashed border-red-700/60 p-4 text-center text-sm text-red-300">
-                                    No se pudieron cargar las conversaciones.
-                                </div>
-                            )}
-                            {filteredChats.length === 0 &&
-                                !chatsLoading &&
-                                !chatsError && (
-                                    <div className="rounded-xl border border-dashed border-slate-700 p-6 text-center text-sm text-slate-400">
-                                        No hay conversaciones que coincidan.
-                                    </div>
-                                )}
-                            {filteredChats.map((chat) => (
-                                <div
-                                    key={chat.id}
-                                    className={`rounded-xl p-3 cursor-pointer transition-colors ${
-                                        chat.id === activeChatId
-                                            ? "bg-blue-700/30 border border-blue-500"
-                                            : "hover:bg-slate-800 border border-transparent"
-                                    }`}
-                                    onClick={() => setActiveChatId(chat.id)}
-                                >
-                                    <div className="flex items-center gap-2">
-                                        <div className="flex-1">
-                                            <div className="font-semibold text-slate-200">
-                                                {chat.title}
-                                            </div>
-                                            {chat.subtitle && (
-                                                <div className="text-xs text-slate-400">
-                                                    {chat.subtitle}
-                                                </div>
-                                            )}
+                            {loadingChats ? (
+                                <div className="text-xs text-slate-400">Cargando chats...</div>
+                            ) : chats.length === 0 ? (
+                                <div className="text-xs text-slate-400">No hay chats</div>
+                            ) : (
+                                chats.map((chat) => (
+                                    <div
+                                        key={chat.id}
+                                        className={`rounded-lg px-3 py-2 cursor-pointer transition-colors ${selectedChatId === chat.id ? "bg-blue-700/30" : "hover:bg-slate-800/60"}`}
+                                        onClick={() => setSelectedChatId(chat.id)}
+                                    >
+                                        <div className="font-medium text-slate-200 text-sm">
+                                            {chat.title}
                                         </div>
-                                        {chat.unreadCount && chat.unreadCount > 0 && (
-                                            <span className="ml-2 inline-block rounded-full bg-blue-600 px-2 py-0.5 text-xs text-white">
-                                                {chat.unreadCount}
-                                            </span>
-                                        )}
-                                    </div>
-                                    {chat.lastMessage && (
-                                        <div className="mt-1 text-xs text-slate-300 truncate">
-                                            {chat.lastMessage}
+                                        <div className="text-xs text-slate-400 truncate">
+                                            {chat.lastMessage || "Sin mensajes"}
                                         </div>
-                                    )}
-                                </div>
-                            ))}
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </section>
 
@@ -787,12 +191,10 @@ export default function ChatPage() {
                         <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 px-5 py-4">
                             <div className="space-y-1">
                                 <h2 className="text-lg font-semibold">
-                                    {activeChat?.title ?? "Chat"}
+                                    {selectedChat?.client?.name || selectedChat?.title || "Sin cliente"}
                                 </h2>
                                 <p className="text-xs text-slate-400">
-                                    {activeChat?.online
-                                        ? "En línea"
-                                        : "Última conexión recientemente"}
+                                    {selectedChat?.client?.email || selectedChat?.client?.phone || ""}
                                 </p>
                             </div>
                             <div className="flex gap-2">
@@ -814,29 +216,27 @@ export default function ChatPage() {
                         </header>
 
                         <div className="flex-1 space-y-4 overflow-y-auto px-5 py-6">
-                            {chatMessages.map((message) => (
-                                <div
-                                    key={message.id}
-                                    className={`flex ${
-                                        message.sender === "me"
-                                            ? "justify-end"
-                                            : "justify-start"
-                                    }`}
-                                >
+                            {/* Debug: mostrar mensajes actuales en consola */}
+                            {console.log('[ADMIN UI] Render messages', messages)}
+                            {loadingMessages ? (
+                                <div className="text-xs text-slate-400">Cargando mensajes...</div>
+                            ) : messages.length === 0 ? (
+                                <div className="text-xs text-slate-400">Sin mensajes aún</div>
+                            ) : (
+                                messages.map((message) => (
                                     <div
-                                        className={`max-w-[78%] space-y-1 rounded-2xl px-4 py-2 text-sm shadow-sm ${
-                                            message.sender === "me"
-                                                ? "bg-blue-600 text-white"
-                                                : "bg-slate-800 text-slate-100"
-                                        }`}
+                                        key={message.id}
+                                        className={`flex ${message.sender === "me" ? "justify-end" : "justify-start"}`}
                                     >
-                                        <p>{message.text}</p>
-                                        <span className="text-[10px] opacity-70">
-                                            {message.time}
-                                        </span>
+                                        <div
+                                            className={`max-w-[78%] space-y-1 rounded-2xl px-4 py-2 text-sm shadow-sm ${message.sender === "me" ? "bg-blue-600 text-white" : "bg-slate-800 text-slate-100"}`}
+                                        >
+                                            <p>{message.text}</p>
+                                            <span className="text-[10px] opacity-70">{message.time}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                            )}
                         </div>
 
                         <footer className="border-t border-slate-800 px-5 py-4">
@@ -848,12 +248,11 @@ export default function ChatPage() {
                                 }}
                             >
                                 <Input
-                                    value={draft}
-                                    onChange={(event) =>
-                                        setDraft(event.target.value)
-                                    }
+                                    // No value ni onChange para permitir edición
                                     placeholder="Escribe un mensaje..."
                                     className="flex-1"
+                                    ref={inputRef}
+                                    onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); handleSendMessage(); } }}
                                 />
                                 <Button type="submit">Enviar</Button>
                             </form>

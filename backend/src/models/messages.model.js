@@ -47,7 +47,7 @@ class MessagesModel extends BaseModel {
             id_chat: {
                 model: () => ChatsModel,
                 refColumn: "id",
-                refTable: "Chats",
+                refTable: "chats",
             },
         };
     }
