@@ -24,33 +24,77 @@ export default function ClientChatPage() {
     const socketRef = useRef<any>(null);
 
     useEffect(() => {
-        // load clients list
+        if (clients.length > 0) return; // Ya están cargados, no vuelvas a cargar
+        console.log("[Chat] Cargando lista de clientes...");
         fetch(`${API_URL}/v1/clients`)
             .then((r) => r.json())
             .then((json) => {
                 const data = Array.isArray(json?.data) ? json.data : json?.data?.clients ?? [];
                 const mapped = data.map((c: any) => ({ id: c.id, name: c.name }));
                 setClients(mapped);
-                if (mapped.length > 0 && selectedClientId == null) setSelectedClientId(mapped[0].id);
+                console.log("[Chat] Clientes cargados:", mapped);
             })
             .catch((err) => {
-                console.error("Error loading clients", err);
+                console.error("[Chat] Error cargando clientes", err);
             });
-    }, []);
+    }, [clients]);
+
+    // Inicializar cliente seleccionado solo si es null y hay clientes
+    useEffect(() => {
+        if (clients.length > 0 && selectedClientId == null) {
+            console.log(`[Chat] Inicializando cliente seleccionado con id: ${clients[0].id}`);
+            setSelectedClientId(clients[0].id);
+        }
+    }, [clients, selectedClientId]);
+
+    // Cargar mensajes históricos al cambiar de cliente (solo una petición)
+    useEffect(() => {
+        if (!selectedClientId) return;
+        fetch(`${API_URL}/v1/chats/`)//trae todos los chats con sus mensajes correspondientes
+            .then((r) => r.json())
+            .then((json) => {
+                // console.log("[Chat] Respuesta de chats:", json);
+                const chat = Array.isArray(json?.data) && json.data.length > 0
+                    ? json.data.find((c: any) => c.id_client === selectedClientId)
+                    : null;
+                // console.log("[Chat] Chat encontrado:", chat);
+                if (chat && chat.id) {
+                    const msgs = Array.isArray(chat.messages) ? chat.messages : [];
+                    // console.log(`[Chat] Mensajes encontrados para chat ${chat.id}:`, msgs);
+                    const mappedMsgs = msgs.map((m: any) => ({
+                        id: String(m.id),
+                        chatId: String(m.id_chat),
+                        sender: m.sender === "client" ? "me" : "other",
+                        text: m.message,
+                        time: m.timestamp ? new Date(m.timestamp).toLocaleTimeString() : undefined,
+                    }));
+                    setMessages(mappedMsgs);
+                } else {
+                    console.log(`[Chat] No se encontró chat para el cliente ${selectedClientId}`);
+                    setMessages([]);
+                }
+            })
+            .catch((err) => {
+                console.error(`[Chat] Error consultando chat para cliente ${selectedClientId}:`, err);
+                setMessages([]);
+            });
+    }, [selectedClientId]);
 
     useEffect(() => {
+        console.log("[Chat] Inicializando conexión socket.io");
         const socket = io(API_URL, { transports: ["websocket"] });
         socketRef.current = socket;
 
         let chatRoomId: number | null = null;
 
         socket.on("connect", () => {
-            // nothing yet
+            console.log("[Chat] Socket conectado");
         });
 
         // Recibe el id real del chat y se une a la sala correcta
         socket.on("chat:assign", ({ chatId }) => {
             chatRoomId = chatId;
+            console.log(`[Chat] Asignado a sala de chat: ${chatId}`);
             socket.emit("client:join", { chatId });
         });
 
@@ -66,6 +110,7 @@ export default function ClientChatPage() {
                 text: String(payload.message ?? payload.text ?? ""),
                 time,
             };
+            console.log("[Chat] Mensaje recibido por socket:", newMsg);
             setMessages((prev) => [...prev, newMsg]);
         };
 
@@ -80,12 +125,10 @@ export default function ClientChatPage() {
     }, []);
 
     useEffect(() => {
-        // join selected client's chat room
         if (!socketRef.current) return;
         if (selectedClientId == null) return;
+        console.log(`[Chat] Uniendo socket a sala del cliente: ${selectedClientId}`);
         socketRef.current.emit("client:join", { chatId: selectedClientId });
-        // reset messages when switching
-        setMessages([]);
     }, [selectedClientId]);
 
     function handleSend() {
@@ -103,6 +146,7 @@ export default function ClientChatPage() {
             time,
         };
 
+        console.log(`[Chat] Enviando mensaje:`, outgoing);
         setMessages((prev) => [...prev, outgoing]);
         setDraft("");
 
