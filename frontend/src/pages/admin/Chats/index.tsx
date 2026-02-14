@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { API_URL } from "@/api/config";
+import { useChatStore } from '@/stores/chatStore';
 
 type Chat = {
     id: number;
@@ -24,11 +25,11 @@ type ChatMessage = {
 export default function ChatPage() {
     const [chats, setChats] = useState<Chat[]>([]);
     const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [loadingChats, setLoadingChats] = useState(false);
     const [loadingMessages, setLoadingMessages] = useState(false);
     const socketRef = useRef<any>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const { messagesByChat, addMessage, setMessages } = useChatStore();
 
     // Cargar todos los chats con sus mensajes
     useEffect(() => {
@@ -39,6 +40,7 @@ export default function ChatPage() {
                 let data = json?.data;
                 if (data && data.chats) data = data.chats;
                 if (!Array.isArray(data)) data = [];
+                console.log('Chats cargados del backend:', data);
                 setChats(data);
                 setLoadingChats(false);
                 // Seleccionar el primer chat si no hay uno seleccionado
@@ -51,8 +53,9 @@ export default function ChatPage() {
 
     // Cargar mensajes históricos solo cuando cambie el chat seleccionado
     useEffect(() => {
+        console.log('Chats seteados en estado:', chats);
         if (!selectedChatId) {
-            setMessages([]);
+            setMessages(String(selectedChatId), []);
             return;
         }
         setLoadingMessages(true);
@@ -60,17 +63,37 @@ export default function ChatPage() {
         if (chat) {
             const mappedMsgs: ChatMessage[] = (chat.messages || []).map((m: any) => ({
                 id: String(m.id),
-                chatId: String(m.idChat ?? m.id_chat ?? chat.id),
+                chatId: String(chat.id),
                 sender: m.sender === "admin" ? "me" : "other",
                 text: m.message,
                 time: m.timestamp ? new Date(m.timestamp).toLocaleTimeString() : undefined,
             }));
-            setMessages(mappedMsgs);
+            // Fusionar mensajes del backend con los de Zustand, evitando duplicados por id
+            const currentMsgs = messagesByChat[String(chat.id)] || [];
+            const merged = [...mappedMsgs];
+            for (const msg of currentMsgs) {
+                if (!merged.some((m) => m.id === msg.id)) {
+                    merged.push(msg);
+                }
+            }
+            // Ordenar por id numérico si es posible, o por timestamp si lo tienes
+            merged.sort((a, b) => {
+                // Si los ids son numéricos
+                const aNum = parseInt(a.id.replace(/\D/g, ""), 10);
+                const bNum = parseInt(b.id.replace(/\D/g, ""), 10);
+                return aNum - bNum;
+            });
+            setMessages(String(chat.id), merged);
         } else {
-            setMessages([]);
+            setMessages(String(selectedChatId), []);
         }
         setLoadingMessages(false);
     }, [selectedChatId]);
+
+    //depuración para ver cambios en mensajes
+    useEffect(() => {
+        console.log('Mensajes actualizados:', messagesByChat);
+    }, [messagesByChat]);
 
     // Conexión socket.io y lógica de mensajes
     useEffect(() => {
@@ -94,16 +117,30 @@ export default function ChatPage() {
                 text: String(payload.message ?? payload.text ?? ""),
                 time,
             };
-            // Debug: log para ver si el mensaje llega y a qué chat corresponde
-            console.log('[ADMIN SOCKET] Recibido', { payload, selectedChatId, chatId, newMsg });
-            // Si el mensaje es del chat seleccionado, agregarlo a la lista
-            if (selectedChatId && String(selectedChatId) === chatId) {
-                setMessages((prev) => [...prev, newMsg]);
-            }
-            // Actualizar el último mensaje en la lista de chats
-            setChats((prev) => prev.map((c) =>
-                String(c.id) === chatId ? { ...c, lastMessage: newMsg.text } : c
-            ));
+            // Detectar si el chat ya existe
+            setChats((prev) => {
+                const exists = prev.some((c) => String(c.id) === chatId);
+                if (!exists) {
+                    // Crear nuevo chat básico
+                    return [
+                        ...prev,
+                        {
+                            id: Number(chatId),
+                            idClient: payload.senderId || null,
+                            title: `Chat ${chatId}`,
+                            client: null,
+                            lastMessage: newMsg.text,
+                            messages: [],
+                        },
+                    ];
+                }
+                // Actualizar el último mensaje en la lista de chats
+                return prev.map((c) =>
+                    String(c.id) === chatId ? { ...c, lastMessage: newMsg.text } : c
+                );
+            });
+            // Siempre agrega el mensaje al chat correspondiente, esté seleccionado o no
+            addMessage(chatId, newMsg);
         };
         socket.on("chat message", onMessage);
 
@@ -133,7 +170,7 @@ export default function ChatPage() {
             text,
             time,
         };
-        setMessages((prev) => [...prev, outgoing]);
+        setMessages(String(selectedChatId), [...messagesByChat[String(selectedChatId)], outgoing]);
         if (inputRef.current) inputRef.current.value = "";
         socketRef.current?.emit("chat message", {
             text,
@@ -145,6 +182,26 @@ export default function ChatPage() {
 
     // Obtener datos del chat seleccionado
     const selectedChat = chats.find((c) => c.id === selectedChatId);
+
+    function chatLoad() {
+        // setLoadingChats(true);
+        fetch(`${API_URL}/v1/chats`)
+            .then((r) => r.json())
+            .then((json) => {
+                let data = json?.data;
+                if (data && data.chats) data = data.chats;
+                if (!Array.isArray(data)) data = [];
+                setChats(data);
+                // setLoadingChats(false);
+                // Seleccionar el primer chat si no hay uno seleccionado
+                if (data.length > 0 && selectedChatId == null) {
+                    setSelectedChatId(data[0].id);
+                }
+            })
+            .catch(() => {
+                // setLoadingChats(false);
+            });
+    }
 
     return (
         <div className="h-svh bg-slate-950 text-slate-100">
@@ -173,7 +230,10 @@ export default function ChatPage() {
                                     <div
                                         key={chat.id}
                                         className={`rounded-lg px-3 py-2 cursor-pointer transition-colors ${selectedChatId === chat.id ? "bg-blue-700/30" : "hover:bg-slate-800/60"}`}
-                                        onClick={() => setSelectedChatId(chat.id)}
+                                        onClick={() => {
+                                            
+                                            setSelectedChatId(chat.id)
+                                        }}
                                     >
                                         <div className="font-medium text-slate-200 text-sm">
                                             {chat.title}
@@ -216,14 +276,13 @@ export default function ChatPage() {
                         </header>
 
                         <div className="flex-1 space-y-4 overflow-y-auto px-5 py-6">
-                            {/* Debug: mostrar mensajes actuales en consola */}
-                            {console.log('[ADMIN UI] Render messages', messages)}
+                            
                             {loadingMessages ? (
                                 <div className="text-xs text-slate-400">Cargando mensajes...</div>
-                            ) : messages.length === 0 ? (
+                            ) : messagesByChat[String(selectedChatId)]?.length === 0 ? (
                                 <div className="text-xs text-slate-400">Sin mensajes aún</div>
                             ) : (
-                                messages.map((message) => (
+                                (messagesByChat[String(selectedChatId)] || []).map((message) => (
                                     <div
                                         key={message.id}
                                         className={`flex ${message.sender === "me" ? "justify-end" : "justify-start"}`}
