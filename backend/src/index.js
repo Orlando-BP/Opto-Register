@@ -24,17 +24,37 @@ const io = new Server(server, {
 const ADMIN_ROOM = "admins";
 
 io.on("connection", (socket) => {
+                // Evento de prueba para comprobar conexión y receptividad
+                socket.on("ping", ({ chatId }) => {
+                    console.log(`[SOCKET][DEBUG] Ping recibido de socket ${socket.id} para sala ${chatId}`);
+                    const socketsInRoom = io.sockets.adapter.rooms.get(String(chatId));
+                    console.log(`[SOCKET][DEBUG] Sockets en sala ${chatId} al emitir pong:`, socketsInRoom ? Array.from(socketsInRoom) : []);
+                    io.to(chatId).emit("pong", { from: socket.id, chatId });
+                });
+            // Permitir que el admin se una a la sala de un chat específico
+            socket.on("admin:joinChat", ({ chatId }) => {
+                if (chatId) {
+                    socket.join(String(chatId));
+                    console.log(`[SOCKET][DEBUG] Admin ${socket.id} unido a sala de chat ${chatId}`);
+                }
+            });
         // Permitir que el cliente se una a la sala de su chat
         socket.on("client:join", ({ chatId }) => {
             if (chatId) {
                 socket.join(String(chatId));
+                console.log(`[SOCKET][DEBUG] Cliente ${socket.id} unido a sala ${chatId}`);
             }
+        });
+        // Depuración desde el cliente
+        socket.on("chat:debug", (data) => {
+            console.log(`[SOCKET][DEBUG] Mensaje de depuración recibido:`, data);
         });
     console.log("Nuevo cliente conectado:", socket.id);
     socket.join(socket.id);
 
     socket.on("admin:join", () => {
         socket.join(ADMIN_ROOM);
+        console.log(`[SOCKET][DEBUG] Admin ${socket.id} unido a sala ${ADMIN_ROOM}`);
     });
 
     socket.on("disconnect", () => {
@@ -42,6 +62,7 @@ io.on("connection", (socket) => {
     });
 
         socket.on("chat message", async (msg) => {
+            console.log(`[SOCKET][DEBUG] Mensaje recibido para enviar:`, msg);
             // Determinar el id del cliente
             let clientId = null;
             if (msg?.chatId && Number.isFinite(Number(msg.chatId))) {
@@ -54,7 +75,10 @@ io.on("connection", (socket) => {
 
             // Si no hay texto, no procesar
             const text = typeof msg === "string" ? msg : msg?.text ?? "";
-            if (!text) return;
+            if (!text) {
+                console.log(`[SOCKET][DEBUG] Mensaje vacío, no se envía.`);
+                return;
+            }
 
             let chatId = null;
             let chatCreated = false;
@@ -74,6 +98,7 @@ io.on("connection", (socket) => {
 
                 // Unir al cliente a la sala del chat (importante para recibir mensajes de ese chat)
                 socket.join(String(chatId));
+                console.log(`[SOCKET][DEBUG] Socket ${socket.id} unido a sala ${chatId} para mensaje.`);
 
                 // Guardar el mensaje
                 if (chatId) {
@@ -95,16 +120,24 @@ io.on("connection", (socket) => {
                 chatId,
                 sender: msg?.sender ?? "client",
                 remitent: msg?.remitent ?? "admin",
+                idClient: msg?.clientId ?? "??",
+                clientName: msg?.clientName ?? "Cliente-Desconocido",
             };
 
-            // Si se acaba de crear el chat, notificar al cliente el id del chat
-            if (chatCreated && chatId) {
+            // Notificar siempre al cliente el id del chat
+            if (chatId) {
                 socket.emit("chat:assign", { chatId });
+                console.log(`[SOCKET][DEBUG] Asignando chatId ${chatId} al cliente.`);
             }
 
+            // Log sockets conectados a la sala
+            const socketsInRoom = io.sockets.adapter.rooms.get(String(chatId));
+            console.log(`[SOCKET][DEBUG] Sockets en sala ${chatId}:`, socketsInRoom ? Array.from(socketsInRoom) : []);
+
+            console.log(`[SOCKET][DEBUG] Emitiendo mensaje a sala ${chatId} y a admins. Payload:`, payload);
             io.to(chatId).emit("chat message", payload);
             io.to(ADMIN_ROOM).emit("chat message", payload);
-    });
+        });
 });
 
 app.use(morgan("dev"));

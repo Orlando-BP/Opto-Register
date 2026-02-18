@@ -10,6 +10,7 @@ type Chat = {
     idClient: number;
     title: string;
     client: { id: number; name: string; phone?: string; email?: string } | null;
+    clientName: string | null;
     lastMessage: string | null;
     messages: ChatMessage[];
 };
@@ -106,7 +107,9 @@ export default function ChatPage() {
 
         // Recibir mensajes en tiempo real
         const onMessage = (payload: any) => {
+            console.log('Mensaje recibido por socket:', payload);
             if (!payload) return;
+            console.log('Mensaje recibido por socket:', payload);
             const chatId = String(payload.idChat ?? payload.chatId ?? payload.chatID ?? "");
             const sender = payload.sender === "admin" ? "me" : "other";
             const time = payload.timestamp ? new Date(payload.timestamp).toLocaleTimeString() : undefined;
@@ -126,9 +129,10 @@ export default function ChatPage() {
                         ...prev,
                         {
                             id: Number(chatId),
-                            idClient: payload.senderId || null,
+                            idClient: payload.idClient || null,
                             title: `Chat ${chatId}`,
                             client: null,
+                            clientName:  payload.clientName || null,
                             lastMessage: newMsg.text,
                             messages: [],
                         },
@@ -154,7 +158,7 @@ export default function ChatPage() {
     // Unirse a la sala del chat seleccionado
     useEffect(() => {
         if (!socketRef.current || !selectedChatId) return;
-        socketRef.current.emit("client:join", { chatId: selectedChatId });
+        socketRef.current.emit("admin:joinChat", { chatId: selectedChatId });
     }, [selectedChatId]);
 
     // Enviar mensaje
@@ -183,26 +187,6 @@ export default function ChatPage() {
     // Obtener datos del chat seleccionado
     const selectedChat = chats.find((c) => c.id === selectedChatId);
 
-    function chatLoad() {
-        // setLoadingChats(true);
-        fetch(`${API_URL}/v1/chats`)
-            .then((r) => r.json())
-            .then((json) => {
-                let data = json?.data;
-                if (data && data.chats) data = data.chats;
-                if (!Array.isArray(data)) data = [];
-                setChats(data);
-                // setLoadingChats(false);
-                // Seleccionar el primer chat si no hay uno seleccionado
-                if (data.length > 0 && selectedChatId == null) {
-                    setSelectedChatId(data[0].id);
-                }
-            })
-            .catch(() => {
-                // setLoadingChats(false);
-            });
-    }
-
     return (
         <div className="h-svh bg-slate-950 text-slate-100">
             <div className="mx-auto flex h-full max-w-6xl flex-col gap-4 px-6 py-10">
@@ -227,7 +211,9 @@ export default function ChatPage() {
                                 <div className="text-xs text-slate-400">No hay chats</div>
                             ) : (
                                 chats.map((chat) => (
+                                    // console.log('Renderizando chat:', chat),
                                     <div
+                                        
                                         key={chat.id}
                                         className={`rounded-lg px-3 py-2 cursor-pointer transition-colors ${selectedChatId === chat.id ? "bg-blue-700/30" : "hover:bg-slate-800/60"}`}
                                         onClick={() => {
@@ -236,7 +222,7 @@ export default function ChatPage() {
                                         }}
                                     >
                                         <div className="font-medium text-slate-200 text-sm">
-                                            {chat.title}
+                                            {`#${chat.client?.id || chat.idClient} ${chat.client?.name || chat.clientName || "Chat sin título"}`}
                                         </div>
                                         <div className="text-xs text-slate-400 truncate">
                                             {chat.lastMessage || "Sin mensajes"}
