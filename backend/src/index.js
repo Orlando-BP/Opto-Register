@@ -21,41 +21,38 @@ const io = new Server(server, {
     },
 });
 
-const ADMIN_ROOM = "admins";
+// const ADMIN_ROOM = "admins";
 
-io.on("connection", (socket) => {
-                // Evento de prueba para comprobar conexión y receptividad
-                socket.on("ping", ({ chatId }) => {
-                    console.log(`[SOCKET][DEBUG] Ping recibido de socket ${socket.id} para sala ${chatId}`);
-                    const socketsInRoom = io.sockets.adapter.rooms.get(String(chatId));
-                    console.log(`[SOCKET][DEBUG] Sockets en sala ${chatId} al emitir pong:`, socketsInRoom ? Array.from(socketsInRoom) : []);
-                    io.to(chatId).emit("pong", { from: socket.id, chatId });
-                });
+io.on("connection", async (socket) => {
             // Permitir que el admin se una a la sala de un chat específico
             socket.on("admin:joinChat", ({ chatId }) => {
                 if (chatId) {
-                    socket.join(String(chatId));
+                    socket.join(String(String(chatId)));
                     console.log(`[SOCKET][DEBUG] Admin ${socket.id} unido a sala de chat ${chatId}`);
                 }
+            });
+            socket.on("admin:joinGeneral", ({  }) => {
+                socket.join("general");
+                console.log(`[SOCKET][DEBUG] Admin ${socket.id} unido a sala general`);
             });
         // Permitir que el cliente se una a la sala de su chat
         socket.on("client:join", ({ chatId }) => {
             if (chatId) {
-                socket.join(String(chatId));
+                socket.join(String(String(chatId)));
                 console.log(`[SOCKET][DEBUG] Cliente ${socket.id} unido a sala ${chatId}`);
             }
         });
         // Depuración desde el cliente
-        socket.on("chat:debug", (data) => {
-            console.log(`[SOCKET][DEBUG] Mensaje de depuración recibido:`, data);
-        });
-    console.log("Nuevo cliente conectado:", socket.id);
-    socket.join(socket.id);
+        // socket.on("chat:debug", (data) => {
+        //     console.log(`[SOCKET][DEBUG] Mensaje de depuración recibido:`, data);
+        // });
+    // console.log("Nuevo cliente conectado:", socket.id);
+    // socket.join(socket.id);
 
-    socket.on("admin:join", () => {
-        socket.join(ADMIN_ROOM);
-        console.log(`[SOCKET][DEBUG] Admin ${socket.id} unido a sala ${ADMIN_ROOM}`);
-    });
+    // socket.on("admin:join", () => {
+    //     socket.join(ADMIN_ROOM);
+    //     console.log(`[SOCKET][DEBUG] Admin ${socket.id} unido a sala ${ADMIN_ROOM}`);
+    // });
 
     socket.on("disconnect", () => {
         console.log("Cliente desconectado:", socket.id);
@@ -65,12 +62,8 @@ io.on("connection", (socket) => {
             console.log(`[SOCKET][DEBUG] Mensaje recibido para enviar:`, msg);
             // Determinar el id del cliente
             let clientId = null;
-            if (msg?.chatId && Number.isFinite(Number(msg.chatId))) {
-                clientId = Number(msg.chatId);
-            } else if (msg?.clientId && Number.isFinite(Number(msg.clientId))) {
-                clientId = Number(msg.clientId);
-            } else if (msg?.senderId && Number.isFinite(Number(msg.senderId))) {
-                clientId = Number(msg.senderId);
+            if (msg?.idClient && Number.isFinite(Number(msg.idClient))) {
+                clientId = Number(msg.idClient);
             }
 
             // Si no hay texto, no procesar
@@ -80,7 +73,7 @@ io.on("connection", (socket) => {
                 return;
             }
 
-            let chatId = null;
+            let clientChatId = null;
             let chatCreated = false;
             try {
                 // Buscar si ya existe un chat para ese cliente
@@ -90,20 +83,12 @@ io.on("connection", (socket) => {
                         chat = await ChatsService.create({ id_client: clientId });
                         chatCreated = true;
                     }
-                    chatId = chat.id;
-                } else {
-                    // Si no hay clientId, usar el id del socket como fallback
-                    chatId = socket.id;
+                    clientChatId = chat.id;
                 }
-
-                // Unir al cliente a la sala del chat (importante para recibir mensajes de ese chat)
-                socket.join(String(chatId));
-                console.log(`[SOCKET][DEBUG] Socket ${socket.id} unido a sala ${chatId} para mensaje.`);
-
                 // Guardar el mensaje
-                if (chatId) {
+                if (clientChatId) {
                     await MessagesService.create({
-                        id_chat: Number(chatId),
+                        id_chat: Number(clientChatId),
                         sender: String(msg?.sender ?? "client"),
                         remitent: String(msg?.remitent ?? "admin"),
                         message: String(text),
@@ -117,26 +102,22 @@ io.on("connection", (socket) => {
             const payload = {
                 text,
                 senderId: socket.id,
-                chatId,
+                clientChatId,
                 sender: msg?.sender ?? "client",
                 remitent: msg?.remitent ?? "admin",
-                idClient: msg?.clientId ?? "??",
+                idClient: msg?.idClient ?? "??",
                 clientName: msg?.clientName ?? "Cliente-Desconocido",
             };
 
-            // Notificar siempre al cliente el id del chat
-            if (chatId) {
-                socket.emit("chat:assign", { chatId });
-                console.log(`[SOCKET][DEBUG] Asignando chatId ${chatId} al cliente.`);
-            }
-
             // Log sockets conectados a la sala
-            const socketsInRoom = io.sockets.adapter.rooms.get(String(chatId));
-            console.log(`[SOCKET][DEBUG] Sockets en sala ${chatId}:`, socketsInRoom ? Array.from(socketsInRoom) : []);
+            const socketsInRoom = io.sockets.adapter.rooms.get(String(clientId));
+            console.log(`[SOCKET][DEBUG] Sockets en sala ${clientId}:`, socketsInRoom ? Array.from(socketsInRoom) : []);
 
-            console.log(`[SOCKET][DEBUG] Emitiendo mensaje a sala ${chatId} y a admins. Payload:`, payload);
-            io.to(chatId).emit("chat message", payload);
-            io.to(ADMIN_ROOM).emit("chat message", payload);
+            console.log(`[SOCKET][DEBUG] Emitiendo mensaje a sala ${clientId}. Payload:`, payload);
+            io.to(String(clientId)).emit("chat message", payload);
+            console.log(`[SOCKET][DEBUG] Emitiendo mensaje a sala general.`);
+            io.to("general").emit("chat message general", payload);
+            // io.to(ADMIN_ROOM).emit("chat message", payload);
         });
 });
 
