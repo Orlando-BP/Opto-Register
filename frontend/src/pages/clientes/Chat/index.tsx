@@ -86,23 +86,14 @@ export default function ClientChatPage() {
         const socket = io(API_URL, { transports: ["websocket"] });
         socketRef.current = socket;
 
-        let chatRoomId: number | null = null;
+        // let chatRoomId: number | null = null;
 
         socket.on("connect", () => {
             console.log("[Chat] Socket conectado, socketId:", socket.id);
             // Unirse a la sala inmediatamente
             console.log(`[Chat][DEBUG] Uniendo socket a sala del cliente (on connect): ${selectedClientId}`);
-            socket.emit("client:join", { chatId: selectedClientId });
-            socket.emit("chat:debug", { action: "join", chatId: selectedClientId });
-        });
-
-        // Recibe el id real del chat y se une a la sala correcta
-        socket.on("chat:assign", ({ chatId }) => {
-            chatRoomId = chatId;
-            console.log(`[Chat] Asignado a sala de chat: ${chatId}`);
-            // Unirse a la sala de chatId cada vez que se recibe la asignación
-            socket.emit("client:join", { chatId });
-            socket.emit("chat:debug", { action: "join", chatId });
+            socket.emit("client:join", { chatId: String(selectedClientId) });
+            // socket.emit("chat:debug", { action: "join", chatId: selectedClientId });
         });
 
         const onMessage = (payload: any) => {
@@ -111,7 +102,7 @@ export default function ClientChatPage() {
                 return;
             }
             console.log("[Chat][DEBUG] Payload recibido por socket:", payload);
-            const chatId = String(payload.idChat ?? payload.chatId ?? chatRoomId ?? selectedClientId ?? "");
+            const chatId = String(payload.idChat ?? payload.chatId ?? payload.clientChatId ?? selectedClientId ?? "");
             const sender = payload.sender === "client" ? "me" : "other";
             const time = payload.timestamp ? new Date(payload.timestamp).toLocaleTimeString() : undefined;
             const newMsg: ChatMessage = {
@@ -124,18 +115,10 @@ export default function ClientChatPage() {
             console.log("[Chat][DEBUG] Mensaje mapeado:", newMsg);
             setMessages((prev) => [...prev, newMsg]);
         };
-
-        // Handler para 'pong'
-        const onPong = (data: any) => {
-            console.log(`[Chat][DEBUG] Pong recibido:`, data);
-        };
-        socket.on("chat message", onMessage);
-        socket.on("pong", onPong);
-
+        socket.on('chat message', onMessage);
         return () => {
-            socket.off("chat message", onMessage);
-            socket.off("chat:assign");
-            socket.off("pong", onPong);
+            // socket.off("chat message", onMessage);
+            // socket.off("chat:assign");
             socket.disconnect();
             socketRef.current = null;
         };
@@ -146,8 +129,8 @@ export default function ClientChatPage() {
         if (selectedClientId == null) return;
         console.log(`[Chat][DEBUG] Uniendo socket a sala del cliente: ${selectedClientId}`);
         socketRef.current.emit("client:join", { chatId: selectedClientId });
-        // Confirmar unión a sala
-        socketRef.current.emit("chat:debug", { action: "join", chatId: selectedClientId });
+        // // Confirmar unión a sala
+        // socketRef.current.emit("chat:debug", { action: "join", chatId: selectedClientId });
     }, [selectedClientId]);
 
     function handleSend() {
@@ -166,7 +149,7 @@ export default function ClientChatPage() {
         };
 
         console.log(`[Chat] Enviando mensaje:`, outgoing);
-        setMessages((prev) => [...prev, outgoing]);
+        // setMessages((prev) => [...prev, outgoing]);
         setDraft("");
 
         socketRef.current?.emit("chat message", {
@@ -174,7 +157,7 @@ export default function ClientChatPage() {
             chatId: selectedClientId,
             sender: "client",
             remitent: "admin",
-            clientId: selectedClientId,
+            idClient: clients.find((c) => c.id === selectedClientId)?.id,
             clientName: clients.find((c) => c.id === selectedClientId)?.name ?? `Cliente-${selectedClientId}`,
         });
     }
@@ -228,14 +211,6 @@ export default function ClientChatPage() {
                 />
                 <button className="px-4 py-2 bg-sky-600 rounded text-white" onClick={handleSend}>
                     Enviar
-                </button>
-                <button className="px-4 py-2 bg-green-600 rounded text-white" onClick={() => {
-                    if (socketRef.current && selectedClientId) {
-                        console.log(`[Chat][DEBUG] Enviando ping a sala ${selectedClientId}`);
-                        socketRef.current.emit("ping", { chatId: selectedClientId });
-                    }
-                }}>
-                    Ping
                 </button>
             </div>
         </div>

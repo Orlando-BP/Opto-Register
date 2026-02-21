@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { API_URL } from "@/api/config";
 import { useChatStore } from '@/stores/chatStore';
+import { on } from "node:cluster";
 
 type Chat = {
     id: number;
-    idClient: number;
+    id_client: number;
     title: string;
     client: { id: number; name: string; phone?: string; email?: string } | null;
     clientName: string | null;
@@ -26,6 +27,7 @@ type ChatMessage = {
 export default function ChatPage() {
     const [chats, setChats] = useState<Chat[]>([]);
     const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
+    const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
     const [loadingChats, setLoadingChats] = useState(false);
     const [loadingMessages, setLoadingMessages] = useState(false);
     const socketRef = useRef<any>(null);
@@ -41,20 +43,24 @@ export default function ChatPage() {
                 let data = json?.data;
                 if (data && data.chats) data = data.chats;
                 if (!Array.isArray(data)) data = [];
-                console.log('Chats cargados del backend:', data);
+                console.log('Chats cargados del backend:', data);//.id_client
                 setChats(data);
                 setLoadingChats(false);
                 // Seleccionar el primer chat si no hay uno seleccionado
                 if (data.length > 0 && selectedChatId == null) {
+                    setSelectedClientId(data[0].id_client);
                     setSelectedChatId(data[0].id);
                 }
             })
             .catch(() => setLoadingChats(false));
     }, []);
+    // Recibir mensajes en tiempo real
+        
+    
 
     // Cargar mensajes históricos solo cuando cambie el chat seleccionado
     useEffect(() => {
-        console.log('Chats seteados en estado:', chats);
+        console.log('Chats seteados en estado:', chats);//.id_client
         if (!selectedChatId) {
             setMessages(String(selectedChatId), []);
             return;
@@ -96,21 +102,66 @@ export default function ChatPage() {
         console.log('Mensajes actualizados:', messagesByChat);
     }, [messagesByChat]);
 
-    // Conexión socket.io y lógica de mensajes
+     
+
     useEffect(() => {
-        const socket = io(API_URL, { transports: ["websocket"] });
-        socketRef.current = socket;
-
-        socket.on("connect", () => {
-            socket.emit("admin:join");
+    const socket = io(API_URL, { transports: ["websocket"] });
+    socketRef.current = socket;
+    socket.on("connect", () => {
+            socket.emit("admin:joinChat", { chatId: String(selectedClientId) });
+            socket.emit("admin:joinGeneral", {  });
         });
-
-        // Recibir mensajes en tiempo real
         const onMessage = (payload: any) => {
             console.log('Mensaje recibido por socket:', payload);
             if (!payload) return;
-            console.log('Mensaje recibido por socket:', payload);
-            const chatId = String(payload.idChat ?? payload.chatId ?? payload.chatID ?? "");
+            // console.log('Mensaje recibido por socket:', payload);
+            const chatId = String(chats.find((c) => c.id_client === payload.idClient)?.id ?? "");
+            const clientId = String(payload.idClient ?? "");
+            const sender = payload.sender === "admin" ? "me" : "other";
+            const time = payload.timestamp ? new Date(payload.timestamp).toLocaleTimeString() : undefined;
+            const newMsg: ChatMessage = {
+                id: String(payload.id ?? `s_${Date.now()}`),
+                chatId,
+                sender,
+                text: String(payload.message ?? payload.text ?? ""),
+                time,
+            };
+            // // Detectar si el chat ya existe
+            // setChats((prev) => {
+            //     // console.log('Chats existentes:', prev);
+            //     const exists = prev.some((c) => String(c.id) === chatId);
+            //     if (!exists) {
+            //         // Crear nuevo chat básico
+            //         return [
+            //             ...prev,
+            //             {
+            //                 id: Number(chatId),
+            //                 idClient: payload.idClient || null,
+            //                 title: `Chat ${chatId}`,
+            //                 client: null,
+            //                 clientName:  payload.clientName || null,
+            //                 lastMessage: newMsg.text,
+            //                 messages: [],
+            //             },
+            //         ];
+            //     }
+            //     // Actualizar el último mensaje en la lista de chats
+            //     return prev.map((c) =>
+            //         String(c.id) === chatId ? { ...c, lastMessage: newMsg.text } : c
+            //     );
+            // });
+            // Siempre agrega el mensaje al chat correspondiente, esté seleccionado o no
+            console.log(`Agregando mensaje al chat ${chatId}:`, newMsg, socketRef.current.id);
+            if (String(socketRef.current.id) !== String(payload.senderId)) {
+                addMessage(chatId, newMsg);
+            }
+        }
+        const onMessageGeneral = (payload: any) => {
+            console.log('Mensaje general recibido por socket:', payload);
+            if (!payload) return;
+            // console.log('Mensaje recibido por socket:', payload);
+            const chatId = String(chats.find((c) => c.id_client === payload.idClient)?.id ?? "");
+            // const clientId = String(payload.idClient ?? "");
             const sender = payload.sender === "admin" ? "me" : "other";
             const time = payload.timestamp ? new Date(payload.timestamp).toLocaleTimeString() : undefined;
             const newMsg: ChatMessage = {
@@ -122,6 +173,7 @@ export default function ChatPage() {
             };
             // Detectar si el chat ya existe
             setChats((prev) => {
+                // console.log('Chats existentes:', prev);
                 const exists = prev.some((c) => String(c.id) === chatId);
                 if (!exists) {
                     // Crear nuevo chat básico
@@ -143,22 +195,17 @@ export default function ChatPage() {
                     String(c.id) === chatId ? { ...c, lastMessage: newMsg.text } : c
                 );
             });
-            // Siempre agrega el mensaje al chat correspondiente, esté seleccionado o no
-            addMessage(chatId, newMsg);
-        };
-        socket.on("chat message", onMessage);
-
+            if (String(chatId) !== String(selectedChatId)) {
+                addMessage(chatId, newMsg);
+            }
+        }
+    socket.on('chat message', onMessage);
+    socket.on('chat message general', onMessageGeneral);
         return () => {
-            socket.off("chat message", onMessage);
+            // socket.off("chat message", onMessage);
             socket.disconnect();
             socketRef.current = null;
         };
-    }, [selectedChatId]);
-
-    // Unirse a la sala del chat seleccionado
-    useEffect(() => {
-        if (!socketRef.current || !selectedChatId) return;
-        socketRef.current.emit("admin:joinChat", { chatId: selectedChatId });
     }, [selectedChatId]);
 
     // Enviar mensaje
@@ -175,18 +222,19 @@ export default function ChatPage() {
             time,
         };
         setMessages(String(selectedChatId), [...messagesByChat[String(selectedChatId)], outgoing]);
+        // Obtener datos del chat seleccionado
+        const selectedChat = chats.find((c) => c.id === selectedChatId);
         if (inputRef.current) inputRef.current.value = "";
         socketRef.current?.emit("chat message", {
             text,
             chatId: selectedChatId,
             sender: "admin",
             remitent: "client",
+            idClient: selectedClientId || '',
+            clientName: selectedChat?.client?.name || '',
         });
     }
-
-    // Obtener datos del chat seleccionado
     const selectedChat = chats.find((c) => c.id === selectedChatId);
-
     return (
         <div className="h-svh bg-slate-950 text-slate-100">
             <div className="mx-auto flex h-full max-w-6xl flex-col gap-4 px-6 py-10">
@@ -211,18 +259,19 @@ export default function ChatPage() {
                                 <div className="text-xs text-slate-400">No hay chats</div>
                             ) : (
                                 chats.map((chat) => (
-                                    // console.log('Renderizando chat:', chat),
+                                    // console.log('Renderizando chat:', chat),//.client.id
                                     <div
                                         
                                         key={chat.id}
                                         className={`rounded-lg px-3 py-2 cursor-pointer transition-colors ${selectedChatId === chat.id ? "bg-blue-700/30" : "hover:bg-slate-800/60"}`}
                                         onClick={() => {
-                                            
+                                            console.log('Chat seleccionado:', chat);
+                                            setSelectedClientId(chat.id_client);
                                             setSelectedChatId(chat.id)
                                         }}
                                     >
                                         <div className="font-medium text-slate-200 text-sm">
-                                            {`#${chat.client?.id || chat.idClient} ${chat.client?.name || chat.clientName || "Chat sin título"}`}
+                                            {`#${chat.client?.id || chat.id_client} ${chat.client?.name || chat.clientName || "Chat sin título"}`}
                                         </div>
                                         <div className="text-xs text-slate-400 truncate">
                                             {chat.lastMessage || "Sin mensajes"}
