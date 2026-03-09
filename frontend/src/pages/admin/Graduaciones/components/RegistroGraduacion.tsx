@@ -42,12 +42,12 @@ export default function RegistroGraduacion({
 
         const payload = {
             id_client: Number(selectedClientId),
-            right_sp: right_SP,
-            right_cyl: right_CYL,
-            right_axis: right_Axis,
-            left_sp: left_SP,
-            left_cyl: left_CYL,
-            left_axis: left_Axis,
+            right_sp: Number(right_SP),
+            right_cyl: Number(right_CYL),
+            right_axis: Number(right_Axis),
+            left_sp: Number(left_SP),
+            left_cyl: Number(left_CYL),
+            left_axis: Number(left_Axis),
         };
 
         const res = await execute({

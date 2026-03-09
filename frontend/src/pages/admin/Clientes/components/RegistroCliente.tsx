@@ -38,6 +38,36 @@ export default function RegistroCliente({ refetch }: { refetch: () => void }) {
                     title: "Éxito",
                     description: "Cliente registrado correctamente.",
                 });
+                // res.data.id es el id asignado al cliente que se mandó a registrar
+                // Si se registró entonces ahora se manda a registrar la graduación con el id del cliente registrado
+                if(showGraduaciones) {
+                    const payload = {
+                        id_client: Number(res.data.id),
+                        right_sp: Number(right_SP),
+                        right_cyl: Number(right_CYL),
+                        right_axis: Number(right_Axis),
+                        left_sp: Number(left_SP),
+                        left_cyl: Number(left_CYL),
+                        left_axis: Number(left_Axis),
+                    };
+                    execute({
+                        url: "/v1/calibrations",
+                        method: "post",
+                        body: payload,
+                    }).then((resGraduation) => {
+                        if(resGraduation.status === 201) {
+                            toast({
+                                title: "Éxito",
+                                description: "Graduación registrada correctamente.",
+                            });
+                        } else {
+                            toast({
+                                title: "Error",
+                                description: "No se pudo registrar la graduación.",
+                            });
+                        }
+                    });
+                }
                 refetch();
                 // Limpiar el formulario
                 setClientname("");

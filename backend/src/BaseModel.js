@@ -295,6 +295,7 @@ class BaseModel {
         const columnNames = keys.join(", ");
 
         const query = `INSERT INTO ${this.tableName} (${columnNames}) VALUES (${placeholders}) RETURNING *`;
+        console.log("Executing query:", query, "with values:", values);
         const { rows } = await pool.query(query, values);
         return rows[0];
     }

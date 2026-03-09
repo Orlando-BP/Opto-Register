@@ -15,6 +15,7 @@ class Calibrations {
     async create(req, res) {
         try {
             const data = req.body;
+            console.log("Received data for creation:", data);
             const result = await CalibrationsService.create(data);
             res.status(201).json({
                 status: "201",
