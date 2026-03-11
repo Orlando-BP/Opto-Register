@@ -112,12 +112,15 @@ export default function ListaClientes({
                                 <TableRow
                                     key={client?.id}
                                     className="hover:bg-slate-800/50 cursor-pointer"
-                                    onClick={() => handleRowClick(client)}
                                 >
-                                    <TableCell className="px-3 py-2">
+                                    <TableCell className="px-3 py-2"
+                                        onClick={() => handleRowClick(client)}
+                                    >
                                         {client?.id}
                                     </TableCell>
-                                    <TableCell className="px-3 py-2">
+                                    <TableCell className="px-3 py-2"
+                                        onClick={() => handleRowClick(client)}
+                                    >
                                         {client?.name}
                                     </TableCell>
                                     <TableCell className="px-3 py-2">

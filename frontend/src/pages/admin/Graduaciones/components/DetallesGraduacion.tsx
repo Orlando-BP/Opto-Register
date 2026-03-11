@@ -1,3 +1,5 @@
+import { AlertTriangle } from "lucide-react";
+
 type DetallesGraduacionProps = {
     graduation: any | null;
 };
@@ -14,6 +16,11 @@ const measurementFields: { key: string; label: string }[] = [
     { key: "left_sp", label: "Left SP" },
     { key: "left_cyl", label: "Left CYL" },
     { key: "left_axis", label: "Left Axis" },
+];
+
+const conditionFields: { key: string; label: string }[] = [
+    { key: "right_condition", label: "Ojo derecho" },
+    { key: "left_condition", label: "Ojo izquierdo" },
 ];
 
 const formatValue = (value: any) => {
@@ -47,7 +54,7 @@ export default function DetallesGraduacion({
     const registrationDate =
         graduation?.registration_date ?? graduation?.registrationDate;
     const formattedDate = formatDate(registrationDate);
-
+    // console.log("Graduation details:", graduation);
     return (
         <div className="space-y-8">
             <div className="w-full space-y-6 rounded-xl border border-slate-800 bg-slate-900/70 p-8 shadow-xl">
@@ -56,7 +63,7 @@ export default function DetallesGraduacion({
                         Detalles de la graduación
                     </h1>
                     <p className="text-sm text-slate-400">
-                        Información registrada en el sistema
+                        Información Del cliente y su graduacion
                     </p>
                 </div>
 
@@ -104,6 +111,30 @@ export default function DetallesGraduacion({
                         </div>
                     ))}
                 </div>
+
+                <div className="rounded-xl border border-yellow-900/70 bg-yellow-950/60 p-6 text-yellow-100 shadow-lg shadow-yellow-900/40">
+                    <div className="flex items-center gap-3">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-900/70">
+                        <AlertTriangle className="h-5 w-5" />
+                        </span>
+                        <div>
+                            <p className="text-sm uppercase tracking-wide text-yellow-200">
+                                Condición Actual de los ojos
+                            </p>
+                            {graduation?.right_condition || graduation?.left_condition ? (
+                                conditionFields.map(({ key, label }) => (
+                                    <p className="text-lg font-semibold text-yellow-100" key={key}>
+                                        {label}: {formatValue(graduation?.[key])}
+                                    </p>
+                                ))
+                            ) : (
+                                <p className="text-lg font-semibold text-yellow-100">
+                                    No hay condiciones registradas
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>                
             </div>
         </div>
     );

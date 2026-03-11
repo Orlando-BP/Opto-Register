@@ -14,6 +14,8 @@ class CalibrationsModel extends BaseModel {
             "left_cyl",
             "left_axis",
             "registration_date",
+            "right_condition",
+            "left_condition",
             "is_deleted"
         ]);
 
@@ -28,6 +30,8 @@ class CalibrationsModel extends BaseModel {
             left_cyl: "number",
             left_axis: "number",
             registration_date: "date",
+            right_condition: "string",
+            left_condition: "string",
             is_deleted: "boolean",
         };
 
@@ -42,6 +46,8 @@ class CalibrationsModel extends BaseModel {
             left_cyl: 0,
             left_axis: null,
             registration_date: null,
+            right_condition: null,
+            left_condition: null,
             is_deleted: false,
         };
 

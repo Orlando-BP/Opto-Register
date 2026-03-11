@@ -8,6 +8,7 @@ class Calibrations {
         this.readAll = this.readAll.bind(this);
         this.readOne = this.readOne.bind(this);
         this.update = this.update.bind(this);
+        this.updateCondition = this.updateCondition.bind(this);//Evalua condicion visual y la añade en sus respectivos cambios de la graduacion(calibration)
         this.replace = this.replace.bind(this);
         this.delete = this.delete.bind(this);
     }
@@ -64,6 +65,8 @@ class Calibrations {
                 left_cyl: item.left_cyl,
                 left_axis: item.left_axis,
                 registration_date: item.registration_date,
+                right_condition: item.right_condition,
+                left_condition: item.left_condition,
                 is_deleted: item.is_deleted,
             }));
             res.json({ status: "200", message: "OK", data: data });
@@ -136,6 +139,41 @@ class Calibrations {
         try {
             const { id } = req.params;
             const data = req.body;
+            const result = await CalibrationsService.update(id, data);
+            res.json({ status: "200", message: "Updated", data: result });
+        } catch (error) {
+            console.error(error);
+            if (
+                error instanceof ModelValidationError ||
+                error?.name === "ModelValidationError"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        status: "400",
+                        message: error.message,
+                        data: error.details ?? null,
+                    });
+            }
+            res.status(500).json({
+                status: "500",
+                message: "Internal server error",
+                data: null,
+            });
+        }
+    }
+
+    async updateCondition(req, res) {
+        try {
+            const { id } = req.params;
+            const data = req.body;
+            // Evaluar los valores de ojo derecho e izquierdo para detereminar la condicion de cada uno
+
+
+
+
+
+            //Ya calculado se actualizan los valores de data acorde a la condicion de los ojos y se manda el update
             const result = await CalibrationsService.update(id, data);
             res.json({ status: "200", message: "Updated", data: result });
         } catch (error) {

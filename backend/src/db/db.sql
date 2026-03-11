@@ -42,6 +42,8 @@ CREATE TABLE calibrations (
     left_cyl DECIMAL(4,2),
     left_axis INT,
     registration_date DATE ,
+    right_condition VARCHAR(255),
+    left_condition VARCHAR(255), 
     is_deleted BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_client) REFERENCES clients(id) ON DELETE SET NULL
 );

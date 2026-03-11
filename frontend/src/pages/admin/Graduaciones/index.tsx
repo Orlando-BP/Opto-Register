@@ -11,6 +11,7 @@ export default function RegistroGraduacion() {
         url: "/v1/calibrations",
     });
     const graduations = useMemo(() => {
+        // console.log("Raw response data:", response);
         if (Array.isArray(response?.data)) return response?.data;
         if (Array.isArray(response)) return response as any[];
         return [];
@@ -30,7 +31,6 @@ export default function RegistroGraduacion() {
         }
         setActiveTab("detalles");
     };
-
     return (
         <div className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-6 py-16">
             <div className="space-y-2">
