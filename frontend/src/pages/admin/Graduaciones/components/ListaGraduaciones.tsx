@@ -22,6 +22,7 @@ export default function ListaGraduaciones({
     onSelectGraduation,
 }: ListaGraduacionesProps) {
     const handleRowClick = (graduation: any) => {
+        console.log("Graduation selected:", graduation);
         if (typeof onSelectGraduation === "function") {
             onSelectGraduation(graduation);
         }

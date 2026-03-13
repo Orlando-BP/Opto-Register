@@ -1,6 +1,7 @@
 import CalibrationsService from "../services/calibrations.service.js";
 import { ModelValidationError } from "../BaseModel.js";
 import ClientsService from "../services/clients.service.js";
+import e from "express";
 
 class Calibrations {
     constructor() {
@@ -168,9 +169,92 @@ class Calibrations {
             const { id } = req.params;
             const data = req.body;
             // Evaluar los valores de ojo derecho e izquierdo para detereminar la condicion de cada uno
-
-
-
+            // console.log("Received data for update:", data);
+            // console.log("Updating calibration with ID:", id);
+            // data.right_condition = "Updateada";
+            // data.left_condition = "Updateada";
+            const RIGHT_SPHERE = data.right_sp || 0;
+            const LEFT_SPHERE = data.left_sp || 0;
+            const RIGHT_CYLINDER = data.right_cyl || 0;
+            const LEFT_CYLINDER = data.left_cyl || 0; 
+            //detectar miopia o hipermetropia y su severidad
+            if (RIGHT_SPHERE > 0) {
+                if (RIGHT_SPHERE < 3) {
+                    data.right_condition = "Leve hipermetropía";
+                } else if (RIGHT_SPHERE < 6) {
+                    data.right_condition = "Moderada hipermetropía";
+                } else { 
+                    data.right_condition = "Severa hipermetropía";
+                }
+            } else if (RIGHT_SPHERE < 0) {
+                if (RIGHT_SPHERE > -3) {
+                    data.right_condition = "Leve miopía";
+                } else if (RIGHT_SPHERE > -6) {
+                    data.right_condition = "Moderada miopía";
+                } else {
+                    data.right_condition = "Severa miopía";
+                }
+            } else {
+                data.right_condition = "Emétrope";
+            }
+            if (LEFT_SPHERE > 0) {
+                if (LEFT_SPHERE < 3) {
+                    data.left_condition = "Leve hipermetropía";
+                } else if (LEFT_SPHERE < 6) {
+                    data.left_condition = "Moderada hipermetropía";
+                } else {
+                    data.left_condition = "Severa hipermetropía";
+                }
+            } else if (LEFT_SPHERE < 0) {
+                if (LEFT_SPHERE > -3) {
+                    data.left_condition = "Leve miopía";
+                } else if (LEFT_SPHERE > -6) {
+                    data.left_condition = "Moderada miopía";
+                } else {
+                    data.left_condition = "Severa miopía";
+                }
+            } else {
+                data.left_condition = "Emétrope";
+            }
+            //detectar astigmatismo y su severidad
+            if (RIGHT_CYLINDER > 0) {
+                if (RIGHT_CYLINDER < 1) {
+                    data.right_condition += " con leve astigmatismo";
+                } else if (RIGHT_CYLINDER < 2) {
+                    data.right_condition += " con moderado astigmatismo";
+                } else {
+                    data.right_condition += " con severo astigmatismo";
+                }
+            }else if (RIGHT_CYLINDER < 0) {
+                if (RIGHT_CYLINDER > -1) {
+                    data.right_condition += " con leve astigmatismo";
+                } else if (RIGHT_CYLINDER > -2) {
+                    data.right_condition += " con moderado astigmatismo";
+                } else {
+                    data.right_condition += " con severo astigmatismo";
+                }
+            } else {
+                data.right_condition += " sin astigmatismo";
+            }
+            if (LEFT_CYLINDER > 0) {
+                if (LEFT_CYLINDER < 1) {
+                    data.left_condition += " con leve astigmatismo";
+                } else if (LEFT_CYLINDER < 2) {
+                    data.left_condition += " con moderado astigmatismo";
+                } else {
+                    data.left_condition += " con severo astigmatismo";
+                }
+            } else if (LEFT_CYLINDER < 0) {
+                if (LEFT_CYLINDER > -1) {
+                    data.left_condition += " con leve astigmatismo";
+                } else if (LEFT_CYLINDER > -2) {
+                    data.left_condition += " con moderado astigmatismo";
+                } else {
+                    data.left_condition += " con severo astigmatismo";
+                }
+            } else {
+                data.left_condition += " sin astigmatismo";
+            }
 
 
             //Ya calculado se actualizan los valores de data acorde a la condicion de los ojos y se manda el update

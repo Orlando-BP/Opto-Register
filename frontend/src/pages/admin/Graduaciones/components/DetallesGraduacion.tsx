@@ -1,4 +1,7 @@
 import { AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { usePost } from "@/hooks";
+import { toast } from "@/hooks/useToast";
 
 type DetallesGraduacionProps = {
     graduation: any | null;
@@ -43,6 +46,39 @@ const formatDate = (value: any) => {
 export default function DetallesGraduacion({
     graduation,
 }: DetallesGraduacionProps) {
+    const { execute } = usePost();
+    const calcularCondicion = async (graduation: any) => {
+        const payload = {
+            id_client: Number(graduation?.idClient),
+            right_sp: Number(graduation?.right_sp),
+            right_cyl: Number(graduation?.right_cyl),
+            right_axis: Number(graduation?.right_axis),
+            left_sp: Number(graduation?.left_sp),
+            left_cyl: Number(graduation?.left_cyl),
+            left_axis: Number(graduation?.left_axis),
+            right_condition: graduation?.right_condition,
+            left_condition: graduation?.left_condition,
+        };
+
+        const res = await execute({
+            url: "/v1/calibrations/" + graduation?.id + "/condition",
+            method: "post",
+            body: payload,
+        });
+
+        if (res.status === 200) {
+            toast({
+                title: "Éxito",
+                description: "Condicion detectada.",
+            });
+            return;
+        }
+
+        toast({
+            title: "Error",
+            description: "No se pudo registrar la graduación.",
+        });
+    };
     if (!graduation) {
         return (
             <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-8 text-center text-slate-300">
@@ -130,6 +166,15 @@ export default function DetallesGraduacion({
                             ) : (
                                 <p className="text-lg font-semibold text-yellow-100">
                                     No hay condiciones registradas
+                                    <Button 
+                                        // disabled={loading} 
+                                        onClick={() => {
+                                            calcularCondicion(graduation);
+                                        }}
+                                        className="w-full"
+                                    >
+                                        calcular condicion{/* {loading ? "Ingresando..." : "Ingresar"} */}
+                                    </Button>
                                 </p>
                             )}
                         </div>
