@@ -18,6 +18,7 @@ class Calibrations {
         try {
             const data = req.body;
             console.log("Received data for creation:", data);
+            //Aqui usa arbol de decision para evaluar la condicion visual del paciente y añadirla a data antes de crear la calibracion
             const result = await CalibrationsService.create(data);
             res.status(201).json({
                 status: "201",
