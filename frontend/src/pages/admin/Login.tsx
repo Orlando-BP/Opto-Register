@@ -25,7 +25,6 @@ export default function Login() {
                 const token = res.data?.token;
                 if (token) {
                     localStorage.setItem("token", token);
-                    console.log("token:", token);
                 } else {
                     console.log("token ausente en respuesta:", res);
                 }
@@ -34,7 +33,6 @@ export default function Login() {
                     description: "✅ Has iniciado sesión correctamente",
                 });
                 navigate("/admin/dashboard");
-                console.log("Este Log si se imprime");
             } else {
                 setError(res.message ?? "No se pudo iniciar sesión.");
                 toast({

@@ -1,5 +1,7 @@
 import CalibrationsService from "./services/calibrations.service.js";
-import RandomForest from 'decision-tree/random-forest';
+import * as DT from 'decision-tree';
+// Compatibilidad: algunos paquetes exponen RandomForest en el entrypoint
+const RandomForest = DT.RandomForest || DT.default?.RandomForest || DT.default || DT;
 import fs from 'fs';
 import path from 'path';
 
@@ -54,21 +56,26 @@ async function trainModels() {
 
 
 
-      // Entrenar modelos RandomForest
-      const rightForest = new RandomForest(className, features);
-      rightForest.train(rightSplit.train);
-      const leftForest = new RandomForest(className, features);
-      leftForest.train(leftSplit.train);
+    // Entrenar modelos RandomForest
+    const rightForest = new RandomForest(className, features);
+    rightForest.train(rightSplit.train);
+    const leftForest = new RandomForest(className, features);
+    leftForest.train(leftSplit.train);
 
-      // Evaluar precisión
-      const rightAccuracy = rightForest.evaluate(rightSplit.test);
-      const leftAccuracy = leftForest.evaluate(leftSplit.test);
+    // Evaluar precisión
+    const rightAccuracy = rightForest.evaluate(rightSplit.test);
+    const leftAccuracy = leftForest.evaluate(leftSplit.test);
 
-      console.log(`Precisión ojo derecho: ${(rightAccuracy * 100).toFixed(2)}%`);
-      console.log(`Precisión ojo izquierdo: ${(leftAccuracy * 100).toFixed(2)}%`);
+    console.log(`Precisión ojo derecho: ${(rightAccuracy * 100).toFixed(2)}%`);
+    console.log(`Precisión ojo izquierdo: ${(leftAccuracy * 100).toFixed(2)}%`);
   } catch (err) {
     console.error('Error entrenando modelos:', err);
   }
 }
+
+
+// Exportaciones
+export default trainModels;
+export { trainModels };
 
 
