@@ -1,7 +1,5 @@
 import CalibrationsService from "./services/calibrations.service.js";
-import * as DT from 'decision-tree';
-// Compatibilidad: algunos paquetes exponen RandomForest en el entrypoint
-const RandomForest = DT.RandomForest || DT.default?.RandomForest || DT.default || DT;
+import RandomForest from 'decision-tree/random-forest';
 import fs from 'fs';
 import path from 'path';
 
@@ -14,60 +12,95 @@ function shuffleArray(array) {
   }
 }
 
-async function trainModels() {
+async function trainModels(data) {
   try {
+    const RIGHT_SPHERE = data.right_sp || 0;
+    const LEFT_SPHERE = data.left_sp || 0;
+    const RIGHT_CYLINDER = data.right_cyl || 0;
+    const LEFT_CYLINDER = data.left_cyl || 0;
+
+    console.log('Datos recibidos para predecir:', {
+      right_sp: RIGHT_SPHERE,
+      left_sp: LEFT_SPHERE,
+      right_cyl: RIGHT_CYLINDER,
+      left_cyl: LEFT_CYLINDER
+    });
+    
     // Obtener todos los registros de calibrations
-    const data = await CalibrationsService.findAll();
-    if (!data || data.length === 0) {
+    const calibrationData = await CalibrationsService.findAll();
+    if (!calibrationData || calibrationData.length === 0) {
       throw new Error('No hay datos de calibraciones para entrenar.');
     }
 
-    // Preparar datos para cada ojo
-    const rightData = data.map(row => ({
+    // Preparar datos para RandomForest (un registro por ojo)
+    const ForestData = calibrationData.flatMap(row => [
+    {
       sp: row.right_sp,
       cyl: row.right_cyl,
-      axis: row.right_axis,
+      // axis: row.right_axis,
+      // age: row.age,
       condition: row.right_condition
-    })).filter(row => row.condition != null);
-
-    const leftData = data.map(row => ({
+    },
+    {
       sp: row.left_sp,
       cyl: row.left_cyl,
-      axis: row.left_axis,
+      // axis: row.left_axis,
+      // age: row.age,
       condition: row.left_condition
-    })).filter(row => row.condition != null);
+    }]).filter(row => row.condition != null);
 
-    const features = ['sp', 'cyl', 'axis'];
+    const features = ['sp', 'cyl'];
     const className = 'condition';
 
-    // Mezclar y dividir datos (80% train, 20% test)
+    // Mezclar y dividir datos (90% train, 10% test)
     function splitTrainTest(arr) {
       const arrCopy = [...arr];
       shuffleArray(arrCopy);
-      const splitIdx = Math.floor(arrCopy.length * 0.8);
+      const splitIdx = Math.floor(arrCopy.length * 0.9);
       return {
         train: arrCopy.slice(0, splitIdx),
         test: arrCopy.slice(splitIdx)
       };
     }
 
-    const rightSplit = splitTrainTest(rightData);
-    const leftSplit = splitTrainTest(leftData);
+    const ForestSplit = splitTrainTest(ForestData);
 
-
+    const config = {
+      nEstimators: 300,        // Number of trees (default: 100)
+      maxFeatures: 2,     // Features per split: 'sqrt', 'log2', 'auto', or number
+      bootstrap: true,         // Use bootstrap sampling (default: true)
+      randomState: 76,         // Random seed for reproducibility
+      maxDepth: 10,            // Maximum tree depth
+      minSamplesSplit: 3       // Minimum samples to split
+    };
 
     // Entrenar modelos RandomForest
-    const rightForest = new RandomForest(className, features);
-    rightForest.train(rightSplit.train);
-    const leftForest = new RandomForest(className, features);
-    leftForest.train(leftSplit.train);
+    const forest = new RandomForest(className, features, config);
+    forest.train(ForestSplit.train);
+
+    //comprobar configuracion
+    const configforest = forest.getConfig();
+    console.log('Configuration:', configforest);
 
     // Evaluar precisión
-    const rightAccuracy = rightForest.evaluate(rightSplit.test);
-    const leftAccuracy = leftForest.evaluate(leftSplit.test);
+    const Accuracy = forest.evaluate(ForestSplit.test);
 
-    console.log(`Precisión ojo derecho: ${(rightAccuracy * 100).toFixed(2)}%`);
-    console.log(`Precisión ojo izquierdo: ${(leftAccuracy * 100).toFixed(2)}%`);
+    console.log(`Precisión de Forest : ${(Accuracy * 100).toFixed(2)}%`);
+
+    //Prediccion de la insercion de datos del paciente
+    const right_predicted_class = forest.predict({
+      sp: RIGHT_SPHERE,
+      cyl: RIGHT_CYLINDER 
+    });
+    console.log('Predicción para ojo derecho:', right_predicted_class);
+
+    const left_predicted_class = forest.predict({
+      sp: LEFT_SPHERE,
+      cyl: LEFT_CYLINDER
+    });
+    console.log('Predicción para ojo izquierdo:', left_predicted_class);
+
+    
   } catch (err) {
     console.error('Error entrenando modelos:', err);
   }
@@ -77,5 +110,3 @@ async function trainModels() {
 // Exportaciones
 export default trainModels;
 export { trainModels };
-
-
