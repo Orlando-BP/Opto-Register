@@ -52,11 +52,11 @@ async function trainModels(data) {
     const features = ['sp', 'cyl'];
     const className = 'condition';
 
-    // Mezclar y dividir datos (90% train, 10% test)
+    // Mezclar y dividir datos (60% train, 40% test)
     function splitTrainTest(arr) {
       const arrCopy = [...arr];
       shuffleArray(arrCopy);
-      const splitIdx = Math.floor(arrCopy.length * 0.9);
+      const splitIdx = Math.floor(arrCopy.length * 0.6);
       return {
         train: arrCopy.slice(0, splitIdx),
         test: arrCopy.slice(splitIdx)
@@ -66,12 +66,12 @@ async function trainModels(data) {
     const ForestSplit = splitTrainTest(ForestData);
 
     const config = {
-      nEstimators: 300,        // Number of trees (default: 100)
+      nEstimators: 500,        // Number of trees (default: 100)
       maxFeatures: 2,     // Features per split: 'sqrt', 'log2', 'auto', or number
       bootstrap: true,         // Use bootstrap sampling (default: true)
       randomState: 76,         // Random seed for reproducibility
-      maxDepth: 10,            // Maximum tree depth
-      minSamplesSplit: 3       // Minimum samples to split
+      maxDepth: 100,            // Maximum tree depth
+      minSamplesSplit: 10       // Minimum samples to split
     };
 
     // Entrenar modelos RandomForest
@@ -84,7 +84,8 @@ async function trainModels(data) {
 
     // Evaluar precisión
     const Accuracy = forest.evaluate(ForestSplit.test);
-
+    // console.log('Datos de prueba:', ForestSplit.test);
+    // console.log('Datos de entrenamiento:', ForestSplit.train);
     console.log(`Precisión de Forest : ${(Accuracy * 100).toFixed(2)}%`);
 
     //Prediccion de la insercion de datos del paciente
