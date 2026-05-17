@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import { usePost, useToast } from "@/hooks";
 
 type Form = {
-    id_sales_note: string;
-    id_calibration: string;
     name: string;
     description: string;
-    value: string;
 };
 
 export default function RegistroProducto({ refetch }: { refetch: () => void }) {
@@ -14,11 +11,8 @@ export default function RegistroProducto({ refetch }: { refetch: () => void }) {
     const { toast } = useToast();
 
     const [form, setForm] = useState<Form>({
-        id_sales_note: "",
-        id_calibration: "",
         name: "",
         description: "",
-        value: "",
     });
 
     function handleCreate(e: React.FormEvent) {
@@ -26,24 +20,14 @@ export default function RegistroProducto({ refetch }: { refetch: () => void }) {
         const payload = {
             name: form.name,
             description: form.description,
-            value: Number(form.value) || 0,
-            id_sales_note: form.id_sales_note
-                ? Number(form.id_sales_note)
-                : null,
-            id_calibration: form.id_calibration
-                ? Number(form.id_calibration)
-                : null,
         };
 
         execute({ url: "/v1/products", method: "post", body: payload }).then(
             (res) => {
                 if (res.ok) {
                     setForm({
-                        id_sales_note: "",
-                        id_calibration: "",
                         name: "",
                         description: "",
-                        value: "",
                     });
                     toast({
                         title: "Producto creado",
@@ -90,21 +74,6 @@ export default function RegistroProducto({ refetch }: { refetch: () => void }) {
                             rows={3}
                             className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
                             placeholder="Descripcion del Producto"
-                        />
-                    </label>
-                    <label className="block text-sm font-medium text-slate-200">
-                        Precio
-                        <input
-                            type="number"
-                            value={form.value}
-                            onChange={(e) =>
-                                setForm((s) => ({
-                                    ...s,
-                                    value: e.target.value,
-                                }))
-                            }
-                            className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
-                            placeholder="Precio"
                         />
                     </label>
                 </div>

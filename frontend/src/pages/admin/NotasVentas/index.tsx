@@ -7,10 +7,10 @@ import RegistroNotasVentas from "@/pages/admin/NotasVentas/components/RegistroNo
 import { useFetch } from "@/hooks";
 
 export default function NotasVentasPage() {
-    const { response, loading, error, refetch } = useFetch({
+    const { response, loading, error,refetch } = useFetch({
         url: "/v1/salesnotes/admin",
     });
-
+    console.log("Notas de venta response:", response);
     const clients = useMemo(() => {
         const rawClients = response?.data?.clients;
         if (Array.isArray(rawClients)) return rawClients;

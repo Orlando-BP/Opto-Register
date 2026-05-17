@@ -1,15 +1,11 @@
-import ClientsService from "../services/clients.service.js";
-import CalibrationsService from "../services/calibrations.service.js";
-import jwt from "jsonwebtoken";
+import ProductsNoteSaleModelService from "../services/product_notesale.service.js";
 import { ModelValidationError } from "../BaseModel.js";
 
-class Clients {
+class ProductsNoteSaleModel {
     constructor() {
         this.create = this.create.bind(this);
         this.readAll = this.readAll.bind(this);
-        this.readAllAdmin = this.readAllAdmin.bind(this);
         this.readOne = this.readOne.bind(this);
-        this.login = this.login.bind(this);
         this.update = this.update.bind(this);
         this.replace = this.replace.bind(this);
         this.delete = this.delete.bind(this);
@@ -18,7 +14,7 @@ class Clients {
     async create(req, res) {
         try {
             const data = req.body;
-            const result = await ClientsService.create(data);
+            const result = await ProductsNoteSaleModelService.create(data);
             res.status(201).json({
                 status: "201",
                 message: "Created",
@@ -50,48 +46,8 @@ class Clients {
         try {
             const filters =
                 req.body && typeof req.body === "object" ? req.body : {};
-            const results = await ClientsService.findAll(filters);
+            const results = await ProductsNoteSaleModelService.findAll(filters);
             res.json({ status: "200", message: "OK", data: results });
-        } catch (error) {
-            console.error(error);
-            if (
-                error instanceof ModelValidationError ||
-                error?.name === "ModelValidationError"
-            ) {
-                return res
-                    .status(400)
-                    .json({
-                        status: "400",
-                        message: error.message,
-                        data: error.details ?? null,
-                    });
-            }
-            res.status(500).json({
-                status: "500",
-                message: "Internal server error",
-                data: null,
-            });
-        }
-    }
-
-    async readAllAdmin(req, res) {
-        try {
-            const filters =
-                req.body && typeof req.body === "object" ? req.body : {};
-
-            const [clients, calibrations] = await Promise.all([
-                ClientsService.findAll(filters),
-                CalibrationsService.findAll(),
-            ]);
-
-            res.json({
-                status: "200",
-                message: "OK",
-                data: {
-                    clientes: clients,
-                    calibraciones: calibrations,
-                },
-            });
         } catch (error) {
             console.error(error);
             if (
@@ -122,16 +78,16 @@ class Clients {
             const hasFilters = Object.keys(filters).length > 0;
             let result = null;
             if (hasFilters) {
-                result = await ClientsService.findOneByWhere(filters);
+                result = await ProductsNoteSaleModelService.findOneByWhere(filters);
             } else {
-                result = await ClientsService.findById(id);
+                result = await ProductsNoteSaleModelService.findById(id);
             }
             if (!result)
                 return res
                     .status(404)
                     .json({
                         status: "404",
-                        message: "Usuario no encontrado",
+                        message: "Producto no encontrado",
                         data: null,
                     });
             res.json({ status: "200", message: "OK", data: result });
@@ -157,56 +113,11 @@ class Clients {
         }
     }
 
-    async login(req, res) {
-        try {
-            const { phone } = req.body;
-            const user = await ClientsService.findOneByWhere({ phone });
-            if (!user) {
-                return res.status(404).json({
-                    status: "404",
-                    message: "Código de cliente inválido",
-                    data: null,
-                });
-            }
-
-            const secret = process.env.JWT_SECRET || "TetoPear";
-            const token = jwt.sign(
-                { id: user.id, code: user.phone, role: "client" },
-                secret,
-                {
-                    expiresIn: "1h",
-                },
-            );
-            res.json({
-                status: "200",
-                message: "OK",
-                data: { token },
-            });
-        } catch (error) {
-            console.error(error);
-            if (
-                error instanceof ModelValidationError ||
-                error?.name === "ModelValidationError"
-            ) {
-                return res.status(400).json({
-                    status: "400",
-                    message: error.message,
-                    data: error.details ?? null,
-                });
-            }
-            res.status(500).json({
-                status: "500",
-                message: "Internal server error",
-                data: null,
-            });
-        }
-    }
-
     async update(req, res) {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await ClientsService.update(id, data);
+            const result = await ProductsNoteSaleModelService.update(id, data);
             res.json({ status: "200", message: "Updated", data: result });
         } catch (error) {
             console.error(error);
@@ -234,7 +145,7 @@ class Clients {
         try {
             const { id } = req.params;
             const data = req.body;
-            const result = await ClientsService.replace(id, data);
+            const result = await ProductsNoteSaleModelService.replace(id, data);
             res.json({ status: "200", message: "Replaced", data: result });
         } catch (error) {
             console.error(error);
@@ -261,13 +172,13 @@ class Clients {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const result = await ClientsService.delete(id);
+            const result = await ProductsNoteSaleModelService.delete(id);
             if (!result)
                 return res
                     .status(404)
                     .json({
                         status: "404",
-                        message: "Usuario no encontrado",
+                        message: "Producto no encontrado",
                         data: null,
                     });
             return res
@@ -296,4 +207,4 @@ class Clients {
     }
 }
 
-export default new Clients();
+export default new Products();

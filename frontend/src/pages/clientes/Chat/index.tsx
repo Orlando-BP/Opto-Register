@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import { API_URL } from "@/api/config";
+import { useNavigate } from "react-router-dom";
 
 type ClientItem = {
     id: number;
@@ -16,6 +17,14 @@ type ChatMessage = {
 };
 
 export default function ClientChatPage() {
+
+    const navigate = useNavigate();
+
+    function handleLogout() {
+        localStorage.removeItem("token");
+        navigate("/admin/login");
+    }
+
     const [clients, setClients] = useState<ClientItem[]>([]);
     const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
     const [messages, setMessages] = useState<ChatMessage[]>([]);

@@ -58,6 +58,16 @@ class CalibrationsModel extends BaseModel {
                 refTable: "clients",
             },
         };
+
+        this.relations = {
+            ProductsNoteSale: {
+                type: "hasOne",
+                model: () => ProductsNoteSaleModel,
+                foreignKey: "id_calibration",
+                localKey: "id",
+                as: "ProductsNoteSale",
+            },
+        };
     }
 }
 

@@ -18,12 +18,14 @@ export default function ListaClientes({
     error,
     refetch,
     onSelectClient,
+    onEditClient,
 }: {
     clients: any[];
     loading: boolean;
     error: any;
     refetch: () => void;
     onSelectClient?: (client: any) => void;
+    onEditClient?: (client: any) => void;
 }) {
     const { execute } = usePost();
     const { toast } = useToast();
@@ -113,12 +115,14 @@ export default function ListaClientes({
                                     key={client?.id}
                                     className="hover:bg-slate-800/50 cursor-pointer"
                                 >
-                                    <TableCell className="px-3 py-2"
+                                    <TableCell
+                                        className="px-3 py-2"
                                         onClick={() => handleRowClick(client)}
                                     >
                                         {client?.id}
                                     </TableCell>
-                                    <TableCell className="px-3 py-2"
+                                    <TableCell
+                                        className="px-3 py-2"
                                         onClick={() => handleRowClick(client)}
                                     >
                                         {client?.name}
@@ -138,6 +142,12 @@ export default function ListaClientes({
                                             size="icon"
                                             onClick={(event) => {
                                                 event.stopPropagation();
+                                                if (
+                                                    typeof onEditClient ===
+                                                    "function"
+                                                ) {
+                                                    onEditClient(client);
+                                                }
                                             }}
                                         >
                                             <Edit className="h-4 w-4" />

@@ -56,9 +56,6 @@ export default function ListaProductos({
                                     Descripción
                                 </TableHead>
                                 <TableHead className="px-3 py-2">
-                                    Precio
-                                </TableHead>
-                                <TableHead className="px-3 py-2">
                                     Editar
                                 </TableHead>
                                 <TableHead className="px-3 py-2">
@@ -82,9 +79,6 @@ export default function ListaProductos({
                                     </TableCell>
                                     <TableCell className="px-3 py-2">
                                         {p?.description}
-                                    </TableCell>
-                                    <TableCell className="px-3 py-2">
-                                        {p?.value}
                                     </TableCell>
                                     <TableCell className="px-3 py-2">
                                         Editar

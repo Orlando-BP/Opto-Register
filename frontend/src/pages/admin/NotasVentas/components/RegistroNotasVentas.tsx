@@ -42,48 +42,62 @@ export default function RegistroNotasVentas({
         advance: "",
     });
     const [selectedClientId, setSelectedClientId] = useState("");
-    const [selectedProducts, setSelectedProducts] = useState<
-        Record<number, number>
-    >({});
+    const [items, setItems] = useState<
+        Array<{ id: number; quantity: number; value: number; name?: string }>
+    >([]);
 
-    const toggleProduct = (productId: number) => {
-        setSelectedProducts((prev) => {
-            const next = { ...prev };
-            if (Object.prototype.hasOwnProperty.call(next, productId)) {
-                delete next[productId];
-            } else {
-                next[productId] = 1;
+    // temporary inputs for adding a product
+    const [newProductId, setNewProductId] = useState<number | "">("");
+    const [newQuantity, setNewQuantity] = useState<number>(1);
+    const [newValue, setNewValue] = useState<number>(0);
+
+    const addItem = (productId: number, quantity: number, value: number) => {
+        const product = products.find((p: any) => p?.id === productId);
+        if (!product) return;
+        setItems((prev) => [
+            ...prev,
+            {
+                id: productId,
+                quantity: Number(quantity) || 1,
+                value: Number(value) || Number(product?.value) || 0,
+                name: product?.name,
+            },
+        ]);
+        // reset new inputs
+        setNewProductId("");
+        setNewQuantity(1);
+        setNewValue(0);
+    };
+
+    const updateItem = (
+        index: number,
+        patch: Partial<{ quantity: number; value: number }>,
+    ) => {
+        setItems((prev) => {
+            const copy = [...prev];
+            copy[index] = { ...copy[index], ...patch } as any;
+            // remove if quantity invalid
+            if (
+                !Number.isFinite(copy[index].quantity) ||
+                copy[index].quantity <= 0
+            ) {
+                copy.splice(index, 1);
             }
-            return next;
+            return copy;
         });
     };
 
-    const updateQuantity = (productId: number, quantity: number) => {
-        setSelectedProducts((prev) => {
-            const next = { ...prev };
-            if (Number.isNaN(quantity) || quantity <= 0) {
-                delete next[productId];
-            } else {
-                next[productId] = quantity;
-            }
-            return next;
-        });
+    const removeItem = (index: number) => {
+        setItems((prev) => prev.filter((_, i) => i !== index));
     };
 
     const totalPrice = useMemo(() => {
-        return Object.entries(selectedProducts).reduce(
-            (sum, [id, quantity]) => {
-                const product = products.find(
-                    (item: any) => item?.id === Number(id),
-                );
-                if (!product) return sum;
-                const price = Number(product?.value) || 0;
-                const qty = Number(quantity) || 0;
-                return sum + price * qty;
-            },
-            0,
-        );
-    }, [selectedProducts, products]);
+        return items.reduce((sum, it) => {
+            const qty = Number(it.quantity) || 0;
+            const val = Number(it.value) || 0;
+            return sum + qty * val;
+        }, 0);
+    }, [items]);
 
     const advanceValue = useMemo(
         () => Number(form.advance) || 0,
@@ -104,7 +118,7 @@ export default function RegistroNotasVentas({
             return;
         }
 
-        if (Object.keys(selectedProducts).length === 0) {
+        if (items.length === 0) {
             toast({
                 title: "Selecciona productos",
                 description:
@@ -112,6 +126,11 @@ export default function RegistroNotasVentas({
             });
             return;
         }
+        const productsPayload = items.map((it) => ({
+            id: it.id,
+            value: it.value,
+            quantity: it.quantity,
+        }));
 
         const payload = {
             id_client: Number(selectedClientId),
@@ -120,6 +139,7 @@ export default function RegistroNotasVentas({
             total_price: totalPrice,
             advance: advanceValue,
             balance: Math.max(totalPrice - advanceValue, 0),
+            products: productsPayload,
         };
 
         const res = await execute({
@@ -130,7 +150,7 @@ export default function RegistroNotasVentas({
 
         if (res.ok) {
             setSelectedClientId("");
-            setSelectedProducts({});
+            setItems([]);
             setForm({
                 issue_date: "",
                 delivery_date: "",
@@ -208,67 +228,143 @@ export default function RegistroNotasVentas({
                     </p>
                 )}
                 <div className="space-y-3">
-                    {products.map((product: any) => {
-                        const isSelected = Object.prototype.hasOwnProperty.call(
-                            selectedProducts,
-                            product?.id,
-                        );
-                        const quantity = selectedProducts[product?.id] ?? 1;
-                        return (
-                            <div
-                                key={product?.id}
-                                className="flex flex-col gap-2 rounded-md border border-slate-700 bg-slate-900/50 p-3 md:flex-row md:items-center md:justify-between"
+                    <div className="flex gap-2 items-end">
+                        <div className="flex-1">
+                            <label className="block text-xs text-slate-300">
+                                Producto
+                            </label>
+                            <select
+                                value={String(newProductId)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    if (val === "") {
+                                        setNewProductId("");
+                                        setNewValue(0);
+                                        return;
+                                    }
+                                    const id = Number(val);
+                                    setNewProductId(id);
+                                    const prod = products.find(
+                                        (p: any) => p?.id === id,
+                                    );
+                                    setNewValue(Number(prod?.value) || 0);
+                                }}
+                                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
                             >
-                                <label className="flex items-center gap-3 text-sm text-slate-200">
-                                    <input
-                                        type="checkbox"
-                                        checked={isSelected}
-                                        onChange={() =>
-                                            toggleProduct(product?.id)
-                                        }
-                                        className="h-4 w-4 rounded border-slate-700 bg-slate-950 text-sky-500"
-                                        disabled={productsLoading || loading}
-                                    />
-                                    <span className="font-medium">
-                                        {product?.name ??
-                                            `Producto #${product?.id}`}
-                                    </span>
-                                    <span className="text-xs text-slate-400">
-                                        $
-                                        {Number(product?.value || 0).toFixed(2)}
-                                    </span>
-                                </label>
-                                {isSelected && (
-                                    <div className="flex items-center gap-2 text-sm">
-                                        <label className="text-slate-300">
-                                            Cantidad
-                                            <input
-                                                type="number"
-                                                min={1}
-                                                value={quantity}
-                                                onChange={(event) =>
-                                                    updateQuantity(
-                                                        product?.id,
-                                                        Number(
-                                                            event.target.value,
-                                                        ),
-                                                    )
-                                                }
-                                                className="ml-2 w-20 rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-slate-100"
-                                            />
-                                        </label>
+                                <option value="">Selecciona producto</option>
+                                {products.map((p: any) => (
+                                    <option key={p?.id} value={p?.id}>
+                                        {p?.name} — $
+                                        {Number(p?.value || 0).toFixed(2)}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="w-28">
+                            <label className="block text-xs text-slate-300">
+                                Cantidad
+                            </label>
+                            <input
+                                type="number"
+                                min={1}
+                                value={newQuantity}
+                                onChange={(e) =>
+                                    setNewQuantity(Number(e.target.value) || 1)
+                                }
+                                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-2 text-sm text-slate-100"
+                            />
+                        </div>
+
+                        <div className="w-36">
+                            <label className="block text-xs text-slate-300">
+                                Precio
+                            </label>
+                            <input
+                                type="number"
+                                min={0}
+                                value={newValue}
+                                onChange={(e) =>
+                                    setNewValue(Number(e.target.value) || 0)
+                                }
+                                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-2 text-sm text-slate-100"
+                            />
+                        </div>
+
+                        <div>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    if (!newProductId) return;
+                                    addItem(
+                                        Number(newProductId),
+                                        newQuantity,
+                                        newValue,
+                                    );
+                                }}
+                                className="mt-1 rounded bg-sky-600 px-3 py-2 text-sm text-white"
+                            >
+                                Añadir
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        {items.map((it, idx) => (
+                            <div
+                                key={`${it.id}-${idx}`}
+                                className="flex items-center justify-between gap-3 rounded-md border border-slate-700 bg-slate-900/50 p-3"
+                            >
+                                <div className="flex-1">
+                                    <div className="font-medium text-slate-100">
+                                        {it.name ?? `#${it.id}`}
                                     </div>
-                                )}
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="number"
+                                        min={1}
+                                        value={it.quantity}
+                                        onChange={(e) =>
+                                            updateItem(idx, {
+                                                quantity:
+                                                    Number(e.target.value) || 0,
+                                            })
+                                        }
+                                        className="w-20 rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-slate-100"
+                                    />
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        value={it.value}
+                                        onChange={(e) =>
+                                            updateItem(idx, {
+                                                value:
+                                                    Number(e.target.value) || 0,
+                                            })
+                                        }
+                                        className="w-28 rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-slate-100"
+                                    />
+                                    <div className="text-sm text-slate-200">
+                                        ${(it.quantity * it.value).toFixed(2)}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => removeItem(idx)}
+                                        className="text-xs text-red-400"
+                                    >
+                                        Eliminar
+                                    </button>
+                                </div>
                             </div>
-                        );
-                    })}
-                    {products.length === 0 &&
-                        !productsLoading &&
-                        !productsError && (
+                        ))}
+                        {items.length === 0 && (
                             <p className="text-xs text-slate-400">
-                                No hay productos registrados.
+                                No hay productos añadidos.
                             </p>
                         )}
+                    </div>
                 </div>
             </div>
 
@@ -350,7 +446,7 @@ export default function RegistroNotasVentas({
                         clientsLoading ||
                         productsLoading ||
                         !selectedClientId ||
-                        Object.keys(selectedProducts).length === 0
+                        items.length === 0
                     }
                 >
                     {loading ? "Guardando..." : "Crear Nota"}

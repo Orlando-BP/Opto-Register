@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
 import Login from "@/pages/clientes/Login";
 import ChatClientes from "@/pages/clientes/Chat";
+import DetallesClientes from "@/pages/clientes/Detalles";
 import Chat from "@/pages/admin/Chats";
 import Dashboard from "../pages/admin/Dashboard";
 import LoginAdmin from "@/pages/admin/Login";
@@ -23,12 +24,25 @@ export default function AppRoutes() {
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/cliente/chat" element={<ChatClientes />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+                element={
+                    <RequireAuth allowedRoles={["client"]}>
+                        <div></div>
+                    </RequireAuth>
+                }
+            >
+                <Route path="/cliente/chat" element={<ChatClientes />} />
+                <Route
+                    path="/cliente/detalles"
+                    element={<DetallesClientes />}
+                />
+            </Route>
+
             <Route path="/admin/login" element={<LoginAdmin />} />
             <Route
                 element={
-                    <RequireAuth>
+                    <RequireAuth allowedRoles={["admin", "client"]}>
                         <SidebarLayout />
                     </RequireAuth>
                 }
@@ -37,11 +51,8 @@ export default function AppRoutes() {
                 <Route path="/admin/dashboard" element={<Dashboard />} />
                 <Route path="/admin/notas-ventas" element={<NotasVentas />} />
                 <Route path="/admin/clientes" element={<Cliente />} />
-                <Route
-                    path="/admin/graduaciones"
-                    element={<Graduacion />}
-                />
-                <Route path="/admin/productos" element={<Productos />} />   
+                <Route path="/admin/graduaciones" element={<Graduacion />} />
+                <Route path="/admin/productos" element={<Productos />} />
             </Route>
             <Route path="/401" element={<Unauthorized />} />
             <Route path="/403" element={<Forbidden />} />

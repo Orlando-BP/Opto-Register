@@ -7,6 +7,7 @@ router.get("/", clients.readAll);
 router.get("/admin", clients.readAllAdmin);
 router.get("/:id", clients.readOne);
 router.post("/", clients.create);
+router.post("/login", clients.login);
 router.patch("/:id", clients.update);
 router.put("/:id", clients.replace);
 router.delete("/:id", clients.delete);

@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 export interface useFetchInterface {
     url: string;
     qs?: any;
+    token?: string | null;
+    headers?: Record<string, string>;
     [key: string]: any;
     enabled?: boolean;
     refreshKey?: number;
@@ -12,6 +14,8 @@ export interface useFetchInterface {
 export const useFetch = ({
     url,
     qs,
+    token,
+    headers,
     enabled = true,
     refreshKey,
 }: useFetchInterface) => {
@@ -20,7 +24,7 @@ export const useFetch = ({
 
     // Nuestro queryFn recibe un objeto que incluye 'signal' para la cancelación
     const queryFn = async ({ signal }: { signal: AbortSignal }) => {
-        const res = await fetchApi.get({ url, qs, signal });
+        const res = await fetchApi.get({ url, qs, signal, token, headers });
 
         const json = await res.json();
         const normalizedStatus = Number(json?.status ?? res?.status);

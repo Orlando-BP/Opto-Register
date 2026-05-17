@@ -5,6 +5,7 @@ import { useFetch } from "@/hooks";
 import DetallesCliente from "@/pages/admin/Clientes/components/DetallesCliente";
 import ListaClientes from "@/pages/admin/Clientes/components/ListaClientes";
 import RegistroClienteForm from "@/pages/admin/Clientes/components/RegistroCliente";
+import EditarCliente from "@/pages/admin/Clientes/components/EditarCliente";
 
 export default function RegistroCliente() {
     const { response, loading, error, refetch } = useFetch({
@@ -27,8 +28,25 @@ export default function RegistroCliente() {
 
     const [activeTab, setActiveTab] = useState("registro");
     const [showDetailsTab, setShowDetailsTab] = useState(false);
+    const [showEditTab, setShowEditTab] = useState(false);
     const [selectedClient, setSelectedClient] = useState<any | null>(null);
+    const [selectedClientForEdit, setSelectedClientForEdit] = useState<
+        any | null
+    >(null);
+    const [selectedCalibrationForEdit, setSelectedCalibrationForEdit] =
+        useState<any | null>(null);
+    const [selectedClientIdForEdit, setSelectedClientIdForEdit] = useState<
+        any | null
+    >(null);
     const [selectedCalibrations, setSelectedCalibrations] = useState<any[]>([]);
+
+    const selectedClientNameForEdit = useMemo(() => {
+        if (selectedClientForEdit?.name) return selectedClientForEdit.name;
+        const fallbackClient = clients.find(
+            (item: any) => item?.id === selectedClientIdForEdit,
+        );
+        return fallbackClient?.name ?? "";
+    }, [clients, selectedClientForEdit, selectedClientIdForEdit]);
 
     const handleSelectClient = (client: any) => {
         if (!client) return;
@@ -43,6 +61,25 @@ export default function RegistroCliente() {
         setActiveTab("detalles");
     };
 
+    const handleEditClient = (client: any) => {
+        const clientId = client?.id;
+        if (!clientId) return;
+
+        const clientCalibrations = Array.isArray(calibrations)
+            ? calibrations.filter(
+                  (item: any) =>
+                      item?.id_client === clientId ||
+                      item?.idClient === clientId,
+              )
+            : [];
+
+        setSelectedClientForEdit(client);
+        setSelectedCalibrationForEdit(clientCalibrations[0] ?? null);
+        setSelectedClientIdForEdit(clientId);
+        if (!showEditTab) setShowEditTab(true);
+        setActiveTab("editar");
+    };
+
     return (
         <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 px-6 py-16">
             <div className="space-y-2">
@@ -54,6 +91,35 @@ export default function RegistroCliente() {
                 <TabsList>
                     <TabsTrigger value="registro">Registrar</TabsTrigger>
                     <TabsTrigger value="lista">Lista</TabsTrigger>
+                    {showEditTab && (
+                        <TabsTrigger
+                            value="editar"
+                            className="group flex items-center gap-2"
+                        >
+                            <span>
+                                Editando cliente
+                                {selectedClientNameForEdit
+                                    ? `: ${selectedClientNameForEdit}`
+                                    : ""}
+                            </span>
+                            <button
+                                type="button"
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                    setShowEditTab(false);
+                                    setActiveTab("lista");
+                                    setSelectedClientIdForEdit(null);
+                                    setSelectedClientForEdit(null);
+                                    setSelectedCalibrationForEdit(null);
+                                }}
+                                className="rounded p-1 text-slate-400 transition hover:bg-slate-800 hover:text-white"
+                                aria-label="Cerrar editar"
+                            >
+                                <X className="h-3.5 w-3.5" />
+                            </button>
+                        </TabsTrigger>
+                    )}
                     {showDetailsTab && (
                         <TabsTrigger
                             value="detalles"
@@ -90,8 +156,27 @@ export default function RegistroCliente() {
                         error={error}
                         refetch={refetch}
                         onSelectClient={handleSelectClient}
+                        onEditClient={handleEditClient}
                     />
                 </TabsContent>
+
+                {showEditTab && (
+                    <TabsContent value="editar" className="mt-4">
+                        <EditarCliente
+                            clientId={selectedClientIdForEdit}
+                            initialClient={selectedClientForEdit}
+                            initialCalibration={selectedCalibrationForEdit}
+                            refetch={refetch}
+                            onClose={() => {
+                                setShowEditTab(false);
+                                setActiveTab("lista");
+                                setSelectedClientIdForEdit(null);
+                                setSelectedClientForEdit(null);
+                                setSelectedCalibrationForEdit(null);
+                            }}
+                        />
+                    </TabsContent>
+                )}
 
                 {showDetailsTab && (
                     <TabsContent value="detalles" className="mt-4">

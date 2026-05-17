@@ -201,15 +201,21 @@ class BaseModel {
 
     normalizeInclude(include) {
         if (!include) return [];
+
         const list = Array.isArray(include) ? include : [include];
+
         return list
             .map((item) => {
-                if (typeof item === "string") return { name: item };
+                if (typeof item === "string") {
+                    return { name: item };
+                }
+
                 return { ...item };
             })
             .map((item) => ({
                 name: item.name,
                 attributes: item.attributes,
+                include: item.include || [],
                 ...(this.relations[item.name] || {}),
             }))
             .map((rel) => ({
@@ -225,78 +231,185 @@ class BaseModel {
     }
 
     async findByColumn(column, value, options = {}) {
+
         if (!this.columns.includes(column)) {
             throw new ModelValidationError("Columna no permitida", { column });
         }
+
         const selected =
-            Array.isArray(options.attributes) && options.attributes.length > 0
+            Array.isArray(options.attributes) &&
+                options.attributes.length > 0
                 ? options.attributes.filter((attr) =>
-                      this.columns.includes(attr),
-                  )
+                    this.columns.includes(attr),
+                )
                 : ["*"];
+
         const { clause, values } = this.buildWhereClauseWithDelete(
             { [column]: value },
             options,
         );
-        const query = `SELECT ${selected.join(", ")} FROM ${this.tableName} ${clause}`;
+
+        const query = `
+            SELECT ${selected.join(", ")}
+            FROM ${this.tableName}
+            ${clause}
+        `;
+
         const { rows } = await pool.query(query, values);
+
+        if (options.include) {
+            return this.attachRelations(rows, options.include);
+        }
+
         return rows;
     }
 
     async attachRelations(rows, include) {
+
         const relations = this.normalizeInclude(include);
-        if (relations.length === 0) return rows;
+
+        if (relations.length === 0) {
+            return rows;
+        }
 
         return Promise.all(
             rows.map(async (row) => {
+
                 const enriched = { ...row };
+
                 for (const rel of relations) {
+
                     if (rel.type === "hasMany") {
-                        enriched[rel.as] = await rel.model.findByColumn(
-                            rel.foreignKey,
-                            row[rel.localKey],
-                            {
-                                attributes: rel.attributes,
-                            },
-                        );
+
+                        enriched[rel.as] =
+                            await rel.model.findByColumn(
+                                rel.foreignKey,
+                                row[rel.localKey],
+                                {
+                                    attributes: rel.attributes,
+                                    include: rel.include,
+                                },
+                            );
+
                     } else if (rel.type === "hasOne") {
-                        const related = await rel.model.findByColumn(
-                            rel.foreignKey,
-                            row[rel.localKey],
-                            {
-                                attributes: rel.attributes,
-                            },
-                        );
+
+                        const related =
+                            await rel.model.findByColumn(
+                                rel.foreignKey,
+                                row[rel.localKey],
+                                {
+                                    attributes: rel.attributes,
+                                    include: rel.include,
+                                },
+                            );
+
                         enriched[rel.as] = related[0] || null;
                     }
                 }
+
                 return enriched;
             }),
         );
     }
 
     async create(data) {
+
+        // BULK INSERT
+        if (Array.isArray(data)) {
+
+            if (data.length === 0) {
+                throw new ModelValidationError("Payload vacío", {
+                    reason: "empty_array",
+                });
+            }
+
+            const rows = [];
+
+            for (const item of data) {
+
+                const payload = this.fillDefaults(this.filterData(item));
+
+                if (payload.is_deleted === undefined) {
+                    payload.is_deleted = false;
+                }
+
+                if (
+                    payload[this.primaryKey] === null ||
+                    payload[this.primaryKey] === undefined
+                ) {
+                    delete payload[this.primaryKey];
+                }
+
+                this.validateData(payload, { mode: "create" });
+
+                await this.ensureForeignKeys(payload);
+
+                rows.push(payload);
+            }
+
+            const keys = Object.keys(rows[0]);
+
+            const values = [];
+            const placeholders = rows.map((row, rowIndex) => {
+
+                const rowPlaceholders = keys.map((key, colIndex) => {
+
+                    values.push(row[key]);
+
+                    return `$${rowIndex * keys.length + colIndex + 1}`;
+
+                });
+
+                return `(${rowPlaceholders.join(", ")})`;
+
+            });
+
+            const query = `
+                INSERT INTO ${this.tableName}
+                (${keys.join(", ")})
+                VALUES ${placeholders.join(", ")}
+                RETURNING *
+            `;
+
+            const result = await pool.query(query, values);
+
+            return result.rows;
+        }
+
+        // SINGLE INSERT
         const payload = this.fillDefaults(this.filterData(data));
+
         if (payload.is_deleted === undefined) {
             payload.is_deleted = false;
         }
+
         if (
             payload[this.primaryKey] === null ||
             payload[this.primaryKey] === undefined
         ) {
             delete payload[this.primaryKey];
         }
+
         this.validateData(payload, { mode: "create" });
+
         await this.ensureForeignKeys(payload);
 
         const keys = Object.keys(payload);
         const values = Object.values(payload);
-        const placeholders = keys.map((_, i) => `$${i + 1}`).join(", ");
-        const columnNames = keys.join(", ");
 
-        const query = `INSERT INTO ${this.tableName} (${columnNames}) VALUES (${placeholders}) RETURNING *`;
-        console.log("Executing query:", query, "with values:", values);
+        const placeholders = keys
+            .map((_, i) => `$${i + 1}`)
+            .join(", ");
+
+        const query = `
+            INSERT INTO ${this.tableName}
+            (${keys.join(", ")})
+            VALUES (${placeholders})
+            RETURNING *
+        `;
+
         const { rows } = await pool.query(query, values);
+
         return rows[0];
     }
 

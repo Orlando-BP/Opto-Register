@@ -1,4 +1,5 @@
 import SalesNotesModel from "../models/salesNotes.model.js";
+import ProductsNoteSaleModel from "../models/product_notesale.model.js";
 
 const SalesNotesService = {
 	async create(data) {
@@ -10,8 +11,14 @@ const SalesNotesService = {
 			where,
 			include: [
 				{
-					name: "Products",
-					attributes: ["id", "type", "material", "frame", "color", "size", "observations"],
+					name: "ProductsNoteSale",
+					attributes: ["id", "id_sales_note", "id_product", "id_calibration", "value", "quantity"],
+					include: [
+						{
+							name: "Product",
+							attributes: ["id", "name", "description",]
+						}
+					]
 				},
 			],
 		});
@@ -21,8 +28,14 @@ const SalesNotesService = {
 		return SalesNotesModel.findById(id, {
 			include: [
 				{
-					name: "Products",
-					attributes: ["id", "type", "material", "frame", "color", "size", "observations"],
+					name: "ProductsNoteSale",
+					attributes: ["id","id_sales_note", "id_product", "id_calibration", "value", "quantity"],
+					include: [
+						{
+							name: "Product",
+							attributes: ["id", "name", "description",]
+						}
+					]
 				},
 			],
 		});
@@ -32,8 +45,14 @@ const SalesNotesService = {
 		return SalesNotesModel.findOne(where, {
 			include: [
 				{
-					name: "Products",
-					attributes: ["id", "type", "material", "frame", "color", "size", "observations"],
+					name: "ProductsNoteSale",
+					attributes: ["id", "id_sales_note", "id_product", "id_calibration", "value", "quantity"],
+					include: [
+						{
+							name: "Product",
+							attributes: ["id", "name", "description",]
+						}
+					]
 				},
 			],
 		});

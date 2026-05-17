@@ -15,7 +15,7 @@ export default function Login() {
 
         try {
             const res: any = await execute({
-                url: "/v1/sales-notes/login",
+                url: "/v1/clients/login",
                 body: { code },
                 method: "post",
             });
@@ -24,7 +24,6 @@ export default function Login() {
                 const token = res.data?.token;
                 if (token) {
                     localStorage.setItem("token", token);
-                    console.log("token:", token);
                 } else {
                     console.log("token ausente en respuesta:", res);
                 }
@@ -32,7 +31,7 @@ export default function Login() {
                     title: "Bienvenido Cliente",
                     description: "✅ Has iniciado sesión correctamente",
                 });
-                navigate("/client/dashboard");
+                navigate("/cliente/detalles");
                 console.log("Este Log si se imprime");
             } else {
                 setError(res.message ?? "No se pudo iniciar sesión.");

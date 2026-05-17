@@ -50,13 +50,13 @@ export default function DetallesNotaVenta({ sale }: DetallesNotaVentaProps) {
 
     const issueDate = sale?.issue_date ?? sale?.issueDate;
     const deliveryDate = sale?.delivery_date ?? sale?.deliveryDate;
-    const productItems = Array.isArray(sale?.Products)
-        ? sale.Products
-        : Array.isArray(sale?.products)
-          ? sale.products
-          : Array.isArray(sale?.details)
-            ? sale.details
-            : [];
+        const productItems = Array.isArray(sale?.ProductsNoteSale)
+                ? sale.ProductsNoteSale
+                : Array.isArray(sale?.products)
+                    ? sale.products
+                    : Array.isArray(sale?.details)
+                        ? sale.details
+                        : [];
 
     return (
         <div className="space-y-8">
@@ -125,49 +125,71 @@ export default function DetallesNotaVenta({ sale }: DetallesNotaVentaProps) {
                             Productos incluidos
                         </h2>
                         <p className="text-sm text-slate-400">
-                            Lista de productos asociados a la nota
+                            Cada producto se muestra como una nota de venta
                         </p>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="grid grid-cols-1 gap-4">
                         {productItems.map((item: any, index: number) => {
-                            const quantity = item?.quantity;
-                            const price = item?.price ?? item?.value;
-                            const total = item?.total;
+                            const quantity = Number(item?.quantity ?? 1);
+                            const price = Number(item?.value ?? item?.price ?? 0);
+                            const total = quantity * price;
+                            const productName =
+                                item?.Product?.name ??
+                                item?.productName ??
+                                item?.name;
+                            const productDescription =
+                                item?.Product?.description ?? item?.description;
+
                             return (
                                 <div
                                     key={item?.id ?? `sale-detail-${index}`}
-                                    className="flex flex-col gap-2 rounded-lg border border-slate-700 bg-slate-800 p-4 text-sm text-slate-200 md:flex-row md:items-center md:justify-between"
+                                    className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-slate-800 shadow-sm"
                                 >
-                                    <div>
-                                        <p className="font-medium">
-                                            {formatValue(
-                                                item?.productName ?? item?.name,
-                                            )}
-                                        </p>
-                                        {item?.description && (
-                                            <p className="text-xs text-slate-400">
-                                                {formatValue(item.description)}
+                                    <div className="flex flex-col gap-3 border-b border-dashed border-slate-300 pb-3 md:flex-row md:items-center md:justify-between">
+                                        <div>
+                                            <p className="text-xs uppercase tracking-wide text-slate-500">
+                                                Producto
                                             </p>
-                                        )}
-                                        {quantity !== undefined && (
-                                            <p className="text-xs text-slate-400">
-                                                Cantidad:{" "}
+                                            <p className="text-base font-semibold text-slate-900">
+                                                {formatValue(productName)}
+                                            </p>
+                                            {productDescription && (
+                                                <p className="text-xs text-slate-500">
+                                                    {formatValue(productDescription)}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="text-right text-xs text-slate-500">
+                                            Nota #{formatValue(sale?.id)}
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-3 grid grid-cols-2 gap-3 text-sm md:grid-cols-4">
+                                        <div className="rounded-md border border-slate-200 bg-white px-3 py-2">
+                                            <p className="text-xs uppercase text-slate-500">
+                                                Cantidad
+                                            </p>
+                                            <p className="font-medium text-slate-900">
                                                 {formatValue(quantity)}
                                             </p>
-                                        )}
-                                    </div>
-                                    <div className="flex flex-wrap gap-4">
-                                        <span>
-                                            Precio: {formatCurrency(price)}
-                                        </span>
-                                        {total !== undefined &&
-                                            total !== null && (
-                                                <span>
-                                                    Total:{" "}
-                                                    {formatCurrency(total)}
-                                                </span>
-                                            )}
+                                        </div>
+                                        <div className="rounded-md border border-slate-200 bg-white px-3 py-2">
+                                            <p className="text-xs uppercase text-slate-500">
+                                                Precio
+                                            </p>
+                                            <p className="font-medium text-slate-900">
+                                                {formatCurrency(price)}
+                                            </p>
+                                        </div>
+                                        <div className="rounded-md border border-slate-200 bg-white px-3 py-2">
+                                            <p className="text-xs uppercase text-slate-500">
+                                                Total
+                                            </p>
+                                            <p className="font-medium text-slate-900">
+                                                {formatCurrency(total)}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             );

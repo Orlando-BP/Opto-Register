@@ -1,5 +1,5 @@
 import BaseModel from "../BaseModel.js";
-import ProductsModel from "./products.model.js";
+import ProductsNoteSaleModel from "./product_notesale.model.js";
 import ClientsModel from "./clients.model.js";
 
 class SalesNotesModel extends BaseModel {
@@ -40,21 +40,21 @@ class SalesNotesModel extends BaseModel {
             is_deleted: false,
         };
 
-        this.relations = {
-            Products: {
-                type: "hasMany",
-                model: () => ProductsModel,
-                foreignKey: "id_note",
-                localKey: "id",
-                as: "Products",
-            },
-        };
-
         this.foreignKeys = {
             id_client: {
                 model: () => ClientsModel,
                 refColumn: "id",
                 refTable: "Clients",
+            },
+        };
+
+        this.relations = {
+            ProductsNoteSale: {
+                type: "hasMany",
+                model: () => ProductsNoteSaleModel,
+                foreignKey: "id_sales_note",
+                localKey: "id",
+                as: "ProductsNoteSale",
             },
         };
     }
