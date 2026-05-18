@@ -28,7 +28,7 @@ export default function AppRoutes() {
             <Route
                 element={
                     <RequireAuth allowedRoles={["client"]}>
-                        <div></div>
+                        <SidebarLayout role="client" />
                     </RequireAuth>
                 }
             >
@@ -43,7 +43,7 @@ export default function AppRoutes() {
             <Route
                 element={
                     <RequireAuth allowedRoles={["admin", "client"]}>
-                        <SidebarLayout />
+                        <SidebarLayout role="admin" />
                     </RequireAuth>
                 }
             >

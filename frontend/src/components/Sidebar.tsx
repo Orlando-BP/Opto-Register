@@ -9,7 +9,14 @@ const links = [
     { to: "/admin/chats", label: "Chats" },
 ];
 
-export default function Sidebar() {
+const linksCliente = [
+    { to: "/cliente/chat", label: "Chat con soporte" },
+    { to: "/cliente/detalles", label: "Mis detalles" },
+];
+
+export default function Sidebar({ role }: { role: "admin" | "client" }) {
+    const currentLinks = role === "admin" ? links : linksCliente;
+
     return (
         <aside className="sticky top-0 flex h-screen w-64 flex-col border-r border-slate-800 bg-slate-950/90 px-4 py-6">
             <div className="mb-8 px-2">
@@ -17,11 +24,11 @@ export default function Sidebar() {
                     Opto Register
                 </h1>
                 <p className="text-xs text-slate-400">
-                    Panel de administración
+                    {role === "admin" ? "Panel de administración" : "Cliente :D"}
                 </p>
             </div>
             <nav className="flex flex-1 flex-col gap-2">
-                {links.map((link) => (
+                {currentLinks.map((link) => (
                     <NavLink
                         key={link.to}
                         to={link.to}
@@ -37,6 +44,13 @@ export default function Sidebar() {
                         {link.label}
                     </NavLink>
                 ))}
+                <NavLink
+                    to="/"
+                    onClick={() => localStorage.removeItem("token")}
+                    className="mt-auto rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-slate-900 hover:text-white"
+                >
+                    Cerrar sesión
+                </NavLink>
             </nav>
         </aside>
     );
