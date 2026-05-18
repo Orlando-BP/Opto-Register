@@ -160,6 +160,8 @@ class Clients {
     async login(req, res) {
         try {
             const { phone } = req.body;
+            // console.log(phone);
+            
             const user = await ClientsService.findOneByWhere({ phone });
             if (!user) {
                 return res.status(404).json({

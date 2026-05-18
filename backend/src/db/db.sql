@@ -10,10 +10,11 @@ CREATE TABLE clients (
 CREATE TABLE sales_notes (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     id_client INT,
-    date DATE ,
-    advance DECIMAL(10,2) ,
-    remaining DECIMAL(10,2) ,
+    issue_date DATE ,
+    delivery_date DATE ,
     total_price DECIMAL(10,2) ,
+    advance DECIMAL(10,2) ,
+    balance DECIMAL(10,2) ,
     code VARCHAR(10),
     is_deleted BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_client) REFERENCES clients(id) ON DELETE SET NULL
@@ -21,11 +22,18 @@ CREATE TABLE sales_notes (
 
 CREATE TABLE product (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    id_sales_note INT,
-    id_calibration INT,
     name VARCHAR(100),
     description TEXT,
+    is_deleted BOOLEAN DEFAULT FALSE,
+);
+
+CREATE TABLE product_notesale (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_sales_note INT,
+    id_product INT,
+    id_calibration INT,
     value DECIMAL(10,2),
+    quantity INT,
     is_deleted BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_sales_note) REFERENCES sales_notes(id) ON DELETE SET NULL
 );

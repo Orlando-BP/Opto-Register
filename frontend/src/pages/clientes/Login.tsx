@@ -1,7 +1,10 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/Button";
 import { usePost, useToast } from "@/hooks";
+import { useSessionStore } from "@/stores/sessionStore";
+
 
 export default function Login() {
     const [code, setCode] = useState("");
@@ -9,6 +12,8 @@ export default function Login() {
     const navigate = useNavigate();
     const { execute, loading } = usePost();
     const { toast } = useToast();
+    const setUser = useSessionStore((state) => state.setUser);
+
 
     async function handleLogin() {
         setError(null);
@@ -16,14 +21,21 @@ export default function Login() {
         try {
             const res: any = await execute({
                 url: "/v1/clients/login",
-                body: { code },
+                body: { phone: code },
                 method: "post",
             });
 
             if (res.ok ?? res.status === 200) {
                 const token = res.data?.token;
+                const userData = res.data?.user || {};
                 if (token) {
                     localStorage.setItem("token", token);
+                    // Actualiza el estado global con el usuario y el token
+                    setUser({
+                        ...userData,
+                        token,
+                        status: "authenticated",
+                    });
                 } else {
                     console.log("token ausente en respuesta:", res);
                 }
