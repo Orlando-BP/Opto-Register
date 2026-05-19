@@ -266,3 +266,601 @@ INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,lef
 (178,40,6.50,2.75,90,8.30,2.50,95,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
 (179,40,7.00,2.25,100,7.25,2.00,86,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
 (180,40,7.50,2.75,110,7.75,2.50,79,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false);
+
+/*extras 1*/
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(181,40,-0.50,0.25,70,-0.25,0.50,110,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(182,40,-1.00,0.25,80,-0.75,0.50,100,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(183,40,-1.50,0.75,90,-1.25,0.25,95,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(184,40,-2.00,0.50,100,-1.75,0.75,86,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(185,40,-2.50,0.75,110,-2.25,0.25,79,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(186,40,-0.50,1.25,70,-0.25,1.00,110,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(187,40,-1.00,1.50,80,-0.75,1.75,100,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(188,40,-1.50,1.00,90,-1.25,1.25,95,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(189,40,-2.00,1.50,100,-1.75,1.75,86,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(190,40,-2.50,1.00,110,-2.25,1.25,79,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(191,40,-0.50,2.25,70,-0.25,2.00,110,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(192,40,-1.00,2.50,80,-0.75,2.75,100,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(193,40,-1.50,2.00,90,-1.25,2.25,95,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(194,40,-2.00,2.50,100,-1.75,2.75,86,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(195,40,-2.50,2.00,110,-2.25,2.25,79,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(196,40,-3.00,0.25,70,-3.25,0.50,110,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(197,40,-3.50,0.75,80,-3.75,0.25,100,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(198,40,-4.00,0.50,90,-4.25,0.75,95,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(199,40,-4.50,0.25,100,-4.75,0.50,86,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(200,40,-5.00,0.75,110,-5.25,0.25,79,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(201,40,-3.00,1.00,70,-3.25,1.25,110,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(202,40,-3.50,1.50,80,-3.75,1.75,100,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(203,40,-4.00,1.00,90,-4.25,1.25,95,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(204,40,-4.50,1.50,100,-4.75,1.75,86,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(205,40,-5.00,1.00,110,-5.25,1.25,79,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(206,40,-3.00,2.00,70,-3.25,2.25,110,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(207,40,-3.50,2.50,80,-3.75,2.75,100,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(208,40,-4.00,2.00,90,-4.25,2.25,95,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(209,40,-4.50,2.50,100,-4.75,2.75,86,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(210,40,-5.00,2.00,110,-5.25,2.25,79,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(211,40,-6.00,0.25,70,-6.25,0.50,110,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(212,40,-6.50,0.75,80,-6.75,0.25,100,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(213,40,-7.00,0.50,90,-7.25,0.75,95,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(214,40,-7.50,0.25,100,-7.75,0.50,86,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(215,40,-8.00,0.75,110,-8.25,0.25,79,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(216,40,-6.00,1.00,70,-6.25,1.25,110,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(217,40,-6.50,1.50,80,-6.75,1.75,100,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(218,40,-7.00,1.00,90,-7.25,1.25,95,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(219,40,-7.50,1.50,100,-7.75,1.75,86,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(220,40,-8.00,1.00,110,-8.25,1.25,79,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(221,40,-6.00,2.00,70,-6.25,2.25,110,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(222,40,-6.50,2.50,80,-6.75,2.75,100,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(223,40,-7.00,2.00,90,-7.25,2.25,95,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(224,40,-7.50,2.50,100,-7.75,2.75,86,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(225,40,-8.00,2.00,110,-8.25,2.25,79,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(226,40,0.25,0.25,70,0.50,0.50,110,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(227,40,0.75,0.75,80,1.00,0.25,100,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(228,40,1.25,0.50,90,1.50,0.75,95,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(229,40,1.75,0.25,100,2.00,0.50,86,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(230,40,2.25,0.75,110,2.50,0.25,79,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(231,40,0.25,1.00,70,0.50,1.25,110,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(232,40,0.75,1.50,80,1.00,1.75,100,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(233,40,1.25,1.00,90,1.50,1.25,95,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(234,40,1.75,1.50,100,2.00,1.75,86,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(235,40,2.25,1.00,110,2.50,1.25,79,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(236,40,0.25,2.00,70,0.50,2.25,110,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(237,40,0.50,2.50,80,0.75,2.75,100,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(238,40,1.00,2.00,90,1.25,2.25,95,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(239,40,1.50,2.50,100,1.75,2.75,86,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(240,40,2.00,2.00,110,2.25,2.25,79,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(241,40,3.00,0.25,70,3.25,0.50,110,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(242,40,3.50,0.75,80,3.75,0.25,100,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(243,40,4.00,0.50,90,4.25,0.75,95,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(244,40,4.50,0.25,100,4.75,0.50,86,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(245,40,5.00,0.75,110,5.25,0.25,79,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(246,40,3.00,1.00,70,3.25,1.25,110,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(247,40,3.50,1.50,80,3.75,1.75,100,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(248,40,4.00,1.00,90,4.25,1.25,95,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(249,40,4.50,1.50,100,4.75,1.75,86,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(250,40,5.00,1.00,110,5.25,1.25,79,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(251,40,3.00,2.00,70,3.25,2.25,110,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(252,40,3.50,2.50,80,3.75,2.75,100,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(253,40,4.00,2.00,90,4.25,2.25,95,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(254,40,4.50,2.50,100,4.75,2.75,86,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(255,40,5.00,2.00,110,5.25,2.25,79,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(256,40,6.00,0.25,70,6.25,0.50,110,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(257,40,6.50,0.75,80,6.75,0.25,100,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(258,40,7.00,0.50,90,7.25,0.75,95,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(259,40,7.50,0.25,100,7.75,0.50,86,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(260,40,8.00,0.75,110,8.25,0.25,79,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(261,40,6.00,1.00,70,6.25,1.25,110,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(262,40,6.50,1.50,80,6.75,1.75,100,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(263,40,6.50,1.00,90,8.30,1.25,95,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(264,40,7.00,1.50,100,7.25,1.75,86,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(265,40,7.50,1.00,110,7.75,1.25,79,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(266,40,6.00,2.00,70,6.25,2.25,110,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(267,40,6.50,2.50,80,6.75,2.75,100,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(268,40,6.50,2.00,90,8.30,2.25,95,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(269,40,7.00,2.50,100,7.25,2.75,86,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(270,40,7.50,2.00,110,7.75,2.25,79,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(271,40,-0.50,0.75,70,-0.25,0.25,110,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(272,40,-1.00,0.50,80,-0.75,0.25,100,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(273,40,-1.50,0.25,90,-1.25,0.75,95,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(274,40,-2.00,0.75,100,-1.75,0.50,86,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(275,40,-2.50,0.50,110,-2.25,0.50,79,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(276,40,-0.50,1.50,70,-0.25,1.75,110,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(277,40,-1.00,1.25,80,-0.75,1.00,100,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(278,40,-1.50,1.75,90,-1.25,1.50,95,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(279,40,-2.00,1.25,100,-1.75,1.00,86,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(280,40,-2.50,1.75,110,-2.25,1.50,79,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(281,40,-0.50,2.50,70,-0.25,2.75,110,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(282,40,-1.00,2.25,80,-0.75,2.00,100,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(283,40,-1.50,2.75,90,-1.25,2.50,95,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(284,40,-2.00,2.25,100,-1.75,2.00,86,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(285,40,-2.50,2.75,110,-2.25,2.50,79,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(286,40,-3.00,0.50,70,-3.25,0.25,110,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(287,40,-3.50,0.25,80,-3.75,0.75,100,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(288,40,-4.00,0.75,90,-4.25,0.50,95,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(289,40,-4.50,0.50,100,-4.75,0.25,86,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(290,40,-5.00,0.25,110,-5.25,0.75,79,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(291,40,-3.00,1.75,70,-3.25,1.50,110,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(292,40,-3.50,1.25,80,-3.75,1.00,100,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(293,40,-4.00,1.75,90,-4.25,1.50,95,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(294,40,-4.50,1.25,100,-4.75,1.00,86,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(295,40,-5.00,1.75,110,-5.25,1.50,79,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(296,40,-3.00,2.75,70,-3.25,2.50,110,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(297,40,-3.50,2.25,80,-3.75,2.00,100,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(298,40,-4.00,2.75,90,-4.25,2.50,95,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(299,40,-4.50,2.25,100,-4.75,2.00,86,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(300,40,-5.00,2.75,110,-5.25,2.50,79,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(301,40,-6.00,0.50,70,-6.25,0.25,110,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(302,40,-6.50,0.25,80,-6.75,0.75,100,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(303,40,-7.00,0.75,90,-7.25,0.50,95,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(304,40,-7.50,0.50,100,-7.75,0.25,86,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(305,40,-8.00,0.25,110,-8.25,0.75,79,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(306,40,-6.00,1.75,70,-6.25,1.50,110,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(307,40,-6.50,1.25,80,-6.75,1.00,100,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(308,40,-7.00,1.75,90,-7.25,1.50,95,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(309,40,-7.50,1.25,100,-7.75,1.00,86,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(310,40,-8.00,1.75,110,-8.25,1.50,79,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(311,40,-6.00,2.75,70,-6.25,2.50,110,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(312,40,-6.50,2.25,80,-6.75,2.00,100,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(313,40,-7.00,2.75,90,-7.25,2.50,95,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(314,40,-7.50,2.25,100,-7.75,2.00,86,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(315,40,-8.00,2.75,110,-8.25,2.50,79,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(316,40,0.25,0.50,70,0.50,0.25,110,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(317,40,0.75,0.25,80,1.00,0.75,100,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(318,40,1.25,0.75,90,1.50,0.50,95,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(319,40,1.75,0.50,100,2.00,0.25,86,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(320,40,2.25,0.25,110,2.50,0.75,79,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(321,40,0.25,1.75,70,0.50,1.50,110,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(322,40,0.75,1.25,80,1.00,1.00,100,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(323,40,1.25,1.75,90,1.50,1.50,95,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(324,40,1.75,1.25,100,2.00,1.00,86,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(325,40,2.25,1.75,110,2.50,1.50,79,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(326,40,0.25,2.75,70,0.50,2.50,110,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(327,40,0.50,2.25,80,0.75,2.00,100,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(328,40,1.00,2.75,90,1.25,2.50,95,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(329,40,1.50,2.25,100,1.75,2.00,86,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(330,40,2.00,2.75,110,2.25,2.50,79,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(331,40,3.00,0.50,70,3.25,0.25,110,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(332,40,3.50,0.25,80,3.75,0.75,100,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(333,40,4.00,0.75,90,4.25,0.50,95,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(334,40,4.50,0.50,100,4.75,0.25,86,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(335,40,5.00,0.25,110,5.25,0.75,79,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(336,40,3.00,1.75,70,3.25,1.50,110,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(337,40,3.50,1.25,80,3.75,1.00,100,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(338,40,4.00,1.75,90,4.25,1.50,95,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(339,40,4.50,1.25,100,4.75,1.00,86,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(340,40,5.00,1.75,110,5.25,1.50,79,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(341,40,3.00,2.75,70,3.25,2.50,110,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(342,40,3.50,2.25,80,3.75,2.00,100,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(343,40,4.00,2.75,90,4.25,2.50,95,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(344,40,4.50,2.25,100,4.75,2.00,86,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(345,40,5.00,2.75,110,5.25,2.50,79,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(346,40,6.00,0.50,70,6.25,0.25,110,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(347,40,6.50,0.25,80,6.75,0.75,100,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(348,40,7.00,0.75,90,7.25,0.50,95,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(349,40,7.50,0.50,100,7.75,0.25,86,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(350,40,8.00,0.25,110,8.25,0.75,79,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(351,40,6.00,1.75,70,6.25,1.50,110,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(352,40,6.50,1.25,80,6.75,1.00,100,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(353,40,6.50,1.75,90,8.30,1.50,95,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(354,40,7.00,1.25,100,7.25,1.00,86,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(355,40,7.50,1.75,110,7.75,1.50,79,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(356,40,6.00,2.75,70,6.25,2.50,110,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(357,40,6.50,2.25,80,6.75,2.00,100,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(358,40,6.50,2.75,90,8.30,2.50,95,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(359,40,7.00,2.25,100,7.25,2.00,86,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(360,40,7.50,2.75,110,7.75,2.50,79,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*extras 2*/
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(361,40,-0.50,0.50,70,-0.25,0.75,110,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(362,40,-1.00,0.75,80,-0.75,0.75,100,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(363,40,-1.50,0.50,90,-1.25,0.50,95,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(364,40,-2.00,0.25,100,-1.75,0.25,86,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(365,40,-2.25,0.75,110,-2.25,0.75,79,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(366,40,-0.50,0.50,70,-0.25,0.75,110,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(367,40,-1.00,0.75,80,-0.75,0.75,100,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(368,40,-1.50,0.50,90,-1.25,0.50,95,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(369,40,-2.00,0.25,100,-1.75,0.25,86,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(370,40,-2.25,0.75,110,-2.25,0.75,79,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(371,40,-0.50,1.75,70,-0.25,1.25,110,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(372,40,-1.00,1.00,80,-0.75,1.50,100,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(373,40,-1.50,1.25,90,-1.25,1.75,95,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(374,40,-2.00,1.75,100,-1.75,1.25,86,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(375,40,-2.50,1.25,110,-2.25,1.00,79,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(376,40,-0.50,1.75,70,-0.25,1.25,110,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(377,40,-1.00,1.00,80,-0.75,1.50,100,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(378,40,-1.50,1.25,90,-1.25,1.75,95,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(379,40,-2.00,1.75,100,-1.75,1.25,86,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(380,40,-2.50,1.25,110,-2.25,1.00,79,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(381,40,-0.50,2.00,70,-0.25,2.25,110,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(382,40,-1.00,2.00,80,-0.75,2.25,100,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(383,40,-1.50,2.25,90,-1.25,2.00,95,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(384,40,-2.00,2.75,100,-1.75,2.50,86,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(385,40,-2.50,2.25,110,-2.25,2.00,79,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(386,40,-0.50,2.00,70,-0.25,2.25,110,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(387,40,-1.00,2.00,80,-0.75,2.25,100,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(388,40,-1.50,2.25,90,-1.25,2.00,95,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(389,40,-2.00,2.75,100,-1.75,2.50,86,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(390,40,-2.50,2.25,110,-2.25,2.00,79,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(391,40,-3.00,0.75,70,-3.25,0.75,110,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(392,40,-3.50,0.50,80,-3.75,0.50,100,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(393,40,-4.00,0.25,90,-4.25,0.25,95,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(394,40,-4.50,0.75,100,-4.75,0.75,86,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(395,40,-5.00,0.50,110,-5.25,0.50,79,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(396,40,-3.00,0.75,70,-3.25,0.75,110,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(397,40,-3.50,0.50,80,-3.75,0.50,100,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(398,40,-4.00,0.25,90,-4.25,0.25,95,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(399,40,-4.50,0.75,100,-4.75,0.75,86,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(400,40,-5.00,0.50,110,-5.25,0.50,79,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(401,40,-3.00,1.50,70,-3.25,1.75,110,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(402,40,-3.50,1.00,80,-3.75,1.25,100,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(403,40,-4.00,1.50,90,-4.25,1.75,95,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(404,40,-4.50,1.00,100,-4.75,1.25,86,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(405,40,-5.00,1.50,110,-5.25,1.75,79,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(406,40,-3.00,1.50,70,-3.25,1.75,110,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(407,40,-3.50,1.00,80,-3.75,1.25,100,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(408,40,-4.00,1.50,90,-4.25,1.75,95,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(409,40,-4.50,1.00,100,-4.75,1.25,86,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(410,40,-5.00,1.50,110,-5.25,1.75,79,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(411,40,-3.00,2.50,70,-3.25,2.75,110,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(412,40,-3.50,2.00,80,-3.75,2.25,100,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(413,40,-4.00,2.50,90,-4.25,2.75,95,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(414,40,-4.50,2.00,100,-4.75,2.25,86,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(415,40,-5.00,2.50,110,-5.25,2.75,79,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(416,40,-3.00,2.50,70,-3.25,2.75,110,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(417,40,-3.50,2.00,80,-3.75,2.25,100,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(418,40,-4.00,2.50,90,-4.25,2.75,95,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(419,40,-4.50,2.00,100,-4.75,2.25,86,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(420,40,-5.00,2.50,110,-5.25,2.75,79,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(421,40,-6.00,0.75,70,-6.25,0.75,110,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(422,40,-6.50,0.50,80,-6.75,0.50,100,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(423,40,-7.00,0.25,90,-7.25,0.25,95,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(424,40,-7.50,0.75,100,-7.75,0.75,86,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(425,40,-8.00,0.50,110,-8.25,0.50,79,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(426,40,-6.00,0.75,70,-6.25,0.75,110,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(427,40,-6.50,0.50,80,-6.75,0.50,100,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(428,40,-7.00,0.25,90,-7.25,0.25,95,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(429,40,-7.50,0.75,100,-7.75,0.75,86,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(430,40,-8.00,0.50,110,-8.25,0.50,79,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(431,40,-6.00,1.50,70,-6.25,1.75,110,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(432,40,-6.50,1.00,80,-6.75,1.25,100,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(433,40,-7.00,1.50,90,-7.25,1.75,95,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(434,40,-7.50,1.00,100,-7.75,1.25,86,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(435,40,-8.00,1.50,110,-8.25,1.75,79,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(436,40,-6.00,1.50,70,-6.25,1.75,110,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(437,40,-6.50,1.00,80,-6.75,1.25,100,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(438,40,-7.00,1.50,90,-7.25,1.75,95,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(439,40,-7.50,1.00,100,-7.75,1.25,86,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(440,40,-8.00,1.50,110,-8.25,1.75,79,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(441,40,-6.00,2.50,70,-6.25,2.75,110,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(442,40,-6.50,2.00,80,-6.75,2.25,100,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(443,40,-7.00,2.50,90,-7.25,2.75,95,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(444,40,-7.50,2.00,100,-7.75,2.25,86,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(445,40,-8.00,2.50,110,-8.25,2.75,79,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false);
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(446,40,-6.00,2.50,70,-6.25,2.75,110,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(447,40,-6.50,2.00,80,-6.75,2.25,100,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(448,40,-7.00,2.50,90,-7.25,2.75,95,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(449,40,-7.50,2.00,100,-7.75,2.25,86,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(450,40,-8.00,2.50,110,-8.25,2.75,79,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(451,40,0.25,0.75,70,0.50,0.75,110,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(452,40,0.75,0.50,80,1.00,0.50,100,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(453,40,1.25,0.25,90,1.50,0.25,95,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(454,40,1.75,0.75,100,2.00,0.75,86,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(455,40,2.25,0.50,110,2.50,0.50,79,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(456,40,0.25,0.75,70,0.50,0.75,110,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(457,40,0.75,0.50,80,1.00,0.50,100,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(458,40,1.25,0.25,90,1.50,0.25,95,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(459,40,1.75,0.75,100,2.00,0.75,86,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(460,40,2.25,0.50,110,2.50,0.50,79,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false);
+
+
+
+
+
+
+/*los siguientes registros aun no estan listos*/
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(231,40,0.25,1.00,70,0.50,1.25,110,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(232,40,0.75,1.50,80,1.00,1.75,100,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(233,40,1.25,1.00,90,1.50,1.25,95,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(234,40,1.75,1.50,100,2.00,1.75,86,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(235,40,2.25,1.00,110,2.50,1.25,79,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(236,40,0.25,2.00,70,0.50,2.25,110,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(237,40,0.50,2.50,80,0.75,2.75,100,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(238,40,1.00,2.00,90,1.25,2.25,95,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(239,40,1.50,2.50,100,1.75,2.75,86,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(240,40,2.00,2.00,110,2.25,2.25,79,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(241,40,3.00,0.25,70,3.25,0.50,110,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(242,40,3.50,0.75,80,3.75,0.25,100,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(243,40,4.00,0.50,90,4.25,0.75,95,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(244,40,4.50,0.25,100,4.75,0.50,86,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(245,40,5.00,0.75,110,5.25,0.25,79,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(246,40,3.00,1.00,70,3.25,1.25,110,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(247,40,3.50,1.50,80,3.75,1.75,100,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(248,40,4.00,1.00,90,4.25,1.25,95,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(249,40,4.50,1.50,100,4.75,1.75,86,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(250,40,5.00,1.00,110,5.25,1.25,79,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(251,40,3.00,2.00,70,3.25,2.25,110,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(252,40,3.50,2.50,80,3.75,2.75,100,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(253,40,4.00,2.00,90,4.25,2.25,95,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(254,40,4.50,2.50,100,4.75,2.75,86,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(255,40,5.00,2.00,110,5.25,2.25,79,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(256,40,6.00,0.25,70,6.25,0.50,110,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(257,40,6.50,0.75,80,6.75,0.25,100,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(258,40,7.00,0.50,90,7.25,0.75,95,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(259,40,7.50,0.25,100,7.75,0.50,86,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(260,40,8.00,0.75,110,8.25,0.25,79,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(261,40,6.00,1.00,70,6.25,1.25,110,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(262,40,6.50,1.50,80,6.75,1.75,100,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(263,40,6.50,1.00,90,8.30,1.25,95,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(264,40,7.00,1.50,100,7.25,1.75,86,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(265,40,7.50,1.00,110,7.75,1.25,79,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(266,40,6.00,2.00,70,6.25,2.25,110,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(267,40,6.50,2.50,80,6.75,2.75,100,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(268,40,6.50,2.00,90,8.30,2.25,95,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(269,40,7.00,2.50,100,7.25,2.75,86,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(270,40,7.50,2.00,110,7.75,2.25,79,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(271,40,-0.50,0.75,70,-0.25,0.25,110,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(272,40,-1.00,0.50,80,-0.75,0.25,100,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(273,40,-1.50,0.25,90,-1.25,0.75,95,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(274,40,-2.00,0.75,100,-1.75,0.50,86,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false),
+(275,40,-2.50,0.50,110,-2.25,0.50,79,'2026-04-01','Leve miopía con leve astigmatismo','Leve miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(276,40,-0.50,1.50,70,-0.25,1.75,110,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(277,40,-1.00,1.25,80,-0.75,1.00,100,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(278,40,-1.50,1.75,90,-1.25,1.50,95,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(279,40,-2.00,1.25,100,-1.75,1.00,86,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false),
+(280,40,-2.50,1.75,110,-2.25,1.50,79,'2026-04-01','Leve miopía con moderado astigmatismo','Leve miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(281,40,-0.50,2.50,70,-0.25,2.75,110,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(282,40,-1.00,2.25,80,-0.75,2.00,100,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(283,40,-1.50,2.75,90,-1.25,2.50,95,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(284,40,-2.00,2.25,100,-1.75,2.00,86,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false),
+(285,40,-2.50,2.75,110,-2.25,2.50,79,'2026-04-01','Leve miopía con severo astigmatismo','Leve miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(286,40,-3.00,0.50,70,-3.25,0.25,110,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(287,40,-3.50,0.25,80,-3.75,0.75,100,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(288,40,-4.00,0.75,90,-4.25,0.50,95,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(289,40,-4.50,0.50,100,-4.75,0.25,86,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false),
+(290,40,-5.00,0.25,110,-5.25,0.75,79,'2026-04-01','Moderada miopía con leve astigmatismo','Moderada miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(291,40,-3.00,1.75,70,-3.25,1.50,110,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(292,40,-3.50,1.25,80,-3.75,1.00,100,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(293,40,-4.00,1.75,90,-4.25,1.50,95,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(294,40,-4.50,1.25,100,-4.75,1.00,86,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false),
+(295,40,-5.00,1.75,110,-5.25,1.50,79,'2026-04-01','Moderada miopía con moderado astigmatismo','Moderada miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(296,40,-3.00,2.75,70,-3.25,2.50,110,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(297,40,-3.50,2.25,80,-3.75,2.00,100,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(298,40,-4.00,2.75,90,-4.25,2.50,95,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(299,40,-4.50,2.25,100,-4.75,2.00,86,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false),
+(300,40,-5.00,2.75,110,-5.25,2.50,79,'2026-04-01','Moderada miopía con severo astigmatismo','Moderada miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(301,40,-6.00,0.50,70,-6.25,0.25,110,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(302,40,-6.50,0.25,80,-6.75,0.75,100,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(303,40,-7.00,0.75,90,-7.25,0.50,95,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(304,40,-7.50,0.50,100,-7.75,0.25,86,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false),
+(305,40,-8.00,0.25,110,-8.25,0.75,79,'2026-04-01','Severa miopía con leve astigmatismo','Severa miopía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(306,40,-6.00,1.75,70,-6.25,1.50,110,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(307,40,-6.50,1.25,80,-6.75,1.00,100,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(308,40,-7.00,1.75,90,-7.25,1.50,95,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(309,40,-7.50,1.25,100,-7.75,1.00,86,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false),
+(310,40,-8.00,1.75,110,-8.25,1.50,79,'2026-04-01','Severa miopía con moderado astigmatismo','Severa miopía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(311,40,-6.00,2.75,70,-6.25,2.50,110,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(312,40,-6.50,2.25,80,-6.75,2.00,100,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(313,40,-7.00,2.75,90,-7.25,2.50,95,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(314,40,-7.50,2.25,100,-7.75,2.00,86,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false),
+(315,40,-8.00,2.75,110,-8.25,2.50,79,'2026-04-01','Severa miopía con severo astigmatismo','Severa miopía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(316,40,0.25,0.50,70,0.50,0.25,110,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(317,40,0.75,0.25,80,1.00,0.75,100,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(318,40,1.25,0.75,90,1.50,0.50,95,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(319,40,1.75,0.50,100,2.00,0.25,86,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false),
+(320,40,2.25,0.25,110,2.50,0.75,79,'2026-04-01','Leve hipermetropía con leve astigmatismo','Leve hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(321,40,0.25,1.75,70,0.50,1.50,110,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(322,40,0.75,1.25,80,1.00,1.00,100,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(323,40,1.25,1.75,90,1.50,1.50,95,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(324,40,1.75,1.25,100,2.00,1.00,86,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false),
+(325,40,2.25,1.75,110,2.50,1.50,79,'2026-04-01','Leve hipermetropía con moderado astigmatismo','Leve hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(326,40,0.25,2.75,70,0.50,2.50,110,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(327,40,0.50,2.25,80,0.75,2.00,100,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(328,40,1.00,2.75,90,1.25,2.50,95,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(329,40,1.50,2.25,100,1.75,2.00,86,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false),
+(330,40,2.00,2.75,110,2.25,2.50,79,'2026-04-01','Leve hipermetropía con severo astigmatismo','Leve hipermetropía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(331,40,3.00,0.50,70,3.25,0.25,110,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(332,40,3.50,0.25,80,3.75,0.75,100,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(333,40,4.00,0.75,90,4.25,0.50,95,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(334,40,4.50,0.50,100,4.75,0.25,86,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false),
+(335,40,5.00,0.25,110,5.25,0.75,79,'2026-04-01','Moderada hipermetropía con leve astigmatismo','Moderada hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(336,40,3.00,1.75,70,3.25,1.50,110,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(337,40,3.50,1.25,80,3.75,1.00,100,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(338,40,4.00,1.75,90,4.25,1.50,95,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(339,40,4.50,1.25,100,4.75,1.00,86,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false),
+(340,40,5.00,1.75,110,5.25,1.50,79,'2026-04-01','Moderada hipermetropía con moderado astigmatismo','Moderada hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(341,40,3.00,2.75,70,3.25,2.50,110,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(342,40,3.50,2.25,80,3.75,2.00,100,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(343,40,4.00,2.75,90,4.25,2.50,95,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(344,40,4.50,2.25,100,4.75,2.00,86,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false),
+(345,40,5.00,2.75,110,5.25,2.50,79,'2026-04-01','Moderada hipermetropía con severo astigmatismo','Moderada hipermetropía con severo astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(346,40,6.00,0.50,70,6.25,0.25,110,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(347,40,6.50,0.25,80,6.75,0.75,100,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(348,40,7.00,0.75,90,7.25,0.50,95,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(349,40,7.50,0.50,100,7.75,0.25,86,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false),
+(350,40,8.00,0.25,110,8.25,0.75,79,'2026-04-01','Severa hipermetropía con leve astigmatismo','Severa hipermetropía con leve astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(351,40,6.00,1.75,70,6.25,1.50,110,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(352,40,6.50,1.25,80,6.75,1.00,100,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(353,40,6.50,1.75,90,8.30,1.50,95,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(354,40,7.00,1.25,100,7.25,1.00,86,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false),
+(355,40,7.50,1.75,110,7.75,1.50,79,'2026-04-01','Severa hipermetropía con moderado astigmatismo','Severa hipermetropía con moderado astigmatismo',false);
+
+INSERT INTO public.calibrations (id_client,age,right_sp,right_cyl,right_axis,left_sp,left_cyl,left_axis,registration_date,right_condition,left_condition,is_deleted) VALUES 
+(356,40,6.00,2.75,70,6.25,2.50,110,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(357,40,6.50,2.25,80,6.75,2.00,100,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(358,40,6.50,2.75,90,8.30,2.50,95,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(359,40,7.00,2.25,100,7.25,2.00,86,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false),
+(360,40,7.50,2.75,110,7.75,2.50,79,'2026-04-01','Severa hipermetropía con severo astigmatismo','Severa hipermetropía con severo astigmatismo',false);
+
