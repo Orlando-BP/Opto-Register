@@ -1,6 +1,7 @@
 import CalibrationsService from "./services/calibrations.service.js";
-import DecisionTree from 'decision-tree';
-import RandomForest from 'decision-tree';
+// import DecisionTree from 'decision-tree';
+// import RandomForest from 'decision-tree';
+import RandomForest from 'decision-tree/random-forest';
 import fs from 'fs';
 import path from 'path';
 

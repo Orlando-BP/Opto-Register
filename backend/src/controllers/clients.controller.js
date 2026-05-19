@@ -121,10 +121,12 @@ class Clients {
                 req.body && typeof req.body === "object" ? req.body : {};
             const hasFilters = Object.keys(filters).length > 0;
             let result = null;
+            
             if (hasFilters) {
                 result = await ClientsService.findOneByWhere(filters);
             } else {
-                result = await ClientsService.findById(id);
+                
+                result = await ClientsService.findById(Number(id));
             }
             if (!result)
                 return res
@@ -182,7 +184,7 @@ class Clients {
             res.json({
                 status: "200",
                 message: "OK",
-                data: { token },
+                data: { token, user },
             });
         } catch (error) {
             console.error(error);

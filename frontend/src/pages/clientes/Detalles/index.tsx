@@ -280,10 +280,11 @@ function ClienteNotaDetalle({ sale }: { sale: SaleItem | null }) {
 export default function DetallesClientes() {
     const user = useSessionStore((state) => state.user);
     const token = user?.token ?? null;
+    const userId = user?.id ?? null;
     
 
     const { response, loading, error, refetch } = useFetch({
-        url: "/v1/salesnotes/cliente",
+        url: `/v1/salesnotes/cliente/${userId}`,
         token,
         enabled: Boolean(token),
     });

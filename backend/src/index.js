@@ -126,6 +126,10 @@ app.use(express.json());
 app.use(
     cors({
         origin: FRONTEND_URL,
+        origin: [
+            FRONTEND_URL,
+            "http://192.168.0.82:5173"
+        ],
         credentials: true,
     }),
 );
@@ -140,6 +144,6 @@ app.use((req, res, next) => {
 
 app.use("/v1", mainRoutes);
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

@@ -150,9 +150,10 @@ class SalesNotes {
 
     async readAllCliente(req, res) {
         try {
+            console.log("params:", req.params);
             const { id } = req.params;
             const filters = {
-                id_client: id,
+                id_client: Number(id),
             };
             const results = await SalesNotesService.findAll(filters);
             res.json({

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import { API_URL } from "@/api/config";
 import { useNavigate } from "react-router-dom";
+import { useSessionStore } from "@/stores/sessionStore";
 
 type ClientItem = {
     id: number;
@@ -17,14 +18,16 @@ type ChatMessage = {
 };
 
 export default function ClientChatPage() {
-
+    
     const navigate = useNavigate();
 
     function handleLogout() {
         localStorage.removeItem("token");
         navigate("/admin/login");
     }
-
+    const user = useSessionStore((state) => state.user);
+    const token = user?.token ?? null;
+    const userId = user?.id ?? null;
     const [clients, setClients] = useState<ClientItem[]>([]);
     const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -35,13 +38,16 @@ export default function ClientChatPage() {
     useEffect(() => {
         if (clients.length > 0) return; // Ya están cargados, no vuelvas a cargar
         console.log("[Chat] Cargando lista de clientes...");
-        fetch(`${API_URL}/v1/clients`)
-            .then((r) => r.json())
-            .then((json) => {
-                const data = Array.isArray(json?.data) ? json.data : json?.data?.clients ?? [];
-                const mapped = data.map((c: any) => ({ id: c.id, name: c.name }));
+        fetch(`${API_URL}/v1/clients/${userId}`)
+                .then((r) => r.json())
+                .then((json) => {
+                const data = json.data;
+                // console.log(data);
+                
+                // const mapped = data.map((c: any) => ({ id: c.id, name: c.name }));
+                const mapped = data ? [{ id: data.id, name: data.name }] : [];
                 setClients(mapped);
-                console.log("[Chat] Clientes cargados:", mapped);
+                // console.log("[Chat] Clientes cargados:", mapped);
             })
             .catch((err) => {
                 console.error("[Chat] Error cargando clientes", err);
