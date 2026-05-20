@@ -1,144 +1,63 @@
 # Opto-Register
 
-Proyecto modular para el registro y gestión de clientes (work in progress). Este repositorio contiene dos partes principales:
+Sistema web para la gestión de clientes en ópticas, integrando registro de datos personales, historial de graduaciones visuales, compras y un módulo de clasificación automática de condiciones visuales mediante algoritmos de aprendizaje automático.
 
-- backend: API REST en Node.js que gestiona la lógica del negocio y la conexión a la base de datos MySQL.
-- frontend: SPA React + Vite que consume la API y ofrece la interfaz administrativa y pública.
+## Objetivo del Proyecto
+El proyecto surge como solución para **Óptica Barba** en Guadalajara, que llevaba más de 25 años gestionando información en papel.  
+Opto-Register digitaliza este proceso, ofreciendo:
+- Registro seguro de clientes y sus datos oftalmológicos.  
+- Seguimiento de graduaciones visuales y compras.  
+- Clasificación automática de condiciones visuales (miopía, hipermetropía, astigmatismo).  
+- Comunicación directa entre cliente y optometrista mediante chat en tiempo real.  
 
-Este README explica cómo poner el proyecto en marcha localmente, la estructura principal y notas útiles.
+## Tecnologías Utilizadas
+- **Frontend:** React JS, TypeScript, Tailwind CSS  
+- **Backend:** Node.js, JavaScript, TypeScript  
+- **Base de datos:** PostgreSQL  
+- **Comunicación en tiempo real:** Socket.io  
+- **Clasificación visual:** Algoritmo Random Forest (librería `decision-tree`)  
 
-Resumen de contenido
+## Arquitectura del Sistema
+El sistema se organiza en módulos principales:
+- **Clientes:** Registro y consulta de datos personales.  
+- **Graduaciones:** Almacenamiento de valores SP, CYL y AXIS para cada ojo.  
+- **Ventas:** Notas de venta y productos asociados.  
+- **Clasificación:** Modelo Random Forest para identificar condiciones visuales.  
+- **Chat:** Comunicación cliente–optometrista en tiempo real.  
+- **Administración:** Dashboard seguro para gestión interna.  
 
-- `backend/` — código del servidor (API). Incluye `server`, `src`, archivos SQL de esquema y respaldos.
-- `frontend/` — aplicación web (Vite + React). Contiene hooks, componentes y configuración de build.
+## Instalación y Uso
+1. Clonar el repositorio:  
+   ```bash
+   git clone https://github.com/Orlando-BP/Opto-Register.git
+    ```
+2. Instalar dependencias en frontend y backend:
+   ```bash
+   npm install
+    ```
+3. Configurar la base de datos PostgreSQL según el esquema incluido.
+4. Ejecutar el servidor en backend y frontend:
+   ```bash
+   npm run dev
+   ```
+## Resultados Actuales
+- Optimización del registro y gestión de clientes.
 
-Formato de respuestas esperado por los hooks
+- Clasificación inicial de condiciones visuales (precisión ~76% a la fecha 20/05/2026).
 
-Los hooks del frontend (`usePost`, `useFetch`) deben recibir respuestas JSON con esta forma:
+- Chat en tiempo real para seguimiento personalizado.
 
-```json
-{
-    "status": "200",
-    "message": "Login successful",
-    "data": {
-        "user": { "id": 3, "username": "Ci" }
-    }
-}
-```
+## Trabajo Futuro
+- Mejorar la precisión del modelo de clasificación con más datos.
 
-Los hooks normalizan `status` (string → número) y exponen `ok` cuando `status === 200`.
+- Integrar reportes estadísticos para análisis poblacional.
 
-Requisitos
+- Adaptación del sistema a aplicaciones móviles.
 
-- Node.js (recomendado >= 18)
-- npm o pnpm
-- MySQL / phpMyAdmin para la base de datos local
+## Autores
+- Orlando Agustín Barba Palacios
 
----
+- Marco Arturo Barrones Esparza
 
-## Backend
+- Martha del Carmen Gutiérrez Salmerón
 
-Ubicación: `backend/`
-
-Contenido clave:
-
-- `server/` — punto de entrada del servidor (ej. `index.js`).
-- `src/` — controladores, rutas y modelos.
-- `Base de datos/` — esquemas y respaldos SQL (`Esquema optica_barba_bd .sql`, `Respaldo 13-8-25 optica_barba_bd.sql`).
-
-Instalación y ejecución (local)
-
-1. Abrir terminal en `backend/`:
-
-```bash
-cd backend
-npm install
-```
-
-2. Configurar variables de entorno (si aplica)
-
-- Revisa `src/config.js` o `server/index.js` para saber qué variables necesita la app (puerto, host/usuario/contraseña de MySQL). Crea un archivo `.env` con esas variables si lo requiere.
-
-3. Levantar servidor:
-
-```bash
-npm run dev
-# o
-npm start
-```
-
-Notas sobre la base de datos
-
-- Importa el SQL desde phpMyAdmin o usando la CLI de MySQL para restaurar `Esquema optica_barba_bd .sql`.
-- Los archivos SQL están en `backend/Base de datos/`.
-
----
-
-## Frontend
-
-Ubicación: `frontend/`
-
-Stack principal: React, Vite, Tailwind, React Router, React Query.
-
-Instalación y ejecución (local)
-
-1. Abrir terminal en `frontend/`:
-
-```bash
-cd frontend
-npm install
-```
-
-2. Configurar la URL de la API
-
-- Revisa `frontend/src/api/config.ts` para la constante `API_URL`. Ajusta ese valor o crea un mecanismo de entorno para apuntar al backend local (por ejemplo `http://localhost:3000`).
-
-3. Ejecutar en modo desarrollo:
-
-```bash
-npm run dev
-```
-
-4. Build de producción:
-
-```bash
-npm run build
-npm run preview
-```
-
-Notas de integración
-
-- El frontend usa `fetchApi` como wrapper de `fetch`. Los hooks `usePost` y `useFetch` normalizan la respuesta de la API y devuelven `status`, `message`, `data` y `ok`.
-- Para que las notificaciones (toasts) funcionen, monta el componente `Toaster` (ej. en `App.tsx`).
-
----
-
-## Desarrollo y depuración
-
-- Revisa la consola del navegador y la terminal del servidor para ver peticiones y respuestas.
-- Si la API devuelve `status` como string (por ejemplo "200"), los hooks convierten ese valor a número automáticamente.
-
----
-
-## Archivos importantes
-
-- Backend:
-    - `backend/server/index.js` — punto de entrada del servidor.
-    - `backend/src/controllers/*` — lógica de endpoints.
-    - `backend/Base de datos/` — esquemas y respaldos SQL.
-
-- Frontend:
-    - `frontend/src/api/fetchApi.ts` — wrapper de `fetch` usado por los hooks.
-    - `frontend/src/hooks/usePost.tsx` — helper para llamadas POST.
-    - `frontend/src/hooks/useFetch.tsx` — wrapper sobre React Query (se puede usar como fetch simple).
-    - `frontend/src/components/ui/toast.tsx` — primitives de UI para toasts.
-    - `frontend/src/components/ui/toaster.tsx` — componente `Toaster` que debe montarse en `App.tsx`.
-
----
-
-## Siguientes pasos sugeridos
-
-- Añadir un `.env.example` con las variables necesarias para backend y frontend.
-- Documentar endpoints principales (login, clientes, productos) extrayéndolos de los controladores.
-
-Si quieres, hago esos ajustes ahora (añadir `.env.example` o documentar endpoints).
