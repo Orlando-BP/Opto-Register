@@ -125,7 +125,6 @@ export function ClienteNotaDetalle({ sale }: { sale: SaleItem | null }) {
             </div>
         );
     }
-
     const productItems = Array.isArray(sale?.ProductsNoteSale)
         ? sale.ProductsNoteSale
         : Array.isArray(sale?.products)
@@ -134,119 +133,132 @@ export function ClienteNotaDetalle({ sale }: { sale: SaleItem | null }) {
             ? sale.details
             : [];
 
+    const rows = productItems.map((item: any) => {
+        const qty = Number(item?.quantity ?? 1);
+        const price = Number(item?.value ?? item?.price ?? 0);
+        const total = qty * price;
+        const description =
+            item?.Product?.name ?? item?.productName ?? item?.name ?? "Item";
+        const descExtra = item?.Product?.description ?? item?.description ?? "";
+        return { qty, price, total, description, descExtra };
+    });
+
+    const subtotal = rows.reduce((s, r) => s + r.total, 0);
+    const reportedTotal = Number(sale?.total_price ?? 0);
+    const tax =
+        reportedTotal && reportedTotal > subtotal
+            ? reportedTotal - subtotal
+            : 0;
+    const total = reportedTotal || subtotal + tax;
+
     return (
-        <div className="space-y-8">
-            <div className="w-full space-y-6 rounded-xl border border-slate-800 bg-slate-900/70 p-8 shadow-xl">
-                <div className="space-y-1 text-center">
-                    <h3 className="text-2xl font-semibold text-white">
-                        Detalle de la nota de venta
-                    </h3>
-                    <p className="text-sm text-slate-400">
-                        Vista tipo recibo con los productos incluidos
+        <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+            <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <p className="text-sm text-slate-400">Nota de venta</p>
+                    <h2 className="text-2xl font-semibold text-white">
+                        Folio #{formatValue(sale?.id)}
+                    </h2>
+                    <p className="text-xs text-slate-500">
+                        Código: {formatValue(sale?.code)}
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 rounded-md border border-slate-700 bg-slate-800 p-4 md:grid-cols-2">
-                    <InfoCard label="Folio" value={sale?.id} />
-                    <InfoCard label="Código" value={sale?.code} />
-                    <InfoCard
-                        label="Total"
-                        value={formatCurrency(sale?.total_price)}
-                    />
-                    <InfoCard
-                        label="Anticipo"
-                        value={formatCurrency(sale?.advance)}
-                    />
-                    <InfoCard
-                        label="Saldo"
-                        value={formatCurrency(sale?.balance)}
-                    />
-                    <InfoCard
-                        label="Fecha emisión"
-                        value={formatDate(sale?.issue_date)}
-                    />
-                    <InfoCard
-                        label="Fecha entrega"
-                        value={formatDate(sale?.delivery_date)}
-                    />
+                <div className="text-sm text-slate-400">
+                    <div>
+                        Emitida:{" "}
+                        <span className="text-slate-200">
+                            {formatDate(sale?.issue_date)}
+                        </span>
+                    </div>
+                    <div>
+                        Entrega:{" "}
+                        <span className="text-slate-200">
+                            {formatDate(sale?.delivery_date)}
+                        </span>
+                    </div>
                 </div>
             </div>
 
-            {productItems.length > 0 && (
-                <div className="w-full space-y-4 rounded-xl border border-slate-800 bg-slate-900/70 p-8 shadow-xl">
-                    <div className="space-y-1 text-center">
-                        <h4 className="text-xl font-semibold text-white">
-                            Productos incluidos
-                        </h4>
-                        <p className="text-sm text-slate-400">
-                            Cada producto se muestra como una sección de recibo
-                        </p>
-                    </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="rounded-md border border-slate-700 bg-slate-800 p-4">
+                    <p className="text-xs uppercase text-slate-400">De</p>
+                    <p className="font-medium text-slate-200">
+                        Tienda / Optica
+                    </p>
+                    <p className="text-xs text-slate-400 mt-2">
+                        Dirección y datos de la tienda
+                    </p>
+                </div>
+                <div className="rounded-md border border-slate-700 bg-slate-800 p-4">
+                    <p className="text-xs uppercase text-slate-400">Para</p>
+                    <p className="font-medium text-slate-200">
+                        Cliente #{formatValue(sale?.id_client)}
+                    </p>
+                    <p className="text-xs text-slate-400 mt-2">
+                        Información del cliente
+                    </p>
+                </div>
+            </div>
 
-                    <div className="grid grid-cols-1 gap-4">
-                        {productItems.map((item: any, index: number) => {
-                            const quantity = Number(item?.quantity ?? 1);
-                            const price = Number(
-                                item?.value ?? item?.price ?? 0,
-                            );
-                            const total = quantity * price;
-                            const productName =
-                                item?.Product?.name ??
-                                item?.productName ??
-                                item?.name;
-                            const productDescription =
-                                item?.Product?.description ?? item?.description;
-
-                            return (
-                                <div
-                                    key={item?.id ?? `sale-detail-${index}`}
-                                    className="rounded-lg border border-slate-600 bg-slate-900 p-4 text-slate-800 shadow-sm"
-                                >
-                                    <div className="flex flex-col gap-3 border-b border-dashed border-slate-300 pb-3 md:flex-row md:items-center md:justify-between">
-                                        <div>
-                                            <p className="text-xs uppercase tracking-wide text-slate-500">
-                                                Producto
-                                            </p>
-                                            <p className="text-base font-semibold text-slate-900">
-                                                {formatValue(productName)}
-                                            </p>
-                                            {productDescription && (
-                                                <p className="text-xs text-slate-500">
-                                                    {formatValue(
-                                                        productDescription,
-                                                    )}
-                                                </p>
-                                            )}
-                                        </div>
-                                        <div className="text-right text-xs text-slate-500">
-                                            Ítem #{index + 1}
-                                        </div>
+            <div className="mt-6 overflow-x-auto">
+                <table className="w-full text-left text-sm text-slate-200">
+                    <thead className="text-xs text-slate-400">
+                        <tr>
+                            <th className="px-3 py-2">Descripción</th>
+                            <th className="px-3 py-2">Cantidad</th>
+                            <th className="px-3 py-2">Precio</th>
+                            <th className="px-3 py-2 text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800">
+                        {rows.map((r, i) => (
+                            <tr key={i} className="align-top">
+                                <td className="px-3 py-3 align-top">
+                                    <div className="font-medium text-slate-100">
+                                        {formatValue(r.description)}
                                     </div>
+                                    {r.descExtra && (
+                                        <div className="text-xs text-slate-400">
+                                            {formatValue(r.descExtra)}
+                                        </div>
+                                    )}
+                                </td>
+                                <td className="px-3 py-3 align-top">{r.qty}</td>
+                                <td className="px-3 py-3 align-top">
+                                    {formatCurrency(r.price)}
+                                </td>
+                                <td className="px-3 py-3 text-right align-top">
+                                    {formatCurrency(r.total)}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
-                                    <div className="mt-3 grid grid-cols-2 gap-3 text-sm md:grid-cols-4">
-                                        <InfoMiniCard
-                                            label="Cantidad"
-                                            value={quantity}
-                                        />
-										<InfoMiniCard
-											label="Nombre"
-											value={formatValue(productName)}
-										/>
-                                        <InfoMiniCard
-                                            label="Precio"
-                                            value={formatCurrency(price)}
-                                        />
-                                        <InfoMiniCard
-                                            label="Total"
-                                            value={formatCurrency(total)}
-                                        />
-                                    </div>
-                                </div>
-                            );
-                        })}
+            <div className="mt-6 flex flex-col-reverse gap-3 md:flex-row md:justify-end md:items-center">
+                <div className="w-full md:w-1/2">
+                    <div className="rounded-md border border-slate-700 bg-slate-800 p-4">
+                        <div className="flex justify-between text-sm text-slate-400">
+                            <div>Subtotal</div>
+                            <div className="text-slate-200">
+                                {formatCurrency(subtotal)}
+                            </div>
+                        </div>
+                        <div className="flex justify-between text-sm text-slate-400 mt-2">
+                            <div>Impuestos</div>
+                            <div className="text-slate-200">
+                                {formatCurrency(tax)}
+                            </div>
+                        </div>
+                        <div className="flex justify-between text-lg font-semibold text-white mt-4">
+                            <div>Total</div>
+                            <div>{formatCurrency(total)}</div>
+                        </div>
                     </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 }
