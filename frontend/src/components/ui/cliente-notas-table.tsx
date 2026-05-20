@@ -1,6 +1,3 @@
-import { Info } from "lucide-react";
-import { InfoCard, InfoMiniCard } from "./info-card";
-
 type SaleItem = {
     id?: number | string;
     id_client?: number | string | null;

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { API_URL } from "@/api/config";
 import { useChatStore } from '@/stores/chatStore';
-import { on } from "node:cluster";
 
 type Chat = {
     id: number;
@@ -291,22 +290,6 @@ export default function ChatPage() {
                                 <p className="text-xs text-slate-400">
                                     {selectedChat?.client?.email || selectedChat?.client?.phone || ""}
                                 </p>
-                            </div>
-                            <div className="flex gap-2">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="border-slate-700 text-slate-200"
-                                >
-                                    Ver perfil
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="border-slate-700 text-slate-200"
-                                >
-                                    Marcar como resuelto
-                                </Button>
                             </div>
                         </header>
 
