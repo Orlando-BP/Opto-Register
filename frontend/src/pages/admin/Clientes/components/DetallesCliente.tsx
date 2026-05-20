@@ -1,12 +1,28 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { usePost } from "@/hooks";
+import { ClienteNotasTable, ClienteNotaDetalle } from "@/components/ui/cliente-notas-table";
+import { useFetch, usePost } from "@/hooks";
 import { toast } from "@/hooks/useToast";
+
 
 type DetallesClienteProps = {
     client: any | null;
     calibrations?: any[];
+};
+
+type SaleItem = {
+    id?: number | string;
+    id_client?: number | string | null;
+    issue_date?: string | null;
+    delivery_date?: string | null;
+    total_price?: number | string | null;
+    advance?: number | string | null;
+    balance?: number | string | null;
+    code?: string | null;
+    ProductsNoteSale?: any[];
+    products?: any[];
+    details?: any[];
 };
 
 const fields: { key: string; label: string }[] = [
@@ -88,6 +104,31 @@ export default function DetallesCliente({
     );
 
     const { execute } = usePost();
+
+    const { response, loading, error } = useFetch({
+        url: "/v1/salesnotes/admin",
+    });
+
+    const [selectedSale, setSelectedSale] = useState<SaleItem | null>(null);
+
+    const sales = useMemo(() => {
+        const rawNotes = response?.data?.results ?? response?.data?.notas;
+        const list = Array.isArray(rawNotes)
+            ? rawNotes
+            : Array.isArray(response?.data)
+                ? response.data
+                : [];
+
+        return list.map((note: any) => ({
+            ...note,
+            issue_date: note?.issue_date ?? note?.issueDate ?? null,
+            delivery_date: note?.delivery_date ?? note?.deliveryDate ?? null,
+            ProductsNoteSale: Array.isArray(note?.ProductsNoteSale)
+                ? note.ProductsNoteSale
+                : [],
+        }));
+    }, [response?.data]);
+
     const calcularCondicion = async (graduation: any) => {
         const payload = {
             id_client: Number(graduation?.idClient),
@@ -216,39 +257,66 @@ export default function DetallesCliente({
                                 <div className="rounded-xl border border-yellow-900/70 bg-yellow-950/60 p-6 text-yellow-100 shadow-lg shadow-yellow-900/40">
                                     <div className="flex items-center gap-3">
                                         <span className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-900/70">
-                                        <AlertTriangle className="h-5 w-5" />
+                                            <AlertTriangle className="h-5 w-5" />
                                         </span>
                                         <div>
                                             <p className="text-sm uppercase tracking-wide text-yellow-200">
                                                 Condición Actual de los ojos
                                             </p>
-                                            {calibration?.right_condition || calibration?.left_condition ? (
-                                                conditionFields.map(({ key, label }) => (
-                                                    <p className="text-lg font-semibold text-yellow-100" key={key}>
-                                                        {label}: {formatValue(calibration?.[key])}
-                                                    </p>
-                                                ))
+                                            {calibration?.right_condition ||
+                                            calibration?.left_condition ? (
+                                                conditionFields.map(
+                                                    ({ key, label }) => (
+                                                        <p
+                                                            className="text-lg font-semibold text-yellow-100"
+                                                            key={key}
+                                                        >
+                                                            {label}:{" "}
+                                                            {formatValue(
+                                                                calibration?.[
+                                                                    key
+                                                                ],
+                                                            )}
+                                                        </p>
+                                                    ),
+                                                )
                                             ) : (
                                                 <p className="text-lg font-semibold text-yellow-100">
-                                                    No hay condiciones registradas
-                                                    <Button 
-                                                        // disabled={loading} 
+                                                    No hay condiciones
+                                                    registradas
+                                                    <Button
+                                                        // disabled={loading}
                                                         onClick={() => {
-                                                            calcularCondicion(calibration);
+                                                            calcularCondicion(
+                                                                calibration,
+                                                            );
                                                         }}
                                                         className="w-full"
                                                     >
-                                                        calcular condicion{/* {loading ? "Ingresando..." : "Ingresar"} */}
+                                                        calcular condicion
+                                                        {/* {loading ? "Ingresando..." : "Ingresar"} */}
                                                     </Button>
                                                 </p>
                                             )}
                                         </div>
                                     </div>
-                                </div>   
+                                </div>
                             </div>
                         );
                     },
                 )}
+            </div>
+            <div>
+                <ClienteNotasTable
+                    sales={sales}
+                    loading={loading}
+                    error={error}
+                    onSelectSale={setSelectedSale}
+                />
+            </div>
+
+            <div>
+                <ClienteNotaDetalle sale={selectedSale} />
             </div>
         </div>
     );
