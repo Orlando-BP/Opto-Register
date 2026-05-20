@@ -27,9 +27,11 @@ const toastVariants = cva(
     {
         variants: {
             variant: {
-                default: "border bg-background text-foreground",
+                // Fallback background/text classes added so toasts always show a visible background
+                default:
+                    "border bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100",
                 destructive:
-                    "destructive group border-destructive bg-destructive text-destructive-foreground",
+                    "destructive group border-red-700 bg-red-600 text-white dark:bg-red-700 dark:text-white",
             },
         },
         defaultVariants: {
