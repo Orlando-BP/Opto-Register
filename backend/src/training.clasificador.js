@@ -4,7 +4,10 @@ import CalibrationsService from "./services/calibrations.service.js";
 import RandomForest from 'decision-tree/random-forest';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Entrena, evalúa y muestra precisión de RandomForest para ambos ojos
 function shuffleArray(array) {
@@ -89,6 +92,14 @@ async function trainModels(data) {
     // console.log('Datos de prueba:', ForestSplit.test);
     // console.log('Datos de entrenamiento:', ForestSplit.train);
     console.log(`Precisión de Forest : ${(Accuracy * 100).toFixed(2)}%`);
+    console.log(` Guardando modelo entrenado...`);
+
+    const modelJson = forest.toJSON();
+    const modelDir = path.resolve(__dirname, './random_forest_model');
+    await fs.promises.mkdir(modelDir, { recursive: true });
+    const modelPath = path.resolve(modelDir, 'model.json');
+    await fs.promises.writeFile(modelPath, JSON.stringify(modelJson, null, 2), 'utf8');
+    console.log(`Modelo guardado en: ${modelPath}`);
 
     //Prediccion de la insercion de datos del paciente
     const right_predicted_class = forest.predict({

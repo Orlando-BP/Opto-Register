@@ -3,6 +3,7 @@ import { ModelValidationError } from "../BaseModel.js";
 import ClientsService from "../services/clients.service.js";
 import e from "express";
 import trainModels  from '../training.clasificador.js';
+import predictModel  from '../implementation.clasificador.js';
 
 class Calibrations {
     constructor() {
@@ -20,9 +21,13 @@ class Calibrations {
             const data = req.body;
             console.log("Received data for creation:", data);
             //Aqui usa arbol de decision para evaluar la condicion visual del paciente y añadirla a data antes de crear la calibracion
-            await trainModels(data);
-            
-            
+            const predicted = await predictModel(data);
+            if (predicted) {
+                data.right_condition = predicted.right_predicted_class;
+                data.left_condition = predicted.left_predicted_class;
+            }
+            data.registration_date = new Date();
+
             const result = await CalibrationsService.create(data);
             res.status(201).json({
                 status: "201",
