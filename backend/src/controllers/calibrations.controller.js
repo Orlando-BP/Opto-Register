@@ -151,6 +151,13 @@ class Calibrations {
         try {
             const { id } = req.params;
             const data = req.body;
+             const predicted = await predictModel(data);
+            if (predicted) {
+                data.right_condition = predicted.right_predicted_class;
+                data.left_condition = predicted.left_predicted_class;
+            }
+            // await trainModels(data);//entrena el modelo
+            data.registration_date = new Date();
             const result = await CalibrationsService.update(id, data);
             res.json({ status: "200", message: "Updated", data: result });
         } catch (error) {

@@ -61,7 +61,7 @@ export default function DetallesGraduacion({
         };
 
         const res = await execute({
-            url: "/v1/calibrations/" + graduation?.id + "/condition",
+            url: "/v1/calibrations/" + graduation?.id,
             method: "post",
             body: payload,
         });

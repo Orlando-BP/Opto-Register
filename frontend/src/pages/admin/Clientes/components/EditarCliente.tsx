@@ -127,12 +127,14 @@ export default function EditarCliente({
                     left_sp: Number(left_SP || 0),
                     left_cyl: Number(left_CYL || 0),
                     left_axis: Number(left_Axis || 0),
+                    right_condition: "",
+                    left_condition: "",
                 };
 
                 if (calibrationId) {
                     const resGrad = await execute({
                         url: `/v1/calibrations/${calibrationId}`,
-                        method: "patch",
+                        method: "post",
                         body: gradPayload,
                     });
                     if (resGrad?.ok) {

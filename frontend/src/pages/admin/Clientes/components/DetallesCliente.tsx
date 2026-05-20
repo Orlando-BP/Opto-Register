@@ -106,7 +106,7 @@ export default function DetallesCliente({
     const { execute } = usePost();
 
     const { response, loading, error } = useFetch({
-        url: "/v1/salesnotes/admin",
+        url: "/v1/salesnotes/cliente/" + client?.id,
     });
 
     const [selectedSale, setSelectedSale] = useState<SaleItem | null>(null);

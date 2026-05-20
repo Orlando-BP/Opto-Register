@@ -32,7 +32,7 @@ export default function RegistroCliente({ refetch }: { refetch: () => void }) {
                 email: email,
                 address: address,
             },
-        }).then((res) => {
+        }).then(async (res) => {
             if(res.status === 201) {
                 toast({
                     title: "Éxito",
@@ -50,11 +50,16 @@ export default function RegistroCliente({ refetch }: { refetch: () => void }) {
                         left_cyl: Number(left_CYL),
                         left_axis: Number(left_Axis),
                     };
-                    execute({
+                    // execute({
+                    //     url: "/v1/calibrations",
+                    //     method: "post",
+                    //     body: payload,
+                    // }).then((resGraduation) => {
+                    const resGraduation = await execute({
                         url: "/v1/calibrations",
                         method: "post",
                         body: payload,
-                    }).then((resGraduation) => {
+                    });
                         if(resGraduation.status === 201) {
                             toast({
                                 title: "Éxito",
@@ -66,7 +71,7 @@ export default function RegistroCliente({ refetch }: { refetch: () => void }) {
                                 description: "No se pudo registrar la graduación.",
                             });
                         }
-                    });
+                    // });
                 }
                 refetch();
                 // Limpiar el formulario

@@ -418,7 +418,8 @@ class BaseModel {
             options.where,
             options,
         );
-        const query = `SELECT * FROM ${this.tableName} ${clause}`;
+        const query = `SELECT * FROM ${this.tableName} ${clause} ORDER BY id ASC`;
+        // console.log(query);
         const { rows } = await pool.query(query, values);
         if (options.include) {
             return this.attachRelations(rows, options.include);
