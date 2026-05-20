@@ -26,6 +26,7 @@ class Calibrations {
                 data.right_condition = predicted.right_predicted_class;
                 data.left_condition = predicted.left_predicted_class;
             }
+            // await trainModels(data);//entrena el modelo
             data.registration_date = new Date();
 
             const result = await CalibrationsService.create(data);
