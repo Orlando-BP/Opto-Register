@@ -11,7 +11,7 @@ export default function Home() {
                             Bienvenido a Opto Register
                         </h2>
                         <p className="text-slate-400">
-                            Accede al panel de administración:
+                            Accede al sitio según tu rol:
                         </p>
                     </div>
                     <Link
