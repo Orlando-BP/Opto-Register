@@ -72,7 +72,7 @@ async function trainModels(data) {
 
     const config = {
       nEstimators: 500,        // Number of trees (default: 100)
-      maxFeatures: 2,     // Features per split: 'sqrt', 'log2', 'auto', or number
+      maxFeatures: 2,         // Features per split: 'sqrt', 'log2', 'auto', or number
       bootstrap: true,         // Use bootstrap sampling (default: true)
       randomState: 76,         // Random seed for reproducibility
       maxDepth: 100,            // Maximum tree depth

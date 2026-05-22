@@ -128,7 +128,7 @@ app.use(
         origin: FRONTEND_URL,
         origin: [
             FRONTEND_URL,
-            "http://192.168.0.82:5173"//"http://192.168.0.82:5173" //Ip del servidor local correspondiente
+            "http://172.24.126.238:5173"//"http://192.168.0.82:5173" //Ip del servidor local correspondiente
         ],
         credentials: true,
     }),
